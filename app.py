@@ -33,6 +33,8 @@ def database_error(error: APIError):
         return api_error("Registration already exists", 409)
     if code == "23503":
         return api_error("Referenced user or event does not exist", 400)
+    if code == "42501":
+        return api_error("Database permission denied: grant SELECT/INSERT to anon in Supabase", 403)
     app.logger.exception("Supabase request failed", exc_info=error)
     return api_error("Database request failed", 500)
 
@@ -69,6 +71,34 @@ def get_event(event_id: str):
         if not result.data:
             return api_error("Event not found", 404)
         return jsonify(result.data[0])
+    except APIError as error:
+        return database_error(error)
+    except RuntimeError as error:
+        return api_error(str(error), 500)
+
+
+@app.post("/api/users/resolve")
+def resolve_user():
+    """Find an existing user by email or create a new student/organizer user."""
+    body: Any = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return api_error("Request body must be a JSON object", 400)
+    email = str(body.get("email") or "").strip().lower()
+    role = str(body.get("role") or "student").strip().lower()
+    if not email or "@" not in email:
+        return api_error("A valid email address is required", 400)
+    if role not in ("student", "organizer"):
+        role = "student"
+
+    try:
+        db = get_supabase()
+        existing = db.table("users").select("id,email,role").eq("email", email).limit(1).execute()
+        if existing.data:
+            return jsonify(existing.data[0])
+        created = db.table("users").insert({"email": email, "role": role}).execute()
+        if created.data:
+            return jsonify(created.data[0]), 201
+        return api_error("Could not create user", 500)
     except APIError as error:
         return database_error(error)
     except RuntimeError as error:

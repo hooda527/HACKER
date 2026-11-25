@@ -432,11 +432,12 @@
 
             <!-- Registered Events -->
             <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
-              <div class="flex items-center justify-between">
+              <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2">
                   <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">star</span>
                   <h2 class="text-[15px] font-bold text-slate-900">Registered Events</h2>
                 </div>
+                <button id="open-auth-btn" type="button" class="text-[11px] font-semibold text-portal-primary hover:underline truncate max-w-[115px]">Sign in</button>
               </div>
 
               <div id="registered-events-list" class="divide-y divide-slate-100">
@@ -745,6 +746,40 @@
     </div>
   </div>
 
+  <!-- User Email Sign-In / Registration Modal -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-float max-w-md w-full p-6 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Sign In to Register</h2>
+          <p class="text-xs text-slate-500">Enter your email to sync your live registrations</p>
+        </div>
+        <button id="close-auth-btn" type="button" aria-label="Close sign in"
+          class="w-8 h-8 rounded-full inline-flex items-center justify-center text-slate-500 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[20px]">close</span>
+        </button>
+      </div>
+      <form id="auth-form" class="flex flex-col gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+          <input id="auth-email-input" type="email" required placeholder="e.g. rahul@gmail.com"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Role</label>
+          <select id="auth-role-select" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+            <option value="student">Student</option>
+            <option value="organizer">Organizer</option>
+          </select>
+        </div>
+        <p id="auth-error" class="text-xs text-rose-600 hidden"></p>
+        <button type="submit" class="rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 transition">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- Live Events Explorer & Registration Modal -->
   <div id="events-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-2xl shadow-float max-w-4xl w-full max-h-[85vh] flex flex-col overflow-hidden">
@@ -765,6 +800,147 @@
   <script>
     (function () {
       var liveEvents = [];
+      var registeredEventIds = {};
+      var currentUser = null;
+      var pendingRegisterCallback = null;
+
+      try {
+        var savedUser = window.localStorage.getItem('event-portal-user');
+        if (savedUser) currentUser = JSON.parse(savedUser);
+      } catch (e) {}
+
+      function inferCategory(ev) {
+        if (ev.category || ev.type) return ev.category || ev.type;
+        var t = String(ev.title || ev.name || '').toLowerCase();
+        if (t.indexOf('workshop') !== -1) return 'Workshops';
+        if (t.indexOf('hackathon') !== -1 || t.indexOf('cup') !== -1 || t.indexOf('competition') !== -1) return 'Competitions';
+        if (t.indexOf('cultural') !== -1 || t.indexOf('fest') !== -1) return 'Cultural Events';
+        return 'Seminars';
+      }
+
+      function updateAuthUI() {
+        var openAuthBtn = document.getElementById('open-auth-btn');
+        var roleLabel = document.getElementById('active-role-label');
+        if (openAuthBtn) {
+          openAuthBtn.textContent = currentUser ? currentUser.email : 'Sign in';
+        }
+        if (roleLabel && currentUser) {
+          roleLabel.textContent = currentUser.role || 'Student';
+        }
+      }
+
+      var authModal = document.getElementById('auth-modal');
+      var authForm = document.getElementById('auth-form');
+      var authEmailInput = document.getElementById('auth-email-input');
+      var authRoleSelect = document.getElementById('auth-role-select');
+      var authError = document.getElementById('auth-error');
+
+      function openAuthModal(onSuccess) {
+        pendingRegisterCallback = onSuccess || null;
+        if (currentUser && authEmailInput) authEmailInput.value = currentUser.email || '';
+        authError.classList.add('hidden');
+        authModal.classList.remove('hidden');
+      }
+
+      document.getElementById('open-auth-btn').addEventListener('click', function () { openAuthModal(); });
+      document.getElementById('close-auth-btn').addEventListener('click', function () { authModal.classList.add('hidden'); });
+      authModal.addEventListener('click', function (e) {
+        if (e.target === authModal) authModal.classList.add('hidden');
+      });
+
+      authForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        authError.classList.add('hidden');
+        try {
+          var res = await fetch('/api/users/resolve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: authEmailInput.value.trim(), role: authRoleSelect.value })
+          });
+          var data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Could not sign in');
+          currentUser = data;
+          window.localStorage.setItem('event-portal-user', JSON.stringify(data));
+          window.localStorage.setItem('event-portal-user-id', data.id);
+          updateAuthUI();
+          authModal.classList.add('hidden');
+          await loadMyRegistrations();
+          if (typeof renderEventsPage === 'function' && !document.getElementById('view-events').classList.contains('hidden')) {
+            renderEventsPage();
+          }
+          if (pendingRegisterCallback) {
+            var cb = pendingRegisterCallback;
+            pendingRegisterCallback = null;
+            cb();
+          }
+        } catch (err) {
+          authError.textContent = err.message;
+          authError.classList.remove('hidden');
+        }
+      });
+
+      async function registerForEvent(ev, btn) {
+        if (!currentUser || !currentUser.id) {
+          openAuthModal(function () { registerForEvent(ev, btn); });
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Registering...';
+        try {
+          var res = await fetch('/api/registrations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: currentUser.id, event_id: ev.id })
+          });
+          var data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Registration failed');
+          registeredEventIds[ev.id] = true;
+          btn.textContent = 'Registered';
+          await Promise.all([loadMyRegistrations(), loadLiveEvents()]);
+        } catch (err) {
+          window.alert(err.message);
+          btn.disabled = false;
+          btn.textContent = 'Register';
+        }
+      }
+
+      async function loadMyRegistrations() {
+        if (!currentUser || !currentUser.id) return;
+        var list = document.getElementById('registered-events-list');
+        if (!list) return;
+        try {
+          var res = await fetch('/api/me/registrations?user_id=' + encodeURIComponent(currentUser.id));
+          if (!res.ok) return;
+          var rows = await res.json();
+          if (!Array.isArray(rows)) return;
+          registeredEventIds = {};
+          if (!rows.length) {
+            list.innerHTML = '<p class="py-3 text-xs text-slate-500">No registrations yet for ' + currentUser.email + '. Click any event to register!</p>';
+            return;
+          }
+          list.replaceChildren();
+          rows.slice(0, 4).forEach(function (row) {
+            var ev = row.events || {};
+            if (row.event_id) registeredEventIds[row.event_id] = true;
+            var item = document.createElement('div');
+            item.className = 'py-2.5 flex items-center justify-between gap-2.5';
+            var left = document.createElement('div');
+            left.className = 'min-w-0';
+            var title = document.createElement('p');
+            title.className = 'text-xs font-bold text-slate-900 truncate';
+            title.textContent = ev.title || 'Registered Event';
+            var sub = document.createElement('p');
+            sub.className = 'text-[11px] text-slate-500 truncate';
+            sub.textContent = 'Capacity: ' + (ev.capacity || 'Open');
+            left.append(title, sub);
+            var badge = document.createElement('span');
+            badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold shrink-0';
+            badge.textContent = 'Registered';
+            item.append(left, badge);
+            list.appendChild(item);
+          });
+        } catch (e) {}
+      }
 
       function normalizeStatus(ev) {
         var s = String(ev.status || '').toLowerCase();
@@ -855,26 +1031,11 @@
           var btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'mt-auto rounded-lg bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2 px-3 transition disabled:opacity-60';
-          btn.textContent = st === 'closed' ? 'Closed' : 'Register';
-          btn.disabled = st === 'closed';
-          btn.addEventListener('click', async function () {
-            var userId = window.localStorage.getItem('event-portal-user-id') || window.prompt('Enter your User UUID to register:');
-            if (!userId) return;
-            window.localStorage.setItem('event-portal-user-id', userId.trim());
-            btn.disabled = true;
-            try {
-              var res = await fetch('/api/registrations', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: userId.trim(), event_id: ev.id })
-              });
-              var data = await res.json();
-              if (!res.ok) throw new Error(data.error || 'Registration failed');
-              btn.textContent = 'Registered';
-            } catch (err) {
-              window.alert(err.message);
-              btn.disabled = false;
-            }
+          var isReg = !!registeredEventIds[ev.id];
+          btn.textContent = st === 'closed' ? 'Closed' : (isReg ? 'Registered' : 'Register');
+          btn.disabled = st === 'closed' || isReg;
+          btn.addEventListener('click', function () {
+            registerForEvent(ev, btn);
           });
           card.appendChild(btn);
           modalGrid.appendChild(card);
@@ -898,15 +1059,31 @@
         });
       });
 
-      fetch('/api/events')
-        .then(function (r) { return r.ok ? r.json() : []; })
-        .then(function (events) {
-          if (Array.isArray(events) && events.length) {
-            liveEvents = events;
-            populateFeaturedCards(events);
-          }
-        })
-        .catch(function () {});
+      function loadLiveEvents() {
+        return fetch('/api/events')
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (events) {
+            if (Array.isArray(events) && events.length) {
+              liveEvents = events.map(function (ev) {
+                ev.category = inferCategory(ev);
+                return ev;
+              });
+              populateFeaturedCards(liveEvents);
+              if (typeof renderEventsPage === 'function' && !document.getElementById('view-events').classList.contains('hidden')) {
+                renderEventsPage();
+              }
+            }
+          })
+          .catch(function () {});
+      }
+
+      updateAuthUI();
+      loadLiveEvents();
+      loadMyRegistrations();
+      window.setInterval(function () {
+        loadLiveEvents();
+        loadMyRegistrations();
+      }, 10000);
 
       // Mobile sidebar toggle
       var mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1046,31 +1223,16 @@
           var btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'mt-auto rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 transition disabled:opacity-60';
-          btn.textContent = st === 'closed' ? 'Registration Closed' : 'Register Now';
-          btn.disabled = st === 'closed';
-          btn.addEventListener('click', async function () {
+          var isReg = !!registeredEventIds[ev.id];
+          btn.textContent = st === 'closed' ? 'Registration Closed' : (isReg ? 'Registered' : 'Register Now');
+          btn.disabled = st === 'closed' || isReg;
+          btn.addEventListener('click', function () {
             if (String(ev.id || '').indexOf('sample-') === 0) {
               btn.textContent = 'Registered (Demo)';
               btn.disabled = true;
               return;
             }
-            var userId = window.localStorage.getItem('event-portal-user-id') || window.prompt('Enter your User UUID to register:');
-            if (!userId) return;
-            window.localStorage.setItem('event-portal-user-id', userId.trim());
-            btn.disabled = true;
-            try {
-              var res = await fetch('/api/registrations', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: userId.trim(), event_id: ev.id })
-              });
-              var data = await res.json();
-              if (!res.ok) throw new Error(data.error || 'Registration failed');
-              btn.textContent = 'Registered';
-            } catch (err) {
-              window.alert(err.message);
-              btn.disabled = false;
-            }
+            registerForEvent(ev, btn);
           });
 
           card.append(top, h3, dateEl, desc, btn);

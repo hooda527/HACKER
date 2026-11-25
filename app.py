@@ -73,17 +73,26 @@ def index():
 
 @app.get("/admin/dashboard")
 def admin_dashboard():
-    return app.send_static_file("admin/dashboard.html")
+    resp = app.send_static_file("admin/dashboard.html")
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
+    resp.headers["Pragma"] = "no-cache"
+    return resp
 
 
 @app.get("/organizer/dashboard")
 def organizer_dashboard():
-    return app.send_static_file("organizer/dashboard.html")
+    resp = app.send_static_file("organizer/dashboard.html")
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
+    resp.headers["Pragma"] = "no-cache"
+    return resp
 
 
 @app.get("/student/dashboard")
 def student_dashboard():
-    return app.send_static_file("student/dashboard.html")
+    resp = app.send_static_file("student/dashboard.html")
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
+    resp.headers["Pragma"] = "no-cache"
+    return resp
 
 
 @app.get("/api")
@@ -223,6 +232,27 @@ def switch_view():
         "preview_mode": preview_mode,
         "redirect": routes[target_role],
     })
+
+
+@app.post("/api/auth/logout")
+@login_required
+def logout():
+    """
+    Server-side logout: audit the logout event and instruct the client to clear
+    all tokens. JWT tokens are stateless so we cannot invalidate them server-side,
+    but logging the event helps detect abuse (e.g. reused tokens after logout).
+    """
+    user = get_current_user()
+    try:
+        db = get_supabase()
+        audit_log(db, user["sub"], "auth.logout", user.get("email", ""), {
+            "role": user.get("role"),
+        })
+    except RuntimeError:
+        pass
+    resp = jsonify({"message": "Logged out successfully"})
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
 
 
 # Keep old resolve endpoint for backward compat (redirects to login)

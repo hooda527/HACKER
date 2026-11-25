@@ -15,6 +15,9 @@
       if(!user||!user.token){location.replace('/');}
       else if(user.role==='student'){location.replace('/student/dashboard');}
       else if(user.role!=='organizer'&&user.role!=='administrator'){location.replace('/');}
+      if(window.history&&window.history.replaceState){
+        window.history.replaceState(null,'',window.location.href);
+      }
     })();
   </script>
   <div class="flex h-screen overflow-hidden">
@@ -124,7 +127,19 @@
     document.getElementById('org-email').textContent=user.email;
 
     function authHeader(){return{'Authorization':'Bearer '+user.token,'Content-Type':'application/json'};}
-    function logout(){localStorage.removeItem('ep_user');sessionStorage.removeItem('ep_preview_role');location.replace('/');}
+
+    function clearSession(){
+      localStorage.removeItem('ep_user');
+      localStorage.removeItem('event-portal-user');
+      localStorage.removeItem('event-portal-user-id');
+      sessionStorage.removeItem('ep_preview_role');
+    }
+
+    async function logout(){
+      try{ await fetch('/api/auth/logout',{method:'POST',headers:authHeader()}); }catch(e){}
+      clearSession();
+      location.replace('/');
+    }
 
     var isPreview = (user.role === 'administrator');
     if (isPreview) {

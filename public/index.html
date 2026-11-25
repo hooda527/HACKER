@@ -863,6 +863,9 @@
             if (r.status === 401 || r.status === 403) {
               currentUser = null;
               window.localStorage.removeItem('ep_user');
+              window.localStorage.removeItem('event-portal-user');
+              window.localStorage.removeItem('event-portal-user-id');
+              window.sessionStorage.removeItem('ep_preview_role');
               updateAuthUI();
               return null;
             }
@@ -1201,6 +1204,9 @@
               if (res.status === 401) {
                 currentUser = null;
                 window.localStorage.removeItem('ep_user');
+                window.localStorage.removeItem('event-portal-user');
+                window.localStorage.removeItem('event-portal-user-id');
+                window.sessionStorage.removeItem('ep_preview_role');
                 updateAuthUI();
                 openAuthModal();
                 return;

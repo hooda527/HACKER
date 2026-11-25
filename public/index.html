@@ -1,891 +1,855 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Portal — Dashboard</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config" data-stitch-original-src="3cd5118369aecd2d===../../tailwind.config.js">/** @type {import('tailwindcss').Config} */
-  globalThis.tailwind = globalThis.tailwind || {};
-  globalThis.tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        colors: {
-          'success': '#15803D',
-          'on-success': '#FFFFFF',
-          'success-container': '#DCFCE7',
-          'on-success-container': '#14532D',
-          'info': '#155EEF',
-          'on-info': '#FFFFFF',
-          'info-container': '#DBEAFE',
-          'on-info-container': '#1E3A8A',
-          'warning': '#B45309',
-          'on-warning': '#FFFFFF',
-          'warning-container': '#FEF3C7',
-          'on-warning-container': '#78350F',
-          'gold-container': '#FEF0C7',
-          'on-gold-container': '#7A4F01',
-          'silver-container': '#E2E8F0',
-          'on-silver-container': '#334155',
-          'bronze-container': '#FFEDD5',
-          'on-bronze-container': '#7C2D12',
-          'light-primary': '#0047C1',
-          'light-on-primary': '#FFFFFF',
-          'light-primary-container': '#155EEF',
-          'light-on-primary-container': '#E7EAFF',
-          'light-secondary': '#475C9A',
-          'light-on-secondary': '#FFFFFF',
-          'light-secondary-container': '#DBE1FF',
-          'light-on-secondary-container': '#142C69',
-          'light-tertiary': '#943000',
-          'light-on-tertiary': '#FFFFFF',
-          'light-tertiary-container': '#FFDBCF',
-          'light-on-tertiary-container': '#5B1A00',
-          'light-error': '#BA1A1A',
-          'light-on-error': '#FFFFFF',
-          'light-error-container': '#FFDAD6',
-          'light-on-error-container': '#93000A',
-          'light-background': '#FAF8FF',
-          'light-on-background': '#191B24',
-          'light-surface': '#FAF8FF',
-          'light-surface-dim': '#D9D9E5',
-          'light-surface-bright': '#FAF8FF',
-          'light-surface-container-lowest': '#FFFFFF',
-          'light-surface-container-low': '#F2F3FF',
-          'light-surface-container': '#EDEDF9',
-          'light-surface-container-high': '#E7E7F3',
-          'light-surface-container-highest': '#E1E1EE',
-          'light-on-surface': '#191B24',
-          'light-surface-variant': '#DFE1F4',
-          'light-on-surface-variant': '#434655',
-          'light-outline': '#737687',
-          'light-outline-variant': '#C3C6D8',
-          'light-inverse-surface': '#2E3039',
-          'light-inverse-on-surface': '#F0F0FC',
-          'light-inverse-primary': '#B4C5FF',
-          'dark-primary': '#B4C5FF',
-          'dark-on-primary': '#002979',
-          'dark-primary-container': '#155EEF',
-          'dark-on-primary-container': '#E7EAFF',
-          'dark-secondary': '#B4C5FF',
-          'dark-on-secondary': '#142C69',
-          'dark-secondary-container': '#314683',
-          'dark-on-secondary-container': '#A2B6FB',
-          'dark-tertiary': '#FFB59B',
-          'dark-on-tertiary': '#5B1A00',
-          'dark-tertiary-container': '#BD3F00',
-          'dark-on-tertiary-container': '#FFE6DE',
-          'dark-error': '#FFB4AB',
-          'dark-on-error': '#690005',
-          'dark-error-container': '#93000A',
-          'dark-on-error-container': '#FFDAD6',
-          'dark-background': '#11131B',
-          'dark-on-background': '#E1E1EE',
-          'dark-surface': '#11131B',
-          'dark-surface-dim': '#11131B',
-          'dark-surface-bright': '#373942',
-          'dark-surface-container-lowest': '#0C0E16',
-          'dark-surface-container-low': '#191B24',
-          'dark-surface-container': '#1D1F28',
-          'dark-surface-container-high': '#272A33',
-          'dark-surface-container-highest': '#32343E',
-          'dark-on-surface': '#E1E1EE',
-          'dark-surface-variant': '#434655',
-          'dark-on-surface-variant': '#C3C6D8',
-          'dark-outline': '#8D90A1',
-          'dark-outline-variant': '#434655',
-          'dark-inverse-surface': '#E1E1EE',
-          'dark-inverse-on-surface': '#2E3039',
-          'dark-inverse-primary': '#0052DC',
-        },
-        borderRadius: {
-          'sm': '4px',
-          'DEFAULT': '8px',
-          'md': '12px',
-          'lg': '16px',
-          'xl': '24px',
-          'full': '9999px',
-        },
-        spacing: {
-          'gutter-xs': '4px',
-          'gutter-sm': '8px',
-          'gutter-md': '16px',
-          'gutter-lg': '24px',
-          'gutter-xl': '32px',
-          'section': '24px',
-          'page-margin': '24px',
-        },
-        fontFamily: {
-          'display': ['"Red Hat Text"', 'sans-serif'],
-          'headline': ['"Red Hat Text"', 'sans-serif'],
-          'title': ['"Red Hat Text"', 'sans-serif'],
-          'body': ['"Instrument Sans"', 'sans-serif'],
-          'label': ['"Instrument Sans"', 'sans-serif'],
-          'mono': ['"Source Code Pro"', 'monospace'],
-        },
-        fontSize: {
-          'display-lg': ['36px', { lineHeight: '44px', letterSpacing: '-0.5px', fontWeight: '700' }],
-          'display-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.25px', fontWeight: '700' }],
-          'headline-lg': ['22px', { lineHeight: '28px', letterSpacing: '-0.2px', fontWeight: '700' }],
-          'headline-md': ['18px', { lineHeight: '24px', letterSpacing: '-0.1px', fontWeight: '700' }],
-          'title-md': ['16px', { lineHeight: '22px', fontWeight: '600' }],
-          'title-sm': ['14px', { lineHeight: '20px', fontWeight: '600' }],
-          'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }],
-          'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }],
-          'label-lg': ['14px', { lineHeight: '20px', fontWeight: '600' }],
-          'label-md': ['12px', { lineHeight: '16px', fontWeight: '600' }],
-          'label-sm': ['11px', { lineHeight: '14px', fontWeight: '600' }],
-          'mono-md': ['13px', { lineHeight: '18px', fontWeight: '600' }],
-        },
-        transitionDuration: {
-          'state-change': '120ms',
-          'surface-enter': '180ms',
-          'surface-exit': '120ms',
-        },
-        transitionDelay: {
-          'state-change': '0ms',
-          'surface-enter': '0ms',
-          'surface-exit': '0ms',
-        },
-        transitionTimingFunction: {
-          'state-change': 'ease-out',
-          'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
-          'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
-        },
-      },
-    },
-  };
-  if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
-  </script>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Red+Hat+Text:wght@500;600;700&amp;family=Source+Code+Pro:wght@500;600&amp;display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
-    <style>
-      .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        line-height: 1 !important;
-        box-sizing: content-box;
-        overflow: hidden;
-        white-space: nowrap;
-        direction: ltr;
-        vertical-align: middle;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Portal — Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Instrument Sans"', 'system-ui', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            portal: {
+              bg: '#EDF3FC',
+              card: '#FFFFFF',
+              border: '#E2E8F0',
+              primary: '#155EEF',
+              primaryHover: '#0F4CD4',
+              softBlue: '#DCEAFE',
+              softBlueText: '#1D4ED8',
+              ink: '#0F172A',
+              muted: '#64748B',
+            }
+          },
+          boxShadow: {
+            card: '0 2px 10px rgba(15, 23, 42, 0.04)',
+            float: '0 10px 25px rgba(15, 23, 42, 0.10)',
+          }
+        }
       }
-    </style>
-  </head>
-  <body class="bg-light-surface-container-low text-light-on-surface font-body antialiased">
-  
-    <div class="min-h-[1024px] flex flex-col" data-stitch-vh="min-h-[1024px]===min-h-screen">
-  
-      <!-- Top Navigation Header -->
-      <header class="sticky top-0 z-30 bg-light-surface-container-lowest border-b border-light-outline-variant px-gutter-md lg:px-gutter-lg py-gutter-sm">
-        <div class="max-w-[1440px] mx-auto flex items-center justify-between gap-gutter-md">
-  
-          <!-- Brand & Mobile Sidebar Toggle -->
-          <div class="flex items-center gap-gutter-sm shrink-0">
-            <button id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full text-light-on-surface-variant hover:bg-light-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary">
-              <span class="material-symbols-outlined text-headline-md" aria-hidden="true">menu</span>
-            </button>
-  
-            <a href="#home" class="flex items-center gap-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary rounded px-gutter-xs py-gutter-xs">
-              <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-light-primary text-light-on-primary">
-                <span class="material-symbols-outlined text-headline-md" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">emoji_events</span>
-              </span>
-              <span class="font-headline text-headline-md text-light-on-surface" data-design-text-token="headline-md">Event Portal</span>
-            </a>
-          </div>
-  
-          <!-- Global Search Bar -->
-          <div class="flex-1 max-w-xl hidden sm:block">
-            <!-- COMPONENT: input-field-search -->
-            <label data-component-id="input-field-search" data-component-type="input-field" data-component-variant="search" class="relative flex items-center w-full">
-              <span class="sr-only font-body text-label-md" data-design-text-token="label-md">Search for events</span>
-              <span class="material-symbols-outlined absolute left-gutter-md text-light-outline text-title-md pointer-events-none" aria-hidden="true">search</span>
-              <input id="event-search-input" type="search" placeholder="Search for events..." class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full border border-light-outline-variant bg-light-surface-container-low text-light-on-surface placeholder:text-light-outline font-body text-body-md focus:bg-light-surface-container-lowest focus:border-light-primary focus:ring-2 focus:ring-light-primary/20 focus:outline-none">
-            </label>
-          </div>
-  
-          <!-- Header Actions: Notifications & View Switcher (No Login Required) -->
-          <div class="flex items-center gap-gutter-sm shrink-0">
-            <!-- Notification Bell -->
-            <div class="relative">
-              <!-- COMPONENT: button-icon -->
-              <button id="notif-btn" data-component-id="button-icon" data-component-type="button" data-component-variant="icon" type="button" aria-label="3 unread notifications" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-light-on-surface-variant bg-light-surface-container-lowest border border-light-outline-variant transition-colors duration-state-change ease-state-change hover:bg-light-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary">
-                <span class="material-symbols-outlined text-headline-md" aria-hidden="true">notifications</span>
-                <!-- COMPONENT: badge-numeric -->
-                <span data-component-id="badge-numeric" data-component-type="badge" data-component-variant="numeric" aria-hidden="true" class="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-5 h-5 px-gutter-xs rounded-full bg-light-error text-light-on-error font-body text-label-sm tabular-nums">
-                  <span data-design-text-token="label-sm">3</span>
-                </span>
-              </button>
-            </div>
-  
-            <!-- Quick Role / View Switcher (No Auth Gate) -->
-            <div class="relative">
-              <button id="role-menu-btn" type="button" aria-haspopup="menu" aria-expanded="false" class="inline-flex items-center gap-gutter-xs p-gutter-xs pr-gutter-sm rounded-full border border-light-outline-variant bg-light-surface-container-lowest hover:bg-light-surface-container-low transition-colors duration-state-change ease-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary">
-                <!-- COMPONENT: avatar-image -->
-                <div data-component-id="avatar-image" data-component-type="avatar" data-component-variant="image" role="img" aria-label="Active viewer avatar" class="w-8 h-8 rounded-full overflow-hidden bg-light-surface-container shrink-0">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBRuWYn0xw0Cd9rfeteJZ3m_myhQz3FNYLAIgbml-TWF9IYaYMQSHU0HYen4nyCIIx0-8vMZGHGdMwMaWO4FB5qF0NC3ld1MlUGSj5keik2UkIaO87O-u5mHIoDI0kGAAGSO7FmRc1MrU93byZdZeGzGKs9qh-j7LYkoImX5CyAhH2JdPJlwsyXtB4ddRiIWXnmLL0HAcqj6z_isllDIaSIEeemFay72cq7PQJ_idYj66KyXuEw" alt="Active viewer" class="w-full h-full object-cover" data-stitch-original-src="d771152ecaae28eb===../../images/avatar_aryan.jpg">
-                </div>
-                <span id="active-role-label" class="hidden md:inline font-body text-label-md text-light-on-surface" data-design-text-token="label-md">Student</span>
-                <span class="material-symbols-outlined text-title-sm text-light-on-surface-variant" aria-hidden="true">expand_more</span>
-              </button>
-  
-              <div id="role-menu-dropdown" role="menu" class="hidden absolute right-0 mt-gutter-sm w-44 bg-light-surface-container-lowest border border-light-outline-variant rounded-md shadow-md py-gutter-xs z-40">
-                <button type="button" role="menuitem" data-role="Profile" class="role-option w-full flex items-center gap-gutter-sm px-gutter-md py-gutter-sm text-left font-body text-body-md text-light-on-surface hover:bg-light-surface-container-low">
-                  <span class="material-symbols-outlined text-title-md text-light-on-surface-variant" aria-hidden="true">person</span>
-                  <span data-design-text-token="body-md">Profile</span>
-                </button>
-                <button type="button" role="menuitem" data-role="Organizer" class="role-option w-full flex items-center gap-gutter-sm px-gutter-md py-gutter-sm text-left font-body text-body-md text-light-on-surface hover:bg-light-surface-container-low">
-                  <span class="material-symbols-outlined text-title-md text-light-on-surface-variant" aria-hidden="true">event_note</span>
-                  <span data-design-text-token="body-md">Organizer</span>
-                </button>
-                <button type="button" role="menuitem" data-role="Student" class="role-option w-full flex items-center gap-gutter-sm px-gutter-md py-gutter-sm text-left font-body text-body-md text-light-primary bg-light-secondary-container/50 hover:bg-light-secondary-container">
-                  <span class="material-symbols-outlined text-title-md text-light-primary" aria-hidden="true">school</span>
-                  <span data-design-text-token="body-md">Student</span>
-                </button>
-              </div>
-            </div>
-          </div>
-  
-        </div>
-      </header>
-  
-      <!-- Workspace Shell: Sidebar + Main Content -->
-      <div class="flex-1 max-w-[1440px] w-full mx-auto flex">
-  
-        <!-- Left Navigation Sidebar -->
-        <aside id="portal-sidebar" aria-label="Primary navigation" class="hidden lg:flex lg:flex-col w-56 shrink-0 bg-light-surface-container-lowest border-r border-light-outline-variant p-gutter-md gap-gutter-lg min-h-[1024px]" data-stitch-vh="min-h-[1024px]===min-h-screen">
-          <nav class="flex flex-col gap-gutter-xs">
-            <a href="#home" class="flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded bg-light-secondary-container text-light-on-secondary-container font-body text-label-lg">
-              <span class="material-symbols-outlined text-title-md text-light-primary" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">home</span>
-              <span data-design-text-token="label-lg">Home</span>
-            </a>
-            <a href="#about" class="flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-              <span class="material-symbols-outlined text-title-md" aria-hidden="true">info</span>
-              <span data-design-text-token="body-md">About</span>
-            </a>
-            <a href="#contact" class="flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-              <span class="material-symbols-outlined text-title-md" aria-hidden="true">mail</span>
-              <span data-design-text-token="body-md">Contact</span>
-            </a>
-            <a href="#help" class="flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-              <span class="material-symbols-outlined text-title-md" aria-hidden="true">help</span>
-              <span data-design-text-token="body-md">Help</span>
-            </a>
-          </nav>
-  
-          <div class="border-t border-light-outline-variant pt-gutter-md flex flex-col gap-gutter-sm">
-            <h2 class="px-gutter-md font-headline text-title-sm text-light-primary" data-design-text-token="title-sm">Events</h2>
-            <nav class="flex flex-col gap-gutter-xs" aria-label="Event categories">
-              <button type="button" data-category="all" class="sidebar-cat-btn flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-left text-light-on-surface hover:bg-light-surface-container-low font-body text-body-md transition-colors duration-state-change ease-state-change">
-                <span class="material-symbols-outlined text-title-md text-light-primary" aria-hidden="true">calendar_month</span>
-                <span data-design-text-token="body-md">All Events</span>
-              </button>
-              <button type="button" data-category="Competitions" class="sidebar-cat-btn flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-left text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-                <span class="material-symbols-outlined text-title-md text-light-primary" aria-hidden="true">emoji_events</span>
-                <span data-design-text-token="body-md">Competitions</span>
-              </button>
-              <button type="button" data-category="Workshops" class="sidebar-cat-btn flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-left text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-                <span class="material-symbols-outlined text-title-md text-light-primary" aria-hidden="true">star</span>
-                <span data-design-text-token="body-md">Workshops</span>
-              </button>
-              <button type="button" data-category="Seminars" class="sidebar-cat-btn flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-left text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-                <span class="material-symbols-outlined text-title-md text-light-primary" aria-hidden="true">groups</span>
-                <span data-design-text-token="body-md">Seminars</span>
-              </button>
-              <button type="button" data-category="Cultural Events" class="sidebar-cat-btn flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded text-left text-light-on-surface-variant hover:bg-light-surface-container-low hover:text-light-on-surface font-body text-body-md transition-colors duration-state-change ease-state-change">
-                <span class="material-symbols-outlined text-title-md text-light-primary" aria-hidden="true">theater_comedy</span>
-                <span data-design-text-token="body-md">Cultural Events</span>
-              </button>
-            </nav>
-          </div>
-        </aside>
-  
-        <!-- Main Dashboard Content -->
-        <main class="flex-1 min-w-0 p-gutter-md lg:p-gutter-lg flex flex-col gap-gutter-lg">
-  
-          <!-- Mobile Search Bar -->
-          <div class="sm:hidden">
-            <label class="relative flex items-center w-full">
-              <span class="sr-only font-body text-label-md" data-design-text-token="label-md">Search for events</span>
-              <span class="material-symbols-outlined absolute left-gutter-md text-light-outline text-title-md pointer-events-none" aria-hidden="true">search</span>
-              <input type="search" placeholder="Search for events..." class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full border border-light-outline-variant bg-light-surface-container-lowest text-light-on-surface placeholder:text-light-outline font-body text-body-md focus:border-light-primary focus:ring-2 focus:ring-light-primary/20 focus:outline-none">
-            </label>
-          </div>
-  
-          <!-- Row 1: Running, Upcoming, and Closed Events -->
-          <section aria-label="Featured event categories" class="grid grid-cols-1 md:grid-cols-3 gap-gutter-md items-stretch">
-  
-            <!-- Card 1: Running Events -->
-            <!-- COMPONENT: card-elevated -->
-            <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" data-event-card="24-Hour Hackathon 2027" data-category="Competitions" class="h-full bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-md">
-              <header class="flex items-center justify-between gap-gutter-sm">
-                <div class="flex items-center gap-gutter-sm">
-                  <span class="material-symbols-outlined text-light-primary text-headline-md" aria-hidden="true">directions_run</span>
-                  <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Running Events</h2>
-                </div>
-                <!-- COMPONENT: button-tertiary -->
-                <button data-component-id="button-tertiary" data-component-type="button" data-component-variant="tertiary" type="button" class="inline-flex items-center gap-gutter-xs px-gutter-xs py-gutter-xs rounded text-light-primary font-body text-label-md transition-colors duration-state-change ease-state-change hover:bg-light-secondary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary">
-                  <span data-design-text-token="label-md">View All</span>
-                  <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
-                </button>
-              </header>
-  
-              <div class="relative overflow-hidden rounded-md aspect-video bg-light-surface-container">
-                <img src="https://lh3.googleusercontent.com/aida/ALJJyrBB4bGzyJsXHCskW5aZl9VJ5t8UrD86IcjCOLAh2R_btuzGeQi4zS9g4l74_QPQC6qxlL3ac8TYTC21kc_B8lfSaW7p0oMfpQeh-YPqizyvYQbaB7JfvBc5KtqdTn5hpLX2t_-nQITmuXh2iJriOk3mgHyxbJARWNeczzaEhbj1EYMIfWzP5uA7fvTe-m-Z33H4GKzCBvstzhjk06D6s2WlZS6reWjvYNJI6F9iG2H5eCXHGq8JEIJv" alt="24-Hour Hackathon 2027" class="w-full h-full object-cover" data-stitch-original-src="afd3112b5da3ee4f===../../images/event_hackathon.jpg">
-                <div class="absolute inset-0 bg-gradient-to-t from-light-inverse-surface/85 via-light-inverse-surface/35 to-transparent flex flex-col justify-end p-gutter-md">
-                  <span class="font-headline text-headline-md text-light-on-primary" data-design-text-token="headline-md">HACKATHON</span>
-                  <span class="font-body text-body-sm text-light-on-primary-container" data-design-text-token="body-sm">Code · Build · Innovate</span>
-                </div>
-              </div>
-  
-              <div class="flex flex-col gap-gutter-sm mt-auto">
-                <h3 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">24-Hour Hackathon 2027</h3>
-                <div class="flex items-center justify-between gap-gutter-sm flex-wrap">
-                  <span class="inline-flex items-center gap-gutter-xs font-body text-body-sm text-light-on-surface-variant tabular-nums" data-design-text-token="body-sm">
-                    <span class="material-symbols-outlined text-title-sm text-light-primary" aria-hidden="true">calendar_today</span>
-                    Dec 10, 2026 – Dec 11, 2026
-                  </span>
-                  <!-- COMPONENT: badge-success -->
-                  <span data-component-id="badge-success" data-component-type="badge" data-component-variant="success" role="status" class="inline-flex items-center gap-gutter-xs px-gutter-sm py-gutter-xs rounded-full bg-success-container text-on-success-container font-body text-label-sm">
-                    <span class="w-1.5 h-1.5 rounded-full bg-success" aria-hidden="true"></span>
-                    <span data-design-text-token="label-sm">Ongoing</span>
-                  </span>
-                </div>
-              </div>
-            </article>
-  
-            <!-- Card 2: Upcoming Events -->
-            <!-- COMPONENT: card-elevated -->
-            <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" data-event-card="AI Summit 2027" data-category="Seminars" class="h-full bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-md">
-              <header class="flex items-center justify-between gap-gutter-sm">
-                <div class="flex items-center gap-gutter-sm">
-                  <span class="material-symbols-outlined text-light-primary text-headline-md" aria-hidden="true">schedule</span>
-                  <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Upcoming Events</h2>
-                </div>
-                <!-- COMPONENT: button-tertiary -->
-                <button data-component-id="button-tertiary" data-component-type="button" data-component-variant="tertiary" type="button" class="inline-flex items-center gap-gutter-xs px-gutter-xs py-gutter-xs rounded text-light-primary font-body text-label-md transition-colors duration-state-change ease-state-change hover:bg-light-secondary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary">
-                  <span data-design-text-token="label-md">View All</span>
-                  <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
-                </button>
-              </header>
-  
-              <div class="relative overflow-hidden rounded-md aspect-video bg-light-surface-container">
-                <img src="https://lh3.googleusercontent.com/aida/ALJJyrDAl9oU-pJeOHa8fjBdqv-etaTzYulDwAdWr27R74Bl46Z1cRvB9fUtdsw4BoVPv-erFbKLaNNh0wC_ahucUgdaUWRNmuMVyhgPBI8TEI_b8mZnSwASECs_tbE49Q3gsQ--PZh4Dfb0bRFbDHXcgaENsUn87qLPYCSKBwW35vd0ufDK0K4la78AEDE5nyaISp1DYCpiVhMwWkqZ_FYxIouRQst6ElDISzgUlkHTnTahkw31-G2Ljn5_" alt="AI Summit 2027" class="w-full h-full object-cover" data-stitch-original-src="9ef4b3c519c62a00===../../images/event_ai_summit.jpg">
-                <div class="absolute inset-0 bg-gradient-to-t from-light-inverse-surface/85 via-light-inverse-surface/35 to-transparent flex flex-col justify-end p-gutter-md">
-                  <span class="font-headline text-headline-md text-light-on-primary" data-design-text-token="headline-md">AI Summit 2027</span>
-                  <span class="font-body text-body-sm text-light-on-primary-container" data-design-text-token="body-sm">Keynotes · Research · Demos</span>
-                </div>
-              </div>
-  
-              <div class="flex flex-col gap-gutter-sm mt-auto">
-                <h3 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">AI Summit 2027</h3>
-                <div class="flex items-center justify-between gap-gutter-sm flex-wrap">
-                  <span class="inline-flex items-center gap-gutter-xs font-body text-body-sm text-light-on-surface-variant tabular-nums" data-design-text-token="body-sm">
-                    <span class="material-symbols-outlined text-title-sm text-light-primary" aria-hidden="true">calendar_today</span>
-                    Jan 15, 2027 – Jan 16, 2027
-                  </span>
-                  <!-- COMPONENT: badge-info -->
-                  <span data-component-id="badge-info" data-component-type="badge" data-component-variant="status" role="status" class="inline-flex items-center gap-gutter-xs px-gutter-sm py-gutter-xs rounded-full bg-info-container text-on-info-container font-body text-label-sm">
-                    <span class="w-1.5 h-1.5 rounded-full bg-info" aria-hidden="true"></span>
-                    <span data-design-text-token="label-sm">Upcoming</span>
-                  </span>
-                </div>
-              </div>
-            </article>
-  
-            <!-- Card 3: Closed Events -->
-            <!-- COMPONENT: card-elevated -->
-            <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" data-event-card="Cultural Fest 2026" data-category="Cultural Events" class="h-full bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-md">
-              <header class="flex items-center justify-between gap-gutter-sm">
-                <div class="flex items-center gap-gutter-sm">
-                  <span class="material-symbols-outlined text-light-primary text-headline-md" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">check_circle</span>
-                  <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Closed Events</h2>
-                </div>
-              </header>
-  
-              <div class="relative overflow-hidden rounded-md aspect-video bg-light-surface-container">
-                <img src="https://lh3.googleusercontent.com/aida/ALJJyrDUu6Z8Jcw_vscYw5AZJmfBmgotTf8MF6dkmFh3MZcwlr8UPPf0o_24Xn8WvrkOtVaVBNVBXI2mQOxs7wIKSlHosr1uQcFja0jO_3xgZ_Ihq5VUKwzIn3Idvsdvb_CfZ21LYLu3h-KryO9pxIo5Uid5yil7jUTpcTlc9yk74uSKYYci0reDLHufLxKTPZAfllpnUfB6tvsMSUx4KOmh_R5Q80gAcc9TiJHSwDEaNaj7SO9c3a2f8fGGSeYeQ24" alt="Cultural Fest 2026" class="w-full h-full object-cover" data-stitch-original-src="a08d72cbfb718475===../../images/event_cultural_fest.jpg">
-                <div class="absolute inset-0 bg-gradient-to-t from-light-inverse-surface/85 via-light-inverse-surface/35 to-transparent flex flex-col justify-end p-gutter-md">
-                  <span class="font-headline text-headline-md text-light-on-primary" data-design-text-token="headline-md">CULTURAL FEST</span>
-                  <span class="font-body text-body-sm text-light-on-primary-container" data-design-text-token="body-sm">Music · Arts · Showcase</span>
-                </div>
-              </div>
-  
-              <div class="flex flex-col gap-gutter-sm mt-auto">
-                <h3 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Cultural Fest 2026</h3>
-                <div class="flex items-center justify-between gap-gutter-sm flex-wrap">
-                  <span class="inline-flex items-center gap-gutter-xs font-body text-body-sm text-light-on-surface-variant tabular-nums" data-design-text-token="body-sm">
-                    <span class="material-symbols-outlined text-title-sm text-light-primary" aria-hidden="true">calendar_today</span>
-                    Nov 20, 2026 – Nov 22, 2026
-                  </span>
-                  <!-- COMPONENT: badge-neutral -->
-                  <span data-component-id="badge-neutral" data-component-type="badge" data-component-variant="status" role="status" class="inline-flex items-center gap-gutter-xs px-gutter-sm py-gutter-xs rounded-full bg-light-surface-container-high text-light-on-surface-variant font-body text-label-sm">
-                    <span class="w-1.5 h-1.5 rounded-full bg-light-outline" aria-hidden="true"></span>
-                    <span data-design-text-token="label-sm">Closed</span>
-                  </span>
-                </div>
-              </div>
-            </article>
-  
-          </section>
-  
-          <!-- Row 2: Filters, Updates & Notifications, Registered Events + Feedback -->
-          <section aria-label="Workspace tools and updates" class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-md items-start">
-  
-            <!-- Column 1: Filter Events -->
-            <!-- COMPONENT: card-action -->
-            <article data-component-id="card-action" data-component-type="card" data-component-variant="action" class="lg:col-span-3 bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-md">
-              <header class="flex items-center gap-gutter-sm">
-                <span class="material-symbols-outlined text-light-primary text-headline-md" aria-hidden="true">filter_alt</span>
-                <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Filter Events</h2>
-              </header>
-  
-              <form id="filter-form" class="flex flex-col gap-gutter-md">
-                <div class="flex flex-col gap-gutter-sm">
-                  <span class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">Date / Month</span>
-                  <label class="flex flex-col gap-gutter-xs">
-                    <span class="sr-only font-body text-label-md" data-design-text-token="label-md">Select Date</span>
-                    <select id="filter-date" class="w-full px-gutter-sm py-gutter-sm rounded border border-light-outline-variant bg-light-surface-container-lowest text-light-on-surface font-body text-body-md focus:border-light-primary focus:ring-2 focus:ring-light-primary/20 focus:outline-none">
-                      <option value>Select Date</option>
-                      <option value="dec-10">Dec 10, 2026</option>
-                      <option value="jan-15">Jan 15, 2027</option>
-                      <option value="nov-20">Nov 20, 2026</option>
-                    </select>
-                  </label>
-                  <label class="flex flex-col gap-gutter-xs">
-                    <span class="sr-only font-body text-label-md" data-design-text-token="label-md">Select Month</span>
-                    <select id="filter-month" class="w-full px-gutter-sm py-gutter-sm rounded border border-light-outline-variant bg-light-surface-container-lowest text-light-on-surface font-body text-body-md focus:border-light-primary focus:ring-2 focus:ring-light-primary/20 focus:outline-none">
-                      <option value>Select Month</option>
-                      <option value="nov">November 2026</option>
-                      <option value="dec">December 2026</option>
-                      <option value="jan">January 2027</option>
-                    </select>
-                  </label>
-                </div>
-  
-                <fieldset class="flex flex-col gap-gutter-sm">
-                  <legend class="font-headline text-title-sm text-light-on-surface mb-gutter-xs" data-design-text-token="title-sm">Event Type</legend>
-                  <label class="flex items-center gap-gutter-sm cursor-pointer">
-                    <input type="checkbox" name="event-type" value="Competitions" class="rounded border-light-outline text-light-primary focus:ring-light-primary">
-                    <span class="font-body text-body-md text-light-on-surface" data-design-text-token="body-md">Competitions</span>
-                  </label>
-                  <label class="flex items-center gap-gutter-sm cursor-pointer">
-                    <input type="checkbox" name="event-type" value="Workshops" class="rounded border-light-outline text-light-primary focus:ring-light-primary">
-                    <span class="font-body text-body-md text-light-on-surface" data-design-text-token="body-md">Workshops</span>
-                  </label>
-                  <label class="flex items-center gap-gutter-sm cursor-pointer">
-                    <input type="checkbox" name="event-type" value="Seminars" class="rounded border-light-outline text-light-primary focus:ring-light-primary">
-                    <span class="font-body text-body-md text-light-on-surface" data-design-text-token="body-md">Seminars</span>
-                  </label>
-                  <label class="flex items-center gap-gutter-sm cursor-pointer">
-                    <input type="checkbox" name="event-type" value="Cultural Events" class="rounded border-light-outline text-light-primary focus:ring-light-primary">
-                    <span class="font-body text-body-md text-light-on-surface" data-design-text-token="body-md">Cultural Events</span>
-                  </label>
-                </fieldset>
-  
-                <footer>
-                  <!-- COMPONENT: button-with-icon -->
-                  <button data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" type="submit" class="w-full inline-flex items-center justify-center gap-gutter-sm px-gutter-md py-gutter-sm rounded bg-light-primary text-light-on-primary font-body text-label-lg shadow-sm transition-colors duration-state-change ease-state-change hover:bg-light-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary focus-visible:ring-offset-2 active:opacity-90">
-                    <span class="material-symbols-outlined text-title-md" aria-hidden="true">filter_alt</span>
-                    <span data-design-text-token="label-lg">Apply Filters</span>
-                  </button>
-                  <p id="filter-status" class="mt-gutter-xs font-body text-body-sm text-light-primary hidden" role="status"></p>
-                </footer>
-              </form>
-            </article>
-  
-            <!-- Column 2: Updates & Notifications -->
-            <article id="updates-panel" data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="lg:col-span-5 bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-sm">
-              <header class="flex items-center justify-between gap-gutter-sm pb-gutter-xs">
-                <div class="flex items-center gap-gutter-sm">
-                  <span class="material-symbols-outlined text-light-primary text-headline-md" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">notifications</span>
-                  <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Updates &amp; Notifications</h2>
-                </div>
-                <button data-component-id="button-tertiary" data-component-type="button" data-component-variant="tertiary" type="button" class="inline-flex items-center gap-gutter-xs px-gutter-xs py-gutter-xs rounded text-light-primary font-body text-label-md transition-colors duration-state-change ease-state-change hover:bg-light-secondary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary">
-                  <span data-design-text-token="label-md">View All</span>
-                  <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
-                </button>
-              </header>
-  
-              <ul class="divide-y divide-light-outline-variant/60">
-                <li class="py-gutter-sm flex items-start gap-gutter-md">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-info-container text-on-info-container shrink-0 mt-0.5">
-                    <span class="material-symbols-outlined text-title-md" aria-hidden="true">info</span>
-                  </span>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-baseline justify-between gap-gutter-sm">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">New event &#34;AI Summit 2027&#34; is now live!</h3>
-                      <span class="font-body text-body-sm text-light-on-surface-variant tabular-nums shrink-0" data-design-text-token="body-sm">2h ago</span>
-                    </div>
-                    <p class="font-body text-body-sm text-light-on-surface-variant mt-gutter-xs text-pretty" data-design-text-token="body-sm">Explore and register for the upcoming AI Summit.</p>
-                  </div>
-                </li>
-  
-                <li class="py-gutter-sm flex items-start gap-gutter-md">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-success-container text-on-success-container shrink-0 mt-0.5">
-                    <span class="material-symbols-outlined text-title-md" aria-hidden="true">check_circle</span>
-                  </span>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-baseline justify-between gap-gutter-sm">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">Your registration for Hackathon 2027 is confirmed.</h3>
-                      <span class="font-body text-body-sm text-light-on-surface-variant tabular-nums shrink-0" data-design-text-token="body-sm">4h ago</span>
-                    </div>
-                    <p class="font-body text-body-sm text-light-on-surface-variant mt-gutter-xs text-pretty" data-design-text-token="body-sm">Check your email for details.</p>
-                  </div>
-                </li>
-  
-                <li class="py-gutter-sm flex items-start gap-gutter-md">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-warning-container text-on-warning-container shrink-0 mt-0.5">
-                    <span class="material-symbols-outlined text-title-md" aria-hidden="true">campaign</span>
-                  </span>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-baseline justify-between gap-gutter-sm">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">Event schedule for Cultural Fest 2026 has been updated.</h3>
-                      <span class="font-body text-body-sm text-light-on-surface-variant tabular-nums shrink-0" data-design-text-token="body-sm">1d ago</span>
-                    </div>
-                    <p class="font-body text-body-sm text-light-on-surface-variant mt-gutter-xs text-pretty" data-design-text-token="body-sm">See the latest timings and venue.</p>
-                  </div>
-                </li>
-  
-                <li class="py-gutter-sm flex items-start gap-gutter-md">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-light-secondary-container text-light-on-secondary-container shrink-0 mt-0.5">
-                    <span class="material-symbols-outlined text-title-md" aria-hidden="true">redeem</span>
-                  </span>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-baseline justify-between gap-gutter-sm">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">Win exciting prizes at the upcoming events!</h3>
-                      <span class="font-body text-body-sm text-light-on-surface-variant tabular-nums shrink-0" data-design-text-token="body-sm">2d ago</span>
-                    </div>
-                    <p class="font-body text-body-sm text-light-on-surface-variant mt-gutter-xs text-pretty" data-design-text-token="body-sm">Participate and stand a chance to win.</p>
-                  </div>
-                </li>
-              </ul>
-            </article>
-  
-            <!-- Column 3: Registered Events & Feedback Form -->
-            <div class="lg:col-span-4 flex flex-col gap-gutter-md">
-  
-              <!-- Registered Events Card -->
-              <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-sm">
-                <header class="flex items-center gap-gutter-sm">
-                  <span class="material-symbols-outlined text-light-primary text-headline-md" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">star</span>
-                  <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Registered Events</h2>
-                </header>
-  
-                <ul class="divide-y divide-light-outline-variant/60">
-                  <li class="py-gutter-sm flex items-center gap-gutter-sm">
-                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrBB4bGzyJsXHCskW5aZl9VJ5t8UrD86IcjCOLAh2R_btuzGeQi4zS9g4l74_QPQC6qxlL3ac8TYTC21kc_B8lfSaW7p0oMfpQeh-YPqizyvYQbaB7JfvBc5KtqdTn5hpLX2t_-nQITmuXh2iJriOk3mgHyxbJARWNeczzaEhbj1EYMIfWzP5uA7fvTe-m-Z33H4GKzCBvstzhjk06D6s2WlZS6reWjvYNJI6F9iG2H5eCXHGq8JEIJv" alt="Hackathon 2027" class="w-14 h-9 rounded-sm object-cover shrink-0 bg-light-surface-container" data-stitch-original-src="afd3112b5da3ee4f===../../images/event_hackathon.jpg">
-                    <div class="flex-1 min-w-0">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">Hackathon 2027</h3>
-                      <p class="font-body text-body-sm text-light-on-surface-variant tabular-nums" data-design-text-token="body-sm">Dec 10–11, 2026</p>
-                    </div>
-                    <span class="inline-flex items-center gap-gutter-xs px-gutter-sm py-gutter-xs rounded-full bg-success-container text-on-success-container font-body text-label-sm shrink-0">
-                      <span class="w-1.5 h-1.5 rounded-full bg-success" aria-hidden="true"></span>
-                      <span data-design-text-token="label-sm">Registered</span>
-                    </span>
-                  </li>
-  
-                  <li class="py-gutter-sm flex items-center gap-gutter-sm">
-                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDAl9oU-pJeOHa8fjBdqv-etaTzYulDwAdWr27R74Bl46Z1cRvB9fUtdsw4BoVPv-erFbKLaNNh0wC_ahucUgdaUWRNmuMVyhgPBI8TEI_b8mZnSwASECs_tbE49Q3gsQ--PZh4Dfb0bRFbDHXcgaENsUn87qLPYCSKBwW35vd0ufDK0K4la78AEDE5nyaISp1DYCpiVhMwWkqZ_FYxIouRQst6ElDISzgUlkHTnTahkw31-G2Ljn5_" alt="AI Summit 2027" class="w-14 h-9 rounded-sm object-cover shrink-0 bg-light-surface-container" data-stitch-original-src="9ef4b3c519c62a00===../../images/event_ai_summit.jpg">
-                    <div class="flex-1 min-w-0">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">AI Summit 2027</h3>
-                      <p class="font-body text-body-sm text-light-on-surface-variant tabular-nums" data-design-text-token="body-sm">Jan 15–16, 2027</p>
-                    </div>
-                    <span class="inline-flex items-center gap-gutter-xs px-gutter-sm py-gutter-xs rounded-full bg-info-container text-on-info-container font-body text-label-sm shrink-0">
-                      <span class="w-1.5 h-1.5 rounded-full bg-info" aria-hidden="true"></span>
-                      <span data-design-text-token="label-sm">Upcoming</span>
-                    </span>
-                  </li>
-  
-                  <li class="py-gutter-sm flex items-center gap-gutter-sm">
-                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDUu6Z8Jcw_vscYw5AZJmfBmgotTf8MF6dkmFh3MZcwlr8UPPf0o_24Xn8WvrkOtVaVBNVBXI2mQOxs7wIKSlHosr1uQcFja0jO_3xgZ_Ihq5VUKwzIn3Idvsdvb_CfZ21LYLu3h-KryO9pxIo5Uid5yil7jUTpcTlc9yk74uSKYYci0reDLHufLxKTPZAfllpnUfB6tvsMSUx4KOmh_R5Q80gAcc9TiJHSwDEaNaj7SO9c3a2f8fGGSeYeQ24" alt="Tech Workshop" class="w-14 h-9 rounded-sm object-cover shrink-0 bg-light-surface-container" data-stitch-original-src="a08d72cbfb718475===../../images/event_cultural_fest.jpg">
-                    <div class="flex-1 min-w-0">
-                      <h3 class="font-headline text-title-sm text-light-on-surface" data-design-text-token="title-sm">Tech Workshop</h3>
-                      <p class="font-body text-body-sm text-light-on-surface-variant tabular-nums" data-design-text-token="body-sm">Feb 05, 2027</p>
-                    </div>
-                    <span class="inline-flex items-center gap-gutter-xs px-gutter-sm py-gutter-xs rounded-full bg-light-surface-container-high text-light-on-surface-variant font-body text-label-sm shrink-0">
-                      <span class="w-1.5 h-1.5 rounded-full bg-light-outline" aria-hidden="true"></span>
-                      <span data-design-text-token="label-sm">Pending</span>
-                    </span>
-                  </li>
-                </ul>
-              </article>
-  
-              <!-- Feedback Form Card -->
-              <!-- COMPONENT: card-action -->
-              <article data-component-id="card-action" data-component-type="card" data-component-variant="action" class="bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-sm">
-                <header class="flex items-center gap-gutter-sm">
-                  <span class="material-symbols-outlined text-light-primary text-headline-md" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">chat</span>
-                  <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Feedback Form</h2>
-                </header>
-  
-                <form id="feedback-form" class="flex flex-col gap-gutter-sm">
-                  <label class="flex flex-col gap-gutter-xs">
-                    <span class="sr-only font-body text-label-md" data-design-text-token="label-md">Share your feedback</span>
-                    <textarea id="feedback-input" rows="3" placeholder="Share your feedback..." class="w-full px-gutter-md py-gutter-sm rounded border border-light-outline-variant bg-light-surface-container-lowest text-light-on-surface placeholder:text-light-outline font-body text-body-md focus:border-light-primary focus:ring-2 focus:ring-light-primary/20 focus:outline-none resize-none"></textarea>
-                  </label>
-  
-                  <footer class="flex items-center justify-between gap-gutter-sm">
-                    <span id="feedback-confirmation" class="font-body text-body-sm text-success hidden" role="status" data-design-text-token="body-sm">Feedback submitted. Thank you!</span>
-                    <!-- COMPONENT: button-primary -->
-                    <button data-component-id="button-primary" data-component-type="button" data-component-variant="primary" type="submit" class="ml-auto inline-flex items-center justify-center gap-gutter-sm px-gutter-md py-gutter-sm rounded bg-light-primary text-light-on-primary font-body text-label-lg shadow-sm transition-colors duration-state-change ease-state-change hover:bg-light-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-primary focus-visible:ring-offset-2 active:opacity-90">
-                      <span data-design-text-token="label-lg">Submit Feedback</span>
-                    </button>
-                  </footer>
-                </form>
-              </article>
-  
-            </div>
-          </section>
-  
-          <!-- Row 3: Prizes & Winning — Top 3 Participants -->
-          <section aria-label="Prizes and Winning Leaderboard" class="bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-md">
-            <header class="flex items-center justify-between gap-gutter-md">
-              <div class="flex items-center gap-gutter-sm">
-                <span class="material-symbols-outlined text-light-primary text-headline-md" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">emoji_events</span>
-                <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Prizes &amp; Winning</h2>
-              </div>
-            </header>
-  
-            <div class="flex items-center gap-gutter-md">
-              <div class="h-px flex-1 bg-light-outline-variant"></div>
-              <h3 class="font-headline text-headline-md text-light-on-surface text-center" data-design-text-token="headline-md">Top 3 Participants</h3>
-              <div class="h-px flex-1 bg-light-outline-variant"></div>
-            </div>
-  
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-md items-stretch">
-  
-              <!-- 1st Place: Aryan Singh -->
-              <div class="bg-gold-container/70 border border-light-outline-variant rounded-md p-gutter-md flex items-center gap-gutter-md">
-                <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gold-container text-on-gold-container border border-on-gold-container/20 font-mono text-mono-md tabular-nums shrink-0" data-design-text-token="mono-md">1</span>
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-light-surface-container-lowest shadow-sm bg-light-surface-container shrink-0">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBRuWYn0xw0Cd9rfeteJZ3m_myhQz3FNYLAIgbml-TWF9IYaYMQSHU0HYen4nyCIIx0-8vMZGHGdMwMaWO4FB5qF0NC3ld1MlUGSj5keik2UkIaO87O-u5mHIoDI0kGAAGSO7FmRc1MrU93byZdZeGzGKs9qh-j7LYkoImX5CyAhH2JdPJlwsyXtB4ddRiIWXnmLL0HAcqj6z_isllDIaSIEeemFay72cq7PQJ_idYj66KyXuEw" alt="Aryan Singh" class="w-full h-full object-cover" data-stitch-original-src="d771152ecaae28eb===../../images/avatar_aryan.jpg">
-                </div>
-                <div class="min-w-0">
-                  <p class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Aryan Singh</p>
-                  <p class="font-mono text-mono-md text-on-gold-container tabular-nums" data-design-text-token="mono-md">1,250 Points</p>
-                </div>
-              </div>
-  
-              <!-- 2nd Place: Sneha Verma -->
-              <div class="bg-silver-container/70 border border-light-outline-variant rounded-md p-gutter-md flex items-center gap-gutter-md">
-                <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-silver-container text-on-silver-container border border-on-silver-container/20 font-mono text-mono-md tabular-nums shrink-0" data-design-text-token="mono-md">2</span>
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-light-surface-container-lowest shadow-sm bg-light-surface-container shrink-0">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBHx4sq0iqDGP4-FS6Eqzs2yNJFMsB3-c0DEAfeK9yuOPQI2OrzvuE1cb3aF_8yuza2CkpBVpdvoTaFzivIRoH_5lJXIc0s5J4XtfEWf8pXxOVAWi6-TVb61mdt3obCy1QbZOqQ79jATFbJKjdymUcENRe82VsoxsPAnjtYl8I-rwUIADYfsOReH_e03wZvE1JwkfH2ZS-5miog0zio9oDTTKsw2r6TPOKkdTjxEszIGsTndG_C" alt="Sneha Verma" class="w-full h-full object-cover" data-stitch-original-src="8caa516ab0562255===../../images/avatar_sneha.jpg">
-                </div>
-                <div class="min-w-0">
-                  <p class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Sneha Verma</p>
-                  <p class="font-mono text-mono-md text-on-silver-container tabular-nums" data-design-text-token="mono-md">1,100 Points</p>
-                </div>
-              </div>
-  
-              <!-- 3rd Place: Rohan Kumar -->
-              <div class="bg-bronze-container/70 border border-light-outline-variant rounded-md p-gutter-md flex items-center gap-gutter-md">
-                <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-bronze-container text-on-bronze-container border border-on-bronze-container/20 font-mono text-mono-md tabular-nums shrink-0" data-design-text-token="mono-md">3</span>
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-light-surface-container-lowest shadow-sm bg-light-surface-container shrink-0">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrB96D5DEvtD5W4VusHMVcHGn9iIfmVaVGtRA2WVnbjGj1_QEexxDaIrAtrJj73mV_bIZaUSISKRMeJFhbvkGyc7Rfyf7mjFjAzX74cb3mMGvmqG2Wbs0_ovwWcbK1c_8MfR86TQcBT-ga5kG-KiFX82Zcohvx74sl7UNKlofRVb2RVYt542w6ZKFi3zzBIjYA7bnbCMbR0yot_exF7xZ3_4fZ0W3WY94VNaTQep8G9DUnXJmu2X" alt="Rohan Kumar" class="w-full h-full object-cover" data-stitch-original-src="3848b26b6d6a92a4===../../images/avatar_rohan.jpg">
-                </div>
-                <div class="min-w-0">
-                  <p class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Rohan Kumar</p>
-                  <p class="font-mono text-mono-md text-on-bronze-container tabular-nums" data-design-text-token="mono-md">980 Points</p>
-                </div>
-              </div>
-  
-            </div>
-          </section>
-  
-          <!-- Footer -->
-          <footer class="pt-gutter-sm pb-gutter-md text-center">
-            <p class="font-body text-body-sm text-light-primary" data-design-text-token="body-sm">All rights reserved • Copyright</p>
-          </footer>
-  
-        </main>
-      </div>
-  
-    </div>
-  
-    <script>
-      (function () {
-        // Load live events from the Flask API. This page and API share an origin on Vercel.
-        var liveEventsSection = document.createElement('section');
-        liveEventsSection.id = 'live-events-section';
-        liveEventsSection.setAttribute('aria-label', 'Events from the live database');
-        liveEventsSection.className = 'flex flex-col gap-gutter-md';
-        var liveEventsHeading = document.createElement('h2');
-        liveEventsHeading.className = 'font-headline text-headline-md text-light-on-surface';
-        liveEventsHeading.textContent = 'Explore Events';
-        var liveEventsGrid = document.createElement('div');
-        liveEventsGrid.id = 'live-events-grid';
-        liveEventsGrid.className = 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter-md';
-        var liveEventsStatus = document.createElement('p');
-        liveEventsStatus.id = 'live-events-status';
-        liveEventsStatus.className = 'font-body text-body-sm text-light-on-surface-variant';
-        liveEventsStatus.setAttribute('role', 'status');
-        liveEventsSection.append(liveEventsHeading, liveEventsStatus, liveEventsGrid);
-        var dashboardMain = document.querySelector('main');
-        var staticFeaturedEvents = document.querySelector('[aria-label="Featured event categories"]');
-        if (dashboardMain && staticFeaturedEvents) dashboardMain.insertBefore(liveEventsSection, staticFeaturedEvents);
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-50..200&display=block" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(180deg, #EEF4FD 0%, #E9F0FA 100%);
+      color: #0F172A;
+    }
+    .material-symbols-rounded {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      vertical-align: middle;
+      user-select: none;
+    }
+    .icon-filled {
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+    }
+    .podium-banner {
+      background: linear-gradient(135deg, #F6FAFF 0%, #E7F0FD 50%, #F4F8FF 100%);
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased text-portal-ink">
 
-        function addEventText(parent, tag, className, text) {
-          var element = document.createElement(tag);
-          element.className = className;
-          element.textContent = text;
-          parent.appendChild(element);
-          return element;
+  <div class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200/80 px-4 lg:px-7 py-3">
+      <div class="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+
+        <!-- Brand & Mobile Menu -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <button id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false"
+            class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100">
+            <span class="material-symbols-rounded text-[22px]">menu</span>
+          </button>
+          <a href="#home" class="flex items-center gap-2.5 group">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-primary/10 text-portal-primary">
+              <span class="material-symbols-rounded icon-filled text-[22px]">emoji_events</span>
+            </span>
+            <span class="text-[20px] font-bold tracking-tight text-slate-900">Event Portal</span>
+          </a>
+        </div>
+
+        <!-- Global Search Bar -->
+        <div class="flex-1 max-w-xl hidden sm:block">
+          <label class="relative flex items-center w-full">
+            <span class="sr-only">Search for events</span>
+            <span class="material-symbols-rounded absolute left-4 text-slate-400 text-[20px] pointer-events-none">search</span>
+            <input id="event-search-input" type="search" placeholder="Search for events..."
+              class="w-full pl-11 pr-4 py-2 rounded-full border border-slate-200 bg-slate-50/80 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20 focus:outline-none transition">
+          </label>
+        </div>
+
+        <!-- Header Right: Notifications & Profile/Role Dropdown -->
+        <div class="flex items-center gap-3 shrink-0">
+          <button id="notif-btn" type="button" aria-label="3 unread notifications"
+            class="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100 transition">
+            <span class="material-symbols-rounded text-[22px]">notifications</span>
+            <span class="absolute top-1.5 right-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white text-[11px] font-bold leading-none">3</span>
+          </button>
+
+          <div class="relative">
+            <button id="role-menu-btn" type="button" aria-haspopup="menu" aria-expanded="false"
+              class="inline-flex items-center gap-1.5 p-1 pr-2 rounded-full hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-portal-primary/30">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrBRuWYn0xw0Cd9rfeteJZ3m_myhQz3FNYLAIgbml-TWF9IYaYMQSHU0HYen4nyCIIx0-8vMZGHGdMwMaWO4FB5qF0NC3ld1MlUGSj5keik2UkIaO87O-u5mHIoDI0kGAAGSO7FmRc1MrU93byZdZeGzGKs9qh-j7LYkoImX5CyAhH2JdPJlwsyXtB4ddRiIWXnmLL0HAcqj6z_isllDIaSIEeemFay72cq7PQJ_idYj66KyXuEw"
+                alt="User profile" class="w-9 h-9 rounded-full object-cover border border-slate-200">
+              <span id="active-role-label" class="sr-only">Student</span>
+              <span class="material-symbols-rounded text-slate-500 text-[18px]">expand_more</span>
+            </button>
+
+            <div id="role-menu-dropdown" role="menu"
+              class="hidden absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-float py-1.5 z-40">
+              <button type="button" role="menuitem" data-role="Profile"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[18px] text-slate-500">person</span>
+                <span>Profile</span>
+              </button>
+              <button type="button" role="menuitem" data-role="Organizer"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[18px] text-slate-500">calendar_month</span>
+                <span>Organizer</span>
+              </button>
+              <button type="button" role="menuitem" data-role="Student"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-semibold text-portal-primary bg-portal-softBlue/60 hover:bg-portal-softBlue">
+                <span class="material-symbols-rounded text-[18px] text-portal-primary">school</span>
+                <span>Student</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Shell -->
+    <div class="flex-1 max-w-[1440px] w-full mx-auto flex gap-5 px-4 lg:px-6 py-5">
+
+      <!-- Left Sidebar -->
+      <aside id="portal-sidebar" aria-label="Primary navigation"
+        class="hidden lg:flex lg:flex-col w-52 shrink-0 bg-white/85 backdrop-blur border border-slate-200/80 rounded-2xl shadow-card p-3 gap-5 self-start sticky top-20">
+        <nav class="flex flex-col gap-1">
+          <a href="#home" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-portal-softBlue text-portal-softBlueText font-semibold text-sm">
+            <span class="material-symbols-rounded icon-filled text-[20px]">home</span>
+            <span>Home</span>
+          </a>
+          <a href="#about" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition">
+            <span class="material-symbols-rounded text-[20px] text-slate-500">info</span>
+            <span>About</span>
+          </a>
+          <a href="#contact" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition">
+            <span class="material-symbols-rounded text-[20px] text-slate-500">mail</span>
+            <span>Contact</span>
+          </a>
+          <a href="#help" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition">
+            <span class="material-symbols-rounded text-[20px] text-slate-500">help</span>
+            <span>Help</span>
+          </a>
+        </nav>
+
+        <div class="border-t border-slate-200/80 pt-4">
+          <p class="px-3.5 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Events</p>
+          <nav class="flex flex-col gap-1">
+            <button type="button" data-category="all"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">event_note</span>
+              <span>All Events</span>
+            </button>
+            <button type="button" data-category="Competitions"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">emoji_events</span>
+              <span>Competitions</span>
+            </button>
+            <button type="button" data-category="Workshops"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">star</span>
+              <span>Workshops</span>
+            </button>
+            <button type="button" data-category="Seminars"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">groups</span>
+              <span>Seminars</span>
+            </button>
+            <button type="button" data-category="Cultural Events"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">sports_esports</span>
+              <span>Cultural Events</span>
+            </button>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Dashboard Content -->
+      <main id="home" class="flex-1 min-w-0 flex flex-col gap-5">
+
+        <!-- Row 1: Running Events, Upcoming Events, Closed Events -->
+        <section aria-label="Featured event categories" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          <!-- Running Events -->
+          <article data-event-card="24-Hour Hackathon 2027" data-category="Competitions" data-status="ongoing"
+            class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-[20px] text-portal-primary">directions_run</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Running Events</h2>
+              </div>
+              <button type="button" data-open-explorer="ongoing"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-[16/8.5] bg-slate-900 cursor-pointer group" data-open-explorer="ongoing">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrBB4bGzyJsXHCskW5aZl9VJ5t8UrD86IcjCOLAh2R_btuzGeQi4zS9g4l74_QPQC6qxlL3ac8TYTC21kc_B8lfSaW7p0oMfpQeh-YPqizyvYQbaB7JfvBc5KtqdTn5hpLX2t_-nQITmuXh2iJriOk3mgHyxbJARWNeczzaEhbj1EYMIfWzP5uA7fvTe-m-Z33H4GKzCBvstzhjk06D6s2WlZS6reWjvYNJI6F9iG2H5eCXHGq8JEIJv"
+                alt="24-Hour Hackathon 2027" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200">
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <h3 class="text-[15px] font-bold text-slate-900 truncate" id="card-running-title">24-Hour Hackathon 2027</h3>
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                  <span class="material-symbols-rounded text-[15px] text-slate-400">calendar_today</span>
+                  <span id="card-running-date">Dec 10, 2026 – Dec 11, 2026</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Ongoing
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Upcoming Events -->
+          <article data-event-card="AI Summit 2027" data-category="Seminars" data-status="upcoming"
+            class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-[20px] text-portal-primary">schedule</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Upcoming Events</h2>
+              </div>
+              <button type="button" data-open-explorer="upcoming"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-[16/8.5] bg-slate-900 cursor-pointer group" data-open-explorer="upcoming">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrDAl9oU-pJeOHa8fjBdqv-etaTzYulDwAdWr27R74Bl46Z1cRvB9fUtdsw4BoVPv-erFbKLaNNh0wC_ahucUgdaUWRNmuMVyhgPBI8TEI_b8mZnSwASECs_tbE49Q3gsQ--PZh4Dfb0bRFbDHXcgaENsUn87qLPYCSKBwW35vd0ufDK0K4la78AEDE5nyaISp1DYCpiVhMwWkqZ_FYxIouRQst6ElDISzgUlkHTnTahkw31-G2Ljn5_"
+                alt="AI Summit 2027" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200">
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <h3 class="text-[15px] font-bold text-slate-900 truncate" id="card-upcoming-title">AI Summit 2027</h3>
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                  <span class="material-symbols-rounded text-[15px] text-slate-400">calendar_today</span>
+                  <span id="card-upcoming-date">Jan 15, 2027 – Jan 16, 2027</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  Upcoming
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Closed Events -->
+          <article data-event-card="Cultural Fest 2026" data-category="Cultural Events" data-status="closed"
+            class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">check_circle</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Closed Events</h2>
+              </div>
+              <button type="button" data-open-explorer="closed"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-[16/8.5] bg-slate-900 cursor-pointer group" data-open-explorer="closed">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrDUu6Z8Jcw_vscYw5AZJmfBmgotTf8MF6dkmFh3MZcwlr8UPPf0o_24Xn8WvrkOtVaVBNVBXI2mQOxs7wIKSlHosr1uQcFja0jO_3xgZ_Ihq5VUKwzIn3Idvsdvb_CfZ21LYLu3h-KryO9pxIo5Uid5yil7jUTpcTlc9yk74uSKYYci0reDLHufLxKTPZAfllpnUfB6tvsMSUx4KOmh_R5Q80gAcc9TiJHSwDEaNaj7SO9c3a2f8fGGSeYeQ24"
+                alt="Cultural Fest 2026" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200">
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <h3 class="text-[15px] font-bold text-slate-900 truncate" id="card-closed-title">Cultural Fest 2026</h3>
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                  <span class="material-symbols-rounded text-[15px] text-slate-400">calendar_today</span>
+                  <span id="card-closed-date">Nov 20, 2026 – Nov 22, 2026</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                  Closed
+                </span>
+              </div>
+            </div>
+          </article>
+
+        </section>
+
+        <!-- Row 2: Filter Events | Updates & Notifications | Registered Events + Feedback Form -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+
+          <!-- Left Column: Filter Events -->
+          <div class="lg:col-span-3 bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-rounded text-[20px] text-portal-primary">filter_alt</span>
+              <h2 class="text-[15px] font-bold text-slate-900">Filter Events</h2>
+            </div>
+
+            <form id="filter-form" class="flex-1 flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-slate-700">Date / Month</label>
+                <div class="relative">
+                  <select id="filter-date" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-700 py-2 px-3 focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+                    <option value="">Select Date</option>
+                    <option value="2026-11">Nov 2026</option>
+                    <option value="2026-12">Dec 2026</option>
+                    <option value="2027-01">Jan 2027</option>
+                    <option value="2027-02">Feb 2027</option>
+                  </select>
+                </div>
+                <div>
+                  <select id="filter-month" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-700 py-2 px-3 focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+                    <option value="">Select Month</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <span class="text-xs font-semibold text-slate-700">Event Type</span>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Competitions" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Competitions</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Workshops" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Workshops</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Seminars" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Seminars</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Cultural Events" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Cultural Events</span>
+                </label>
+              </div>
+
+              <p id="filter-status" class="text-[11px] text-slate-500 min-h-[16px]" role="status"></p>
+
+              <button type="submit"
+                class="mt-auto w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 shadow-sm transition">
+                <span class="material-symbols-rounded text-[16px]">filter_alt</span>
+                <span>Apply Filters</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Center Column: Updates & Notifications -->
+          <div class="lg:col-span-6 bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">notifications</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Updates &amp; Notifications</h2>
+              </div>
+              <button type="button" data-open-explorer="all"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="divide-y divide-slate-100 flex-1 flex flex-col justify-between">
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">info</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">New event "AI Summit 2027" is now live!</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Explore and register for the upcoming AI Summit.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">2h ago</span>
+              </div>
+
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">check</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">Your registration for Hackathon 2027 is confirmed.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Check your email for details.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">4h ago</span>
+              </div>
+
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-50 text-amber-500 border border-amber-200 shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">campaign</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">Event schedule for Cultural Fest 2026 has been updated.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">See the latest timings and venue.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">1d ago</span>
+              </div>
+
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-50 text-purple-600 border border-purple-200 shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">redeem</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">Win exciting prizes at the upcoming events!</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Participate and stand a chance to win.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">2d ago</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Registered Events + Feedback Form -->
+          <div class="lg:col-span-3 flex flex-col gap-5">
+
+            <!-- Registered Events -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">star</span>
+                  <h2 class="text-[15px] font-bold text-slate-900">Registered Events</h2>
+                </div>
+              </div>
+
+              <div id="registered-events-list" class="divide-y divide-slate-100">
+                <div class="py-2.5 flex items-center justify-between gap-2.5">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrBB4bGzyJsXHCskW5aZl9VJ5t8UrD86IcjCOLAh2R_btuzGeQi4zS9g4l74_QPQC6qxlL3ac8TYTC21kc_B8lfSaW7p0oMfpQeh-YPqizyvYQbaB7JfvBc5KtqdTn5hpLX2t_-nQITmuXh2iJriOk3mgHyxbJARWNeczzaEhbj1EYMIfWzP5uA7fvTe-m-Z33H4GKzCBvstzhjk06D6s2WlZS6reWjvYNJI6F9iG2H5eCXHGq8JEIJv"
+                      alt="Hackathon 2027" class="w-12 h-8 rounded-md object-cover shrink-0">
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-900 truncate">Hackathon 2027</p>
+                      <p class="text-[11px] text-slate-500 truncate">Dec 10–11, 2026</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Registered
+                  </span>
+                </div>
+
+                <div class="py-2.5 flex items-center justify-between gap-2.5">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDAl9oU-pJeOHa8fjBdqv-etaTzYulDwAdWr27R74Bl46Z1cRvB9fUtdsw4BoVPv-erFbKLaNNh0wC_ahucUgdaUWRNmuMVyhgPBI8TEI_b8mZnSwASECs_tbE49Q3gsQ--PZh4Dfb0bRFbDHXcgaENsUn87qLPYCSKBwW35vd0ufDK0K4la78AEDE5nyaISp1DYCpiVhMwWkqZ_FYxIouRQst6ElDISzgUlkHTnTahkw31-G2Ljn5_"
+                      alt="AI Summit 2027" class="w-12 h-8 rounded-md object-cover shrink-0">
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-900 truncate">AI Summit 2027</p>
+                      <p class="text-[11px] text-slate-500 truncate">Jan 15–16, 2027</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Upcoming
+                  </span>
+                </div>
+
+                <div class="py-2.5 flex items-center justify-between gap-2.5">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDUu6Z8Jcw_vscYw5AZJmfBmgotTf8MF6dkmFh3MZcwlr8UPPf0o_24Xn8WvrkOtVaVBNVBXI2mQOxs7wIKSlHosr1uQcFja0jO_3xgZ_Ihq5VUKwzIn3Idvsdvb_CfZ21LYLu3h-KryO9pxIo5Uid5yil7jUTpcTlc9yk74uSKYYci0reDLHufLxKTPZAfllpnUfB6tvsMSUx4KOmh_R5Q80gAcc9TiJHSwDEaNaj7SO9c3a2f8fGGSeYeQ24"
+                      alt="Tech Workshop" class="w-12 h-8 rounded-md object-cover shrink-0">
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-900 truncate">Tech Workshop</p>
+                      <p class="text-[11px] text-slate-500 truncate">Feb 05, 2027</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Pending
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback Form -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex-1 flex flex-col gap-2.5">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">chat</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Feedback Form</h2>
+              </div>
+              <form id="feedback-form" class="flex-1 flex flex-col gap-2.5">
+                <textarea id="feedback-input" rows="3" placeholder="Share your feedback..."
+                  class="w-full flex-1 rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-800 placeholder:text-slate-400 p-2.5 resize-none focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20"></textarea>
+                <div class="flex items-center justify-between gap-2">
+                  <span id="feedback-status" class="text-[11px] text-emerald-600 font-medium"></span>
+                  <button type="submit"
+                    class="rounded-lg bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold px-4 py-2 transition">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Row 3: Prizes & Winning — Top 3 Participants -->
+        <section aria-label="Prizes and Winning" class="podium-banner border border-slate-200/90 rounded-2xl shadow-card p-5">
+          <!-- Decorative confetti dots -->
+          <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-75">
+            <span class="absolute left-5 top-12 w-2 h-2 rounded-sm bg-rose-400 rotate-12"></span>
+            <span class="absolute left-12 top-20 w-2 h-2 rounded-full bg-amber-400"></span>
+            <span class="absolute left-7 bottom-8 w-2.5 h-1.5 rounded-sm bg-sky-400 -rotate-45"></span>
+            <span class="absolute right-6 top-10 w-2 h-2 rounded-sm bg-sky-500 rotate-45"></span>
+            <span class="absolute right-12 top-20 w-2 h-2 rounded-full bg-rose-400"></span>
+            <span class="absolute right-8 bottom-7 w-2.5 h-1.5 rounded-sm bg-amber-400 rotate-12"></span>
+          </div>
+
+          <div class="relative flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">emoji_events</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Prizes &amp; Winning</h2>
+              </div>
+            </div>
+
+            <h3 class="text-center text-base font-bold text-slate-800 -mt-2">Top 3 Participants</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-1 lg:px-6">
+              <!-- 1st Place: Aryan Singh -->
+              <div class="bg-gradient-to-r from-[#FFF3D1] to-[#FFE8B3] border border-[#F3D382] rounded-xl px-4 py-3 flex items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-b from-amber-300 to-amber-500 text-amber-950 font-extrabold text-sm shadow ring-2 ring-amber-200 shrink-0">1</span>
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBRuWYn0xw0Cd9rfeteJZ3m_myhQz3FNYLAIgbml-TWF9IYaYMQSHU0HYen4nyCIIx0-8vMZGHGdMwMaWO4FB5qF0NC3ld1MlUGSj5keik2UkIaO87O-u5mHIoDI0kGAAGSO7FmRc1MrU93byZdZeGzGKs9qh-j7LYkoImX5CyAhH2JdPJlwsyXtB4ddRiIWXnmLL0HAcqj6z_isllDIaSIEeemFay72cq7PQJ_idYj66KyXuEw"
+                    alt="Aryan Singh" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm shrink-0">
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold text-slate-900 truncate">Aryan Singh</p>
+                    <p class="text-xs font-semibold text-amber-900">1,250 Points</p>
+                  </div>
+                </div>
+                <svg class="w-8 h-8 text-amber-500/80 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3l-4.8 2.6.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+                </svg>
+              </div>
+
+              <!-- 2nd Place: Sneha Verma -->
+              <div class="bg-gradient-to-r from-[#F4F7FC] to-[#E6EEF9] border border-[#CBD7E8] rounded-xl px-4 py-3 flex items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-b from-slate-200 to-slate-400 text-slate-800 font-extrabold text-sm shadow ring-2 ring-white shrink-0">2</span>
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBHx4sq0iqDGP4-FS6Eqzs2yNJFMsB3-c0DEAfeK9yuOPQI2OrzvuE1cb3aF_8yuza2CkpBVpdvoTaFzivIRoH_5lJXIc0s5J4XtfEWf8pXxOVAWi6-TVb61mdt3obCy1QbZOqQ79jATFbJKjdymUcENRe82VsoxsPAnjtYl8I-rwUIADYfsOReH_e03wZvE1JwkfH2ZS-5miog0zio9oDTTKsw2r6TPOKkdTjxEszIGsTndG_C"
+                    alt="Sneha Verma" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm shrink-0">
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold text-slate-900 truncate">Sneha Verma</p>
+                    <p class="text-xs font-semibold text-slate-600">1,100 Points</p>
+                  </div>
+                </div>
+                <svg class="w-8 h-8 text-slate-400/80 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3l-4.8 2.6.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+                </svg>
+              </div>
+
+              <!-- 3rd Place: Rohan Kumar -->
+              <div class="bg-gradient-to-r from-[#FFEDE0] to-[#FAD8BE] border border-[#ECC09F] rounded-xl px-4 py-3 flex items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-b from-orange-300 to-orange-500 text-orange-950 font-extrabold text-sm shadow ring-2 ring-orange-200 shrink-0">3</span>
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrB96D5DEvtD5W4VusHMVcHGn9iIfmVaVGtRA2WVnbjGj1_QEexxDaIrAtrJj73mV_bIZaUSISKRMeJFhbvkGyc7Rfyf7mjFjAzX74cb3mMGvmqG2Wbs0_ovwWcbK1c_8MfR86TQcBT-ga5kG-KiFX82Zcohvx74sl7UNKlofRVb2RVYt542w6ZKFi3zzBIjYA7bnbCMbR0yot_exF7xZ3_4fZ0W3WY94VNaTQep8G9DUnXJmu2X"
+                    alt="Rohan Kumar" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm shrink-0">
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold text-slate-900 truncate">Rohan Kumar</p>
+                    <p class="text-xs font-semibold text-orange-900">980 Points</p>
+                  </div>
+                </div>
+                <svg class="w-8 h-8 text-orange-400/80 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3l-4.8 2.6.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="pt-1 pb-3 text-center">
+          <p class="text-xs font-medium text-portal-primary">All rights reserved • Copyright</p>
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Live Events Explorer & Registration Modal -->
+  <div id="events-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-float max-w-4xl w-full max-h-[85vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+        <div>
+          <h2 id="modal-title" class="text-lg font-bold text-slate-900">All Events</h2>
+          <p id="modal-subtitle" class="text-xs text-slate-500">Live events from database</p>
+        </div>
+        <button id="close-modal-btn" type="button" aria-label="Close modal"
+          class="w-9 h-9 rounded-full inline-flex items-center justify-center text-slate-500 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[20px]">close</span>
+        </button>
+      </div>
+      <div id="modal-events-grid" class="p-5 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var liveEvents = [];
+
+      function normalizeStatus(ev) {
+        var s = String(ev.status || '').toLowerCase();
+        if (s === 'ongoing' || s === 'running' || s === 'active') return 'ongoing';
+        if (s === 'closed' || s === 'completed' || s === 'ended') return 'closed';
+        return 'upcoming';
+      }
+
+      function formatDate(ev) {
+        var d = ev.start_date || ev.date || ev.starts_at || '';
+        return d ? String(d).slice(0, 10) : 'TBD';
+      }
+
+      function populateFeaturedCards(events) {
+        var running = events.find(function (e) { return normalizeStatus(e) === 'ongoing'; });
+        var upcoming = events.find(function (e) { return normalizeStatus(e) === 'upcoming'; });
+        var closed = events.find(function (e) { return normalizeStatus(e) === 'closed'; });
+
+        if (running) {
+          document.getElementById('card-running-title').textContent = running.title || running.name || 'Running Event';
+          document.getElementById('card-running-date').textContent = formatDate(running);
         }
-        function renderLiveEvents(events) {
-          liveEventsGrid.replaceChildren();
-          events.forEach(function (event) {
-            var title = event.title || event.name || event.event_name || 'Untitled event';
-            var category = event.category || event.type || 'Events';
-            var card = document.createElement('article');
-            card.className = 'bg-light-surface-container-lowest border border-light-outline-variant rounded-lg p-gutter-md shadow-sm flex flex-col gap-gutter-sm';
-            card.dataset.eventCard = title;
-            card.dataset.category = category;
-            addEventText(card, 'p', 'font-body text-label-sm text-light-primary', category);
-            addEventText(card, 'h3', 'font-headline text-title-md text-light-on-surface', title);
-            var date = event.start_date || event.date || event.starts_at;
-            if (date) addEventText(card, 'p', 'font-body text-body-sm text-light-on-surface-variant', String(date).slice(0, 10));
-            if (event.description) addEventText(card, 'p', 'font-body text-body-sm text-light-on-surface-variant', event.description);
-            var registerButton = document.createElement('button');
-            registerButton.type = 'button';
-            registerButton.className = 'mt-auto inline-flex justify-center rounded bg-light-primary px-gutter-md py-gutter-sm text-light-on-primary font-body text-label-md hover:bg-light-primary-container';
-            registerButton.textContent = 'Register';
-            registerButton.addEventListener('click', async function () {
-              var userId = window.localStorage.getItem('event-portal-user-id') || window.prompt('Enter your user ID to register');
-              if (!userId) return;
-              window.localStorage.setItem('event-portal-user-id', userId.trim());
-              registerButton.disabled = true;
-              try {
-                var response = await fetch('/api/registrations', {
-                  method: 'POST', headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ user_id: userId.trim(), event_id: event.id })
-                });
-                var result = await response.json();
-                if (!response.ok) throw new Error(result.error || 'Registration failed');
-                registerButton.textContent = 'Registered';
-              } catch (error) {
-                window.alert(error.message);
-                registerButton.disabled = false;
-              }
-            });
-            card.appendChild(registerButton);
-            liveEventsGrid.appendChild(card);
+        if (upcoming) {
+          document.getElementById('card-upcoming-title').textContent = upcoming.title || upcoming.name || 'Upcoming Event';
+          document.getElementById('card-upcoming-date').textContent = formatDate(upcoming);
+        }
+        if (closed) {
+          document.getElementById('card-closed-title').textContent = closed.title || closed.name || 'Closed Event';
+          document.getElementById('card-closed-date').textContent = formatDate(closed);
+        }
+      }
+
+      // Modal Explorer
+      var modal = document.getElementById('events-modal');
+      var modalTitle = document.getElementById('modal-title');
+      var modalSubtitle = document.getElementById('modal-subtitle');
+      var modalGrid = document.getElementById('modal-events-grid');
+
+      function openExplorer(filterType, titleText) {
+        modalTitle.textContent = titleText || 'All Events';
+        var filtered = liveEvents.filter(function (ev) {
+          if (!filterType || filterType === 'all') return true;
+          if (filterType === 'ongoing' || filterType === 'upcoming' || filterType === 'closed') {
+            return normalizeStatus(ev) === filterType;
+          }
+          var cat = String(ev.category || ev.type || '').toLowerCase();
+          return cat === filterType.toLowerCase();
+        });
+        modalSubtitle.textContent = filtered.length
+          ? filtered.length + ' event(s) available'
+          : 'No matching events found in database.';
+
+        modalGrid.replaceChildren();
+        filtered.forEach(function (ev) {
+          var card = document.createElement('article');
+          card.className = 'border border-slate-200 rounded-xl p-4 flex flex-col gap-2 bg-slate-50/50';
+
+          var top = document.createElement('div');
+          top.className = 'flex items-center justify-between gap-2';
+          var cat = document.createElement('span');
+          cat.className = 'text-[11px] font-bold uppercase tracking-wider text-portal-primary';
+          cat.textContent = ev.category || ev.type || 'Event';
+          var st = normalizeStatus(ev);
+          var pill = document.createElement('span');
+          pill.className = 'px-2 py-0.5 rounded-full text-[11px] font-semibold ' +
+            (st === 'ongoing' ? 'bg-emerald-50 text-emerald-700' :
+             st === 'closed' ? 'bg-slate-100 text-slate-600' : 'bg-blue-50 text-blue-700');
+          pill.textContent = st.charAt(0).toUpperCase() + st.slice(1);
+          top.append(cat, pill);
+
+          var h3 = document.createElement('h3');
+          h3.className = 'text-sm font-bold text-slate-900';
+          h3.textContent = ev.title || ev.name || 'Untitled Event';
+
+          var dateEl = document.createElement('p');
+          dateEl.className = 'text-xs text-slate-500';
+          dateEl.textContent = 'Date: ' + formatDate(ev);
+
+          card.append(top, h3, dateEl);
+
+          if (ev.description) {
+            var desc = document.createElement('p');
+            desc.className = 'text-xs text-slate-600 line-clamp-2';
+            desc.textContent = ev.description;
+            card.appendChild(desc);
+          }
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mt-auto rounded-lg bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2 px-3 transition disabled:opacity-60';
+          btn.textContent = st === 'closed' ? 'Closed' : 'Register';
+          btn.disabled = st === 'closed';
+          btn.addEventListener('click', async function () {
+            var userId = window.localStorage.getItem('event-portal-user-id') || window.prompt('Enter your User UUID to register:');
+            if (!userId) return;
+            window.localStorage.setItem('event-portal-user-id', userId.trim());
+            btn.disabled = true;
+            try {
+              var res = await fetch('/api/registrations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId.trim(), event_id: ev.id })
+              });
+              var data = await res.json();
+              if (!res.ok) throw new Error(data.error || 'Registration failed');
+              btn.textContent = 'Registered';
+            } catch (err) {
+              window.alert(err.message);
+              btn.disabled = false;
+            }
           });
-          liveEventsStatus.textContent = events.length ? events.length + ' events loaded from the database.' : 'No events are available yet.';
-        }
-        fetch('/api/events').then(function (response) {
-          if (!response.ok) throw new Error('Could not load events');
-          return response.json();
-        }).then(function (events) {
-          if (!Array.isArray(events)) throw new Error('Unexpected events response');
-          renderLiveEvents(events);
-          if (staticFeaturedEvents) staticFeaturedEvents.classList.add('hidden');
-        }).catch(function () {
-          liveEventsStatus.textContent = 'Live events could not be loaded. Check the API configuration and try again.';
+          card.appendChild(btn);
+          modalGrid.appendChild(card);
         });
 
-        // Mobile sidebar toggle
-        var mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        var sidebar = document.getElementById('portal-sidebar');
-        if (mobileMenuBtn && sidebar) {
-          mobileMenuBtn.addEventListener('click', function () {
-            var isHidden = sidebar.classList.contains('hidden');
-            sidebar.classList.toggle('hidden', !isHidden);
-            sidebar.classList.toggle('flex', isHidden);
-            sidebar.classList.toggle('flex-col', isHidden);
-            mobileMenuBtn.setAttribute('aria-expanded', String(isHidden));
-          });
-        }
-  
-        // Role / View switcher (no login required)
-        var roleBtn = document.getElementById('role-menu-btn');
-        var roleDropdown = document.getElementById('role-menu-dropdown');
-        var roleLabel = document.getElementById('active-role-label');
-        if (roleBtn && roleDropdown) {
-          roleBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var open = !roleDropdown.classList.contains('hidden');
-            roleDropdown.classList.toggle('hidden', open);
-            roleBtn.setAttribute('aria-expanded', String(!open));
-          });
-          document.querySelectorAll('.role-option').forEach(function (opt) {
-            opt.addEventListener('click', function () {
-              if (roleLabel) roleLabel.textContent = opt.getAttribute('data-role') || 'Student';
-              roleDropdown.classList.add('hidden');
-              roleBtn.setAttribute('aria-expanded', 'false');
-            });
-          });
-          document.addEventListener('click', function () {
+        modal.classList.remove('hidden');
+      }
+
+      document.getElementById('close-modal-btn').addEventListener('click', function () {
+        modal.classList.add('hidden');
+      });
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+
+      document.querySelectorAll('[data-open-explorer]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var mode = el.getAttribute('data-open-explorer');
+          var labels = { ongoing: 'Running Events', upcoming: 'Upcoming Events', closed: 'Closed Events', all: 'All Events' };
+          openExplorer(mode, labels[mode] || 'Events');
+        });
+      });
+
+      fetch('/api/events')
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (events) {
+          if (Array.isArray(events) && events.length) {
+            liveEvents = events;
+            populateFeaturedCards(events);
+          }
+        })
+        .catch(function () {});
+
+      // Mobile sidebar toggle
+      var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      var sidebar = document.getElementById('portal-sidebar');
+      if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', function () {
+          var isHidden = sidebar.classList.contains('hidden');
+          sidebar.classList.toggle('hidden', !isHidden);
+          sidebar.classList.toggle('flex', isHidden);
+          sidebar.classList.toggle('flex-col', isHidden);
+          mobileMenuBtn.setAttribute('aria-expanded', String(isHidden));
+        });
+      }
+
+      // Role dropdown
+      var roleBtn = document.getElementById('role-menu-btn');
+      var roleDropdown = document.getElementById('role-menu-dropdown');
+      var roleLabel = document.getElementById('active-role-label');
+      if (roleBtn && roleDropdown) {
+        roleBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = !roleDropdown.classList.contains('hidden');
+          roleDropdown.classList.toggle('hidden', open);
+          roleBtn.setAttribute('aria-expanded', String(!open));
+        });
+        document.querySelectorAll('.role-option').forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            if (roleLabel) roleLabel.textContent = opt.getAttribute('data-role') || 'Student';
             roleDropdown.classList.add('hidden');
             roleBtn.setAttribute('aria-expanded', 'false');
           });
-        }
-  
-        // Live search & category filtering
-        var searchInput = document.getElementById('event-search-input');
-        function getEventCards() { return document.querySelectorAll('[data-event-card]'); }
-        function applySearch(query) {
-          var q = (query || '').trim().toLowerCase();
-          getEventCards().forEach(function (card) {
-            var title = (card.getAttribute('data-event-card') || '').toLowerCase();
-            var cat = (card.getAttribute('data-category') || '').toLowerCase();
-            var match = !q || title.indexOf(q) !== -1 || cat.indexOf(q) !== -1;
-            card.classList.toggle('hidden', !match);
-          });
-        }
-        if (searchInput) {
-          searchInput.addEventListener('input', function (e) {
-            applySearch(e.target.value);
-          });
-        }
-  
-        // Sidebar category quick filter
-        document.querySelectorAll('.sidebar-cat-btn').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var cat = btn.getAttribute('data-category');
-            getEventCards().forEach(function (card) {
-              var match = cat === 'all' || card.getAttribute('data-category') === cat;
-              card.classList.toggle('hidden', !match);
-            });
-          });
         });
-  
-        // Filter form
-        var filterForm = document.getElementById('filter-form');
-        var filterStatus = document.getElementById('filter-status');
-        if (filterForm) {
-          filterForm.addEventListener('submit', function (e) {
+        document.addEventListener('click', function () {
+          roleDropdown.classList.add('hidden');
+          roleBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      // Search & Sidebar Category Filter
+      var searchInput = document.getElementById('event-search-input');
+      if (searchInput) {
+        searchInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
             e.preventDefault();
-            var checked = Array.from(filterForm.querySelectorAll('input[name="event-type"]:checked')).map(function (el) {
-              return el.value;
+            var q = searchInput.value.trim().toLowerCase();
+            if (!q) return openExplorer('all', 'All Events');
+            var saved = liveEvents;
+            liveEvents = saved.filter(function (ev) {
+              return String(ev.title || ev.name || '').toLowerCase().indexOf(q) !== -1 ||
+                     String(ev.category || ev.type || '').toLowerCase().indexOf(q) !== -1;
             });
-            getEventCards().forEach(function (card) {
-              var match = checked.length === 0 || checked.indexOf(card.getAttribute('data-category')) !== -1;
-              card.classList.toggle('hidden', !match);
-            });
-            if (filterStatus) {
-              filterStatus.textContent = checked.length ? 'Filtered by ' + checked.join(', ') : 'Showing all event types';
-              filterStatus.classList.remove('hidden');
-            }
+            openExplorer('all', 'Search: "' + searchInput.value.trim() + '"');
+            liveEvents = saved;
+          }
+        });
+      }
+
+      document.querySelectorAll('.sidebar-cat-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var cat = btn.getAttribute('data-category');
+          openExplorer(cat, cat === 'all' ? 'All Events' : cat);
+        });
+      });
+
+      // Filter form
+      var filterForm = document.getElementById('filter-form');
+      var filterStatus = document.getElementById('filter-status');
+      if (filterForm) {
+        filterForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var checked = Array.from(filterForm.querySelectorAll('input[name="event-type"]:checked')).map(function (el) {
+            return el.value;
           });
-        }
-  
-        // Feedback form
-        var feedbackForm = document.getElementById('feedback-form');
-        var feedbackInput = document.getElementById('feedback-input');
-        var feedbackConfirm = document.getElementById('feedback-confirmation');
-        if (feedbackForm) {
-          feedbackForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            if (feedbackInput && feedbackInput.value.trim() !== '') {
-              feedbackInput.value = '';
-              if (feedbackConfirm) feedbackConfirm.classList.remove('hidden');
-            }
-          });
-        }
-      })();
-    </script>
-  
-  
-  </body></html>
+          filterStatus.textContent = checked.length
+            ? 'Filtered: ' + checked.join(', ')
+            : 'Showing all event types';
+          if (checked.length === 1) {
+            openExplorer(checked[0], checked[0]);
+          } else {
+            openExplorer('all', checked.length ? checked.join(', ') : 'All Events');
+          }
+        });
+      }
+
+      // Feedback form
+      var feedbackForm = document.getElementById('feedback-form');
+      var feedbackInput = document.getElementById('feedback-input');
+      var feedbackStatus = document.getElementById('feedback-status');
+      if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!feedbackInput.value.trim()) {
+            feedbackStatus.className = 'text-[11px] text-rose-600 font-medium';
+            feedbackStatus.textContent = 'Please enter feedback first.';
+            return;
+          }
+          feedbackStatus.className = 'text-[11px] text-emerald-600 font-medium';
+          feedbackStatus.textContent = 'Thank you for your feedback!';
+          feedbackInput.value = '';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

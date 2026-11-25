@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Portal — Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Instrument Sans"', 'system-ui', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            portal: {
+              bg: '#EDF3FC',
+              card: '#FFFFFF',
+              border: '#E2E8F0',
+              primary: '#155EEF',
+              primaryHover: '#0F4CD4',
+              softBlue: '#DCEAFE',
+              softBlueText: '#1D4ED8',
+              ink: '#0F172A',
+              muted: '#64748B',
+            }
+          },
+          boxShadow: {
+            card: '0 2px 10px rgba(15, 23, 42, 0.04)',
+            float: '0 10px 25px rgba(15, 23, 42, 0.10)',
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-50..200&display=block" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(180deg, #EEF4FD 0%, #E9F0FA 100%);
+      color: #0F172A;
+    }
+    .material-symbols-rounded {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      vertical-align: middle;
+      user-select: none;
+    }
+    .icon-filled {
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+    }
+    .podium-banner {
+      background: linear-gradient(135deg, #F6FAFF 0%, #E7F0FD 50%, #F4F8FF 100%);
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased text-portal-ink">
+
+  <div class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200/80 px-4 lg:px-7 py-3">
+      <div class="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+
+        <!-- Brand & Mobile Menu -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <button id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false"
+            class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100">
+            <span class="material-symbols-rounded text-[22px]">menu</span>
+          </button>
+          <a href="#home" class="flex items-center gap-2.5 group">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-primary/10 text-portal-primary">
+              <span class="material-symbols-rounded icon-filled text-[22px]">emoji_events</span>
+            </span>
+            <span class="text-[20px] font-bold tracking-tight text-slate-900">Event Portal</span>
+          </a>
+        </div>
+
+        <!-- Global Search Bar -->
+        <div class="flex-1 max-w-xl hidden sm:block">
+          <label class="relative flex items-center w-full">
+            <span class="sr-only">Search for events</span>
+            <span class="material-symbols-rounded absolute left-4 text-slate-400 text-[20px] pointer-events-none">search</span>
+            <input id="event-search-input" type="search" placeholder="Search for events..."
+              class="w-full pl-11 pr-4 py-2 rounded-full border border-slate-200 bg-slate-50/80 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20 focus:outline-none transition">
+          </label>
+        </div>
+
+        <!-- Header Right: Notifications & Profile/Role Dropdown -->
+        <div class="flex items-center gap-3 shrink-0">
+          <button id="notif-btn" type="button" aria-label="3 unread notifications"
+            class="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100 transition">
+            <span class="material-symbols-rounded text-[22px]">notifications</span>
+            <span class="absolute top-1.5 right-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white text-[11px] font-bold leading-none">3</span>
+          </button>
+
+          <div class="relative">
+            <button id="role-menu-btn" type="button" aria-haspopup="menu" aria-expanded="false"
+              class="inline-flex items-center gap-1.5 p-1 pr-2 rounded-full hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-portal-primary/30">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrBRuWYn0xw0Cd9rfeteJZ3m_myhQz3FNYLAIgbml-TWF9IYaYMQSHU0HYen4nyCIIx0-8vMZGHGdMwMaWO4FB5qF0NC3ld1MlUGSj5keik2UkIaO87O-u5mHIoDI0kGAAGSO7FmRc1MrU93byZdZeGzGKs9qh-j7LYkoImX5CyAhH2JdPJlwsyXtB4ddRiIWXnmLL0HAcqj6z_isllDIaSIEeemFay72cq7PQJ_idYj66KyXuEw"
+                alt="User profile" class="w-9 h-9 rounded-full object-cover border border-slate-200">
+              <span id="active-role-label" class="sr-only">Student</span>
+              <span class="material-symbols-rounded text-slate-500 text-[18px]">expand_more</span>
+            </button>
+
+            <div id="role-menu-dropdown" role="menu"
+              class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-float py-1.5 z-40">
+              <button type="button" role="menuitem" data-role="Profile"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[18px] text-slate-500">person</span>
+                <span>Profile</span>
+              </button>
+              <button type="button" role="menuitem" data-role="Administrator"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[18px] text-slate-500">admin_panel_settings</span>
+                <span>Administrator</span>
+              </button>
+              <button type="button" role="menuitem" data-role="Organizer"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[18px] text-slate-500">calendar_month</span>
+                <span>Organizer</span>
+              </button>
+              <button type="button" role="menuitem" data-role="Student"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-semibold text-portal-primary bg-portal-softBlue/60 hover:bg-portal-softBlue">
+                <span class="material-symbols-rounded text-[18px] text-portal-primary">school</span>
+                <span>Student</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Shell -->
+    <div class="flex-1 max-w-[1440px] w-full mx-auto flex gap-5 px-4 lg:px-6 py-5">
+
+      <!-- Left Sidebar -->
+      <aside id="portal-sidebar" aria-label="Primary navigation"
+        class="hidden lg:flex lg:flex-col w-52 shrink-0 bg-white/85 backdrop-blur border border-slate-200/80 rounded-2xl shadow-card p-3 gap-5 self-start sticky top-20">
+        <nav class="flex flex-col gap-1">
+          <a href="#home" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-portal-softBlue text-portal-softBlueText font-semibold text-sm">
+            <span class="material-symbols-rounded icon-filled text-[20px]">home</span>
+            <span>Home</span>
+          </a>
+          <a href="#about" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition">
+            <span class="material-symbols-rounded text-[20px] text-slate-500">info</span>
+            <span>About</span>
+          </a>
+          <a href="#contact" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition">
+            <span class="material-symbols-rounded text-[20px] text-slate-500">mail</span>
+            <span>Contact</span>
+          </a>
+          <a href="#help" class="sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition">
+            <span class="material-symbols-rounded text-[20px] text-slate-500">help</span>
+            <span>Help</span>
+          </a>
+        </nav>
+
+        <div class="border-t border-slate-200/80 pt-4">
+          <p class="px-3.5 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Events</p>
+          <nav class="flex flex-col gap-1">
+            <button type="button" data-category="all"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">event_note</span>
+              <span>All Events</span>
+            </button>
+            <button type="button" data-category="Competitions"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">emoji_events</span>
+              <span>Competitions</span>
+            </button>
+            <button type="button" data-category="Workshops"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">star</span>
+              <span>Workshops</span>
+            </button>
+            <button type="button" data-category="Seminars"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">groups</span>
+              <span>Seminars</span>
+            </button>
+            <button type="button" data-category="Cultural Events"
+              class="sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition">
+              <span class="material-symbols-rounded text-[19px] text-slate-500">sports_esports</span>
+              <span>Cultural Events</span>
+            </button>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Dashboard Content -->
+      <main id="main-content" class="flex-1 min-w-0 flex flex-col gap-5">
+
+        <!-- VIEW: Home (Dashboard) -->
+        <div id="view-home" class="portal-view flex flex-col gap-5">
+
+        <!-- Row 1: Running Events, Upcoming Events, Closed Events -->
+        <section aria-label="Featured event categories" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          <!-- Running Events -->
+          <article data-event-card="24-Hour Hackathon 2027" data-category="Competitions" data-status="ongoing"
+            class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-[20px] text-portal-primary">directions_run</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Running Events</h2>
+              </div>
+              <button type="button" data-open-explorer="ongoing"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-[16/8.5] bg-slate-900 cursor-pointer group" data-open-explorer="ongoing">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrBB4bGzyJsXHCskW5aZl9VJ5t8UrD86IcjCOLAh2R_btuzGeQi4zS9g4l74_QPQC6qxlL3ac8TYTC21kc_B8lfSaW7p0oMfpQeh-YPqizyvYQbaB7JfvBc5KtqdTn5hpLX2t_-nQITmuXh2iJriOk3mgHyxbJARWNeczzaEhbj1EYMIfWzP5uA7fvTe-m-Z33H4GKzCBvstzhjk06D6s2WlZS6reWjvYNJI6F9iG2H5eCXHGq8JEIJv"
+                alt="24-Hour Hackathon 2027" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200">
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <h3 class="text-[15px] font-bold text-slate-900 truncate" id="card-running-title">24-Hour Hackathon 2027</h3>
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                  <span class="material-symbols-rounded text-[15px] text-slate-400">calendar_today</span>
+                  <span id="card-running-date">Dec 10, 2026 – Dec 11, 2026</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Ongoing
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Upcoming Events -->
+          <article data-event-card="AI Summit 2027" data-category="Seminars" data-status="upcoming"
+            class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-[20px] text-portal-primary">schedule</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Upcoming Events</h2>
+              </div>
+              <button type="button" data-open-explorer="upcoming"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-[16/8.5] bg-slate-900 cursor-pointer group" data-open-explorer="upcoming">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrDAl9oU-pJeOHa8fjBdqv-etaTzYulDwAdWr27R74Bl46Z1cRvB9fUtdsw4BoVPv-erFbKLaNNh0wC_ahucUgdaUWRNmuMVyhgPBI8TEI_b8mZnSwASECs_tbE49Q3gsQ--PZh4Dfb0bRFbDHXcgaENsUn87qLPYCSKBwW35vd0ufDK0K4la78AEDE5nyaISp1DYCpiVhMwWkqZ_FYxIouRQst6ElDISzgUlkHTnTahkw31-G2Ljn5_"
+                alt="AI Summit 2027" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200">
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <h3 class="text-[15px] font-bold text-slate-900 truncate" id="card-upcoming-title">AI Summit 2027</h3>
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                  <span class="material-symbols-rounded text-[15px] text-slate-400">calendar_today</span>
+                  <span id="card-upcoming-date">Jan 15, 2027 – Jan 16, 2027</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  Upcoming
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Closed Events -->
+          <article data-event-card="Cultural Fest 2026" data-category="Cultural Events" data-status="closed"
+            class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">check_circle</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Closed Events</h2>
+              </div>
+              <button type="button" data-open-explorer="closed"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-[16/8.5] bg-slate-900 cursor-pointer group" data-open-explorer="closed">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrDUu6Z8Jcw_vscYw5AZJmfBmgotTf8MF6dkmFh3MZcwlr8UPPf0o_24Xn8WvrkOtVaVBNVBXI2mQOxs7wIKSlHosr1uQcFja0jO_3xgZ_Ihq5VUKwzIn3Idvsdvb_CfZ21LYLu3h-KryO9pxIo5Uid5yil7jUTpcTlc9yk74uSKYYci0reDLHufLxKTPZAfllpnUfB6tvsMSUx4KOmh_R5Q80gAcc9TiJHSwDEaNaj7SO9c3a2f8fGGSeYeQ24"
+                alt="Cultural Fest 2026" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200">
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <h3 class="text-[15px] font-bold text-slate-900 truncate" id="card-closed-title">Cultural Fest 2026</h3>
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                  <span class="material-symbols-rounded text-[15px] text-slate-400">calendar_today</span>
+                  <span id="card-closed-date">Nov 20, 2026 – Nov 22, 2026</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                  Closed
+                </span>
+              </div>
+            </div>
+          </article>
+
+        </section>
+
+        <!-- Row 2: Filter Events | Updates & Notifications | Registered Events + Feedback Form -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+
+          <!-- Left Column: Filter Events -->
+          <div class="lg:col-span-3 bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-rounded text-[20px] text-portal-primary">filter_alt</span>
+              <h2 class="text-[15px] font-bold text-slate-900">Filter Events</h2>
+            </div>
+
+            <form id="filter-form" class="flex-1 flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-slate-700">Date / Month</label>
+                <div class="relative">
+                  <select id="filter-date" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-700 py-2 px-3 focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+                    <option value="">Select Date</option>
+                    <option value="2026-11">Nov 2026</option>
+                    <option value="2026-12">Dec 2026</option>
+                    <option value="2027-01">Jan 2027</option>
+                    <option value="2027-02">Feb 2027</option>
+                  </select>
+                </div>
+                <div>
+                  <select id="filter-month" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-700 py-2 px-3 focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+                    <option value="">Select Month</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <span class="text-xs font-semibold text-slate-700">Event Type</span>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Competitions" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Competitions</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Workshops" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Workshops</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Seminars" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Seminars</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="event-type" value="Cultural Events" class="rounded border-slate-300 text-portal-primary focus:ring-portal-primary/30">
+                  <span>Cultural Events</span>
+                </label>
+              </div>
+
+              <p id="filter-status" class="text-[11px] text-slate-500 min-h-[16px]" role="status"></p>
+
+              <button type="submit"
+                class="mt-auto w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 shadow-sm transition">
+                <span class="material-symbols-rounded text-[16px]">filter_alt</span>
+                <span>Apply Filters</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Center Column: Updates & Notifications -->
+          <div class="lg:col-span-6 bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">notifications</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Updates &amp; Notifications</h2>
+              </div>
+              <button type="button" data-open-explorer="all"
+                class="text-xs font-semibold text-portal-primary hover:underline inline-flex items-center gap-0.5">
+                View All <span aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="divide-y divide-slate-100 flex-1 flex flex-col justify-between">
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">info</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">New event "AI Summit 2027" is now live!</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Explore and register for the upcoming AI Summit.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">2h ago</span>
+              </div>
+
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">check</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">Your registration for Hackathon 2027 is confirmed.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Check your email for details.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">4h ago</span>
+              </div>
+
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-50 text-amber-500 border border-amber-200 shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">campaign</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">Event schedule for Cultural Fest 2026 has been updated.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">See the latest timings and venue.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">1d ago</span>
+              </div>
+
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-50 text-purple-600 border border-purple-200 shrink-0 mt-0.5">
+                    <span class="material-symbols-rounded icon-filled text-[17px]">redeem</span>
+                  </span>
+                  <div>
+                    <p class="text-[13px] font-semibold text-slate-900">Win exciting prizes at the upcoming events!</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Participate and stand a chance to win.</p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 shrink-0">2d ago</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Registered Events + Feedback Form -->
+          <div class="lg:col-span-3 flex flex-col gap-5">
+
+            <!-- Registered Events -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex flex-col gap-3">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">star</span>
+                  <h2 class="text-[15px] font-bold text-slate-900">Registered Events</h2>
+                </div>
+                <button id="open-auth-btn" type="button" class="text-[11px] font-semibold text-portal-primary hover:underline truncate max-w-[115px]">Sign in</button>
+              </div>
+
+              <div id="registered-events-list" class="divide-y divide-slate-100">
+                <div class="py-2.5 flex items-center justify-between gap-2.5">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrBB4bGzyJsXHCskW5aZl9VJ5t8UrD86IcjCOLAh2R_btuzGeQi4zS9g4l74_QPQC6qxlL3ac8TYTC21kc_B8lfSaW7p0oMfpQeh-YPqizyvYQbaB7JfvBc5KtqdTn5hpLX2t_-nQITmuXh2iJriOk3mgHyxbJARWNeczzaEhbj1EYMIfWzP5uA7fvTe-m-Z33H4GKzCBvstzhjk06D6s2WlZS6reWjvYNJI6F9iG2H5eCXHGq8JEIJv"
+                      alt="Hackathon 2027" class="w-12 h-8 rounded-md object-cover shrink-0">
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-900 truncate">Hackathon 2027</p>
+                      <p class="text-[11px] text-slate-500 truncate">Dec 10–11, 2026</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Registered
+                  </span>
+                </div>
+
+                <div class="py-2.5 flex items-center justify-between gap-2.5">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDAl9oU-pJeOHa8fjBdqv-etaTzYulDwAdWr27R74Bl46Z1cRvB9fUtdsw4BoVPv-erFbKLaNNh0wC_ahucUgdaUWRNmuMVyhgPBI8TEI_b8mZnSwASECs_tbE49Q3gsQ--PZh4Dfb0bRFbDHXcgaENsUn87qLPYCSKBwW35vd0ufDK0K4la78AEDE5nyaISp1DYCpiVhMwWkqZ_FYxIouRQst6ElDISzgUlkHTnTahkw31-G2Ljn5_"
+                      alt="AI Summit 2027" class="w-12 h-8 rounded-md object-cover shrink-0">
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-900 truncate">AI Summit 2027</p>
+                      <p class="text-[11px] text-slate-500 truncate">Jan 15–16, 2027</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Upcoming
+                  </span>
+                </div>
+
+                <div class="py-2.5 flex items-center justify-between gap-2.5">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDUu6Z8Jcw_vscYw5AZJmfBmgotTf8MF6dkmFh3MZcwlr8UPPf0o_24Xn8WvrkOtVaVBNVBXI2mQOxs7wIKSlHosr1uQcFja0jO_3xgZ_Ihq5VUKwzIn3Idvsdvb_CfZ21LYLu3h-KryO9pxIo5Uid5yil7jUTpcTlc9yk74uSKYYci0reDLHufLxKTPZAfllpnUfB6tvsMSUx4KOmh_R5Q80gAcc9TiJHSwDEaNaj7SO9c3a2f8fGGSeYeQ24"
+                      alt="Tech Workshop" class="w-12 h-8 rounded-md object-cover shrink-0">
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-900 truncate">Tech Workshop</p>
+                      <p class="text-[11px] text-slate-500 truncate">Feb 05, 2027</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Pending
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback Form -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-4 flex-1 flex flex-col gap-2.5">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">chat</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Feedback Form</h2>
+              </div>
+              <form id="feedback-form" class="flex-1 flex flex-col gap-2.5">
+                <textarea id="feedback-input" rows="3" placeholder="Share your feedback..."
+                  class="w-full flex-1 rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-800 placeholder:text-slate-400 p-2.5 resize-none focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20"></textarea>
+                <div class="flex items-center justify-between gap-2">
+                  <span id="feedback-status" class="text-[11px] text-emerald-600 font-medium"></span>
+                  <button type="submit"
+                    class="rounded-lg bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold px-4 py-2 transition">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Row 3: Prizes & Winning — Top 3 Participants -->
+        <section aria-label="Prizes and Winning" class="podium-banner border border-slate-200/90 rounded-2xl shadow-card p-5">
+          <!-- Decorative confetti dots -->
+          <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-75">
+            <span class="absolute left-5 top-12 w-2 h-2 rounded-sm bg-rose-400 rotate-12"></span>
+            <span class="absolute left-12 top-20 w-2 h-2 rounded-full bg-amber-400"></span>
+            <span class="absolute left-7 bottom-8 w-2.5 h-1.5 rounded-sm bg-sky-400 -rotate-45"></span>
+            <span class="absolute right-6 top-10 w-2 h-2 rounded-sm bg-sky-500 rotate-45"></span>
+            <span class="absolute right-12 top-20 w-2 h-2 rounded-full bg-rose-400"></span>
+            <span class="absolute right-8 bottom-7 w-2.5 h-1.5 rounded-sm bg-amber-400 rotate-12"></span>
+          </div>
+
+          <div class="relative flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded icon-filled text-[20px] text-portal-primary">emoji_events</span>
+                <h2 class="text-[15px] font-bold text-slate-900">Prizes &amp; Winning</h2>
+              </div>
+            </div>
+
+            <h3 class="text-center text-base font-bold text-slate-800 -mt-2">Top 3 Participants</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-1 lg:px-6">
+              <!-- 1st Place: Aryan Singh -->
+              <div class="bg-gradient-to-r from-[#FFF3D1] to-[#FFE8B3] border border-[#F3D382] rounded-xl px-4 py-3 flex items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-b from-amber-300 to-amber-500 text-amber-950 font-extrabold text-sm shadow ring-2 ring-amber-200 shrink-0">1</span>
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBRuWYn0xw0Cd9rfeteJZ3m_myhQz3FNYLAIgbml-TWF9IYaYMQSHU0HYen4nyCIIx0-8vMZGHGdMwMaWO4FB5qF0NC3ld1MlUGSj5keik2UkIaO87O-u5mHIoDI0kGAAGSO7FmRc1MrU93byZdZeGzGKs9qh-j7LYkoImX5CyAhH2JdPJlwsyXtB4ddRiIWXnmLL0HAcqj6z_isllDIaSIEeemFay72cq7PQJ_idYj66KyXuEw"
+                    alt="Aryan Singh" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm shrink-0">
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold text-slate-900 truncate">Aryan Singh</p>
+                    <p class="text-xs font-semibold text-amber-900">1,250 Points</p>
+                  </div>
+                </div>
+                <svg class="w-8 h-8 text-amber-500/80 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3l-4.8 2.6.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+                </svg>
+              </div>
+
+              <!-- 2nd Place: Sneha Verma -->
+              <div class="bg-gradient-to-r from-[#F4F7FC] to-[#E6EEF9] border border-[#CBD7E8] rounded-xl px-4 py-3 flex items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-b from-slate-200 to-slate-400 text-slate-800 font-extrabold text-sm shadow ring-2 ring-white shrink-0">2</span>
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBHx4sq0iqDGP4-FS6Eqzs2yNJFMsB3-c0DEAfeK9yuOPQI2OrzvuE1cb3aF_8yuza2CkpBVpdvoTaFzivIRoH_5lJXIc0s5J4XtfEWf8pXxOVAWi6-TVb61mdt3obCy1QbZOqQ79jATFbJKjdymUcENRe82VsoxsPAnjtYl8I-rwUIADYfsOReH_e03wZvE1JwkfH2ZS-5miog0zio9oDTTKsw2r6TPOKkdTjxEszIGsTndG_C"
+                    alt="Sneha Verma" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm shrink-0">
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold text-slate-900 truncate">Sneha Verma</p>
+                    <p class="text-xs font-semibold text-slate-600">1,100 Points</p>
+                  </div>
+                </div>
+                <svg class="w-8 h-8 text-slate-400/80 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3l-4.8 2.6.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+                </svg>
+              </div>
+
+              <!-- 3rd Place: Rohan Kumar -->
+              <div class="bg-gradient-to-r from-[#FFEDE0] to-[#FAD8BE] border border-[#ECC09F] rounded-xl px-4 py-3 flex items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-b from-orange-300 to-orange-500 text-orange-950 font-extrabold text-sm shadow ring-2 ring-orange-200 shrink-0">3</span>
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrB96D5DEvtD5W4VusHMVcHGn9iIfmVaVGtRA2WVnbjGj1_QEexxDaIrAtrJj73mV_bIZaUSISKRMeJFhbvkGyc7Rfyf7mjFjAzX74cb3mMGvmqG2Wbs0_ovwWcbK1c_8MfR86TQcBT-ga5kG-KiFX82Zcohvx74sl7UNKlofRVb2RVYt542w6ZKFi3zzBIjYA7bnbCMbR0yot_exF7xZ3_4fZ0W3WY94VNaTQep8G9DUnXJmu2X"
+                    alt="Rohan Kumar" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm shrink-0">
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold text-slate-900 truncate">Rohan Kumar</p>
+                    <p class="text-xs font-semibold text-orange-900">980 Points</p>
+                  </div>
+                </div>
+                <svg class="w-8 h-8 text-orange-400/80 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3l-4.8 2.6.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        </div><!-- /#view-home -->
+
+        <!-- VIEW: About -->
+        <section id="view-about" class="portal-view hidden flex flex-col gap-5">
+          <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-softBlue text-portal-primary">
+                  <span class="material-symbols-rounded icon-filled text-[20px]">info</span>
+                </span>
+                <div>
+                  <h1 class="text-xl font-bold text-slate-900">About Event Portal</h1>
+                  <p class="text-xs text-slate-500">Connecting students, clubs, and organizers across campus</p>
+                </div>
+              </div>
+              <button type="button" data-go-home class="text-xs font-semibold text-portal-primary hover:underline">← Back to Home</button>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Event Portal is your central campus hub to discover hackathons, technical workshops, expert seminars, and cultural festivals. Track live registrations, stay updated on schedule changes, and climb the campus leaderboard.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4">
+                <p class="text-2xl font-extrabold text-portal-primary">25+</p>
+                <p class="text-xs font-semibold text-slate-700 mt-1">Annual Campus Events</p>
+              </div>
+              <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4">
+                <p class="text-2xl font-extrabold text-emerald-600">1,500+</p>
+                <p class="text-xs font-semibold text-slate-700 mt-1">Active Student Participants</p>
+              </div>
+              <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4">
+                <p class="text-2xl font-extrabold text-amber-600">12+</p>
+                <p class="text-xs font-semibold text-slate-700 mt-1">Partner Clubs &amp; Societies</p>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <span class="material-symbols-rounded text-portal-primary text-[24px]">travel_explore</span>
+              <h2 class="text-sm font-bold text-slate-900 mt-2">1. Discover Events</h2>
+              <p class="text-xs text-slate-500 mt-1">Browse ongoing, upcoming, and archived events filtered by category or month.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <span class="material-symbols-rounded text-emerald-600 text-[24px]">how_to_reg</span>
+              <h2 class="text-sm font-bold text-slate-900 mt-2">2. Instant Registration</h2>
+              <p class="text-xs text-slate-500 mt-1">Reserve your seat in one click with live capacity tracking backed by Supabase.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <span class="material-symbols-rounded text-amber-500 text-[24px]">military_tech</span>
+              <h2 class="text-sm font-bold text-slate-900 mt-2">3. Earn Points &amp; Prizes</h2>
+              <p class="text-xs text-slate-500 mt-1">Participate in competitions and workshops to earn points on the leaderboard.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: Contact -->
+        <section id="view-contact" class="portal-view hidden grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div class="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl shadow-card p-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-softBlue text-portal-primary">
+                  <span class="material-symbols-rounded icon-filled text-[20px]">mail</span>
+                </span>
+                <h1 class="text-xl font-bold text-slate-900">Contact Us</h1>
+              </div>
+              <button type="button" data-go-home class="text-xs font-semibold text-portal-primary hover:underline">← Back</button>
+            </div>
+            <p class="text-xs text-slate-500">Have questions about hosting an event, sponsorship, or your registration? Reach out to the Student Activities Office.</p>
+            <div class="flex flex-col gap-3 text-xs text-slate-700 pt-1">
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-rounded text-portal-primary text-[18px]">alternate_email</span>
+                <span>events-support@campusconnect.edu</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-rounded text-portal-primary text-[18px]">call</span>
+                <span>+91 98765 43210 (Mon–Fri, 9:00 AM – 5:30 PM)</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-rounded text-portal-primary text-[18px]">location_on</span>
+                <span>Innovation Block, Room 204, Main Campus</span>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl shadow-card p-6">
+            <h2 class="text-base font-bold text-slate-900 mb-3">Send a Message</h2>
+            <form id="contact-page-form" class="flex flex-col gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input type="text" required placeholder="Your Name" class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+                <input type="email" required placeholder="Your Email" class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+              </div>
+              <input type="text" required placeholder="Subject (e.g., Hackathon Team Query)" class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+              <textarea rows="4" required placeholder="Write your message..." class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 resize-none focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20"></textarea>
+              <div class="flex items-center justify-between">
+                <span id="contact-page-status" class="text-xs font-medium text-emerald-600"></span>
+                <button type="submit" class="rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold px-5 py-2.5 transition">Send Message</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- VIEW: Help -->
+        <section id="view-help" class="portal-view hidden flex flex-col gap-5">
+          <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-6 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-softBlue text-portal-primary">
+                <span class="material-symbols-rounded icon-filled text-[20px]">help</span>
+              </span>
+              <div>
+                <h1 class="text-xl font-bold text-slate-900">Help &amp; Frequently Asked Questions</h1>
+                <p class="text-xs text-slate-500">Quick answers for participants and event organizers</p>
+              </div>
+            </div>
+            <button type="button" data-go-home class="text-xs font-semibold text-portal-primary hover:underline">← Back to Home</button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">How do I register for an event?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Open any event category or click <strong>View All</strong>, then press <strong>Register</strong> on an open event and enter your User UUID.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">Why does it say an event is at capacity?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Each event has a maximum seat limit enforced by the API. Once full, new registrations return a capacity notice.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">How are leaderboard points calculated?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Students earn points for attending workshops, completing hackathons, and placing in top 3 competition ranks.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">How can organizers view attendees?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Organizers can query <code>/api/events/&lt;id&gt;/registrations?organizer_id=&lt;uuid&gt;</code> or switch to Organizer view from the top-right menu.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: Events Category Page (All Events, Competitions, Workshops, Seminars, Cultural Events) -->
+        <section id="view-events" class="portal-view hidden flex flex-col gap-5">
+          <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-portal-softBlue text-portal-primary">
+                <span id="events-page-icon" class="material-symbols-rounded icon-filled text-[22px]">event_note</span>
+              </span>
+              <div>
+                <h1 id="events-page-title" class="text-xl font-bold text-slate-900">All Events</h1>
+                <p id="events-page-subtitle" class="text-xs text-slate-500">Browse and register for campus events</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" data-status-filter="all" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-portal-softBlue text-portal-softBlueText">All</button>
+              <button type="button" data-status-filter="ongoing" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Ongoing</button>
+              <button type="button" data-status-filter="upcoming" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Upcoming</button>
+              <button type="button" data-status-filter="closed" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Closed</button>
+              <button type="button" data-go-home class="ml-2 text-xs font-semibold text-portal-primary hover:underline">← Home</button>
+            </div>
+          </div>
+          <div id="events-page-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="pt-1 pb-3 text-center">
+          <p class="text-xs font-medium text-portal-primary">All rights reserved • Copyright</p>
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- User Email Sign-In / Registration Modal -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-float max-w-md w-full p-6 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Sign In to Register</h2>
+          <p class="text-xs text-slate-500">Enter your email to sync your live registrations</p>
+        </div>
+        <button id="close-auth-btn" type="button" aria-label="Close sign in"
+          class="w-8 h-8 rounded-full inline-flex items-center justify-center text-slate-500 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[20px]">close</span>
+        </button>
+      </div>
+      <form id="auth-form" class="flex flex-col gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+          <input id="auth-email-input" type="email" required placeholder="e.g. rahul@gmail.com"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Role</label>
+          <select id="auth-role-select" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+            <option value="student">Student</option>
+            <option value="organizer">Organizer</option>
+            <option value="administrator">Administrator</option>
+          </select>
+        </div>
+        <p id="auth-error" class="text-xs text-rose-600 hidden"></p>
+        <button type="submit" class="rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 transition">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Live Events Explorer & Registration Modal -->
+  <div id="events-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-float max-w-4xl w-full max-h-[85vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+        <div>
+          <h2 id="modal-title" class="text-lg font-bold text-slate-900">All Events</h2>
+          <p id="modal-subtitle" class="text-xs text-slate-500">Live events from database</p>
+        </div>
+        <button id="close-modal-btn" type="button" aria-label="Close modal"
+          class="w-9 h-9 rounded-full inline-flex items-center justify-center text-slate-500 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[20px]">close</span>
+        </button>
+      </div>
+      <div id="modal-events-grid" class="p-5 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var liveEvents = [];
+      var registeredEventIds = {};
+      var currentUser = null;
+      var pendingRegisterCallback = null;
+
+      try {
+        var savedUser = window.localStorage.getItem('event-portal-user');
+        if (savedUser) currentUser = JSON.parse(savedUser);
+      } catch (e) {}
+
+      function inferCategory(ev) {
+        if (ev.category || ev.type) return ev.category || ev.type;
+        var t = String(ev.title || ev.name || '').toLowerCase();
+        if (t.indexOf('workshop') !== -1) return 'Workshops';
+        if (t.indexOf('hackathon') !== -1 || t.indexOf('cup') !== -1 || t.indexOf('competition') !== -1) return 'Competitions';
+        if (t.indexOf('cultural') !== -1 || t.indexOf('fest') !== -1) return 'Cultural Events';
+        return 'Seminars';
+      }
+
+      function updateAuthUI() {
+        var openAuthBtn = document.getElementById('open-auth-btn');
+        var roleLabel = document.getElementById('active-role-label');
+        if (openAuthBtn) {
+          openAuthBtn.textContent = currentUser ? currentUser.email : 'Sign in';
+        }
+        if (roleLabel && currentUser) {
+          roleLabel.textContent = currentUser.role || 'Student';
+        }
+        var userRole = (currentUser && currentUser.token && currentUser.role) ? String(currentUser.role).toLowerCase() : '';
+        document.querySelectorAll('.role-option').forEach(function (opt) {
+          var dr = (opt.getAttribute('data-role') || '').toLowerCase();
+          if (dr === 'profile') {
+            opt.classList.remove('hidden');
+            return;
+          }
+          var allowed = !userRole || userRole === 'administrator' || dr === userRole;
+          opt.classList.toggle('hidden', !allowed);
+          var isActive = userRole && dr === userRole;
+          opt.classList.toggle('bg-portal-softBlue/60', isActive);
+          opt.classList.toggle('text-portal-primary', isActive);
+          opt.classList.toggle('font-semibold', isActive);
+          var span = opt.querySelector('span:last-child');
+          if (span) {
+            if (userRole === 'administrator' && (dr === 'organizer' || dr === 'student')) {
+              span.textContent = opt.getAttribute('data-role') + ' (Preview)';
+            } else {
+              span.textContent = opt.getAttribute('data-role');
+            }
+          }
+        });
+      }
+
+      if (currentUser && currentUser.token) {
+        fetch('/api/auth/whoami', { headers: { 'Authorization': 'Bearer ' + currentUser.token } })
+          .then(function (r) {
+            if (r.status === 401 || r.status === 403) {
+              currentUser = null;
+              window.localStorage.removeItem('ep_user');
+              window.localStorage.removeItem('event-portal-user');
+              window.localStorage.removeItem('event-portal-user-id');
+              window.sessionStorage.removeItem('ep_preview_role');
+              updateAuthUI();
+              return null;
+            }
+            return r.ok ? r.json() : null;
+          })
+          .then(function (u) {
+            if (u && u.role) {
+              currentUser.role = u.role;
+              currentUser.email = u.email || currentUser.email;
+              currentUser.status = u.status || currentUser.status;
+              window.localStorage.setItem('ep_user', JSON.stringify(currentUser));
+              updateAuthUI();
+            }
+          })
+          .catch(function () {});
+      }
+
+      var authModal = document.getElementById('auth-modal');
+      var authForm = document.getElementById('auth-form');
+      var authEmailInput = document.getElementById('auth-email-input');
+      var authRoleSelect = document.getElementById('auth-role-select');
+      var authError = document.getElementById('auth-error');
+
+      function openAuthModal(onSuccess) {
+        pendingRegisterCallback = onSuccess || null;
+        if (currentUser && authEmailInput) authEmailInput.value = currentUser.email || '';
+        authError.classList.add('hidden');
+        authModal.classList.remove('hidden');
+      }
+
+      document.getElementById('open-auth-btn').addEventListener('click', function () { openAuthModal(); });
+      document.getElementById('close-auth-btn').addEventListener('click', function () { authModal.classList.add('hidden'); });
+      authModal.addEventListener('click', function (e) {
+        if (e.target === authModal) authModal.classList.add('hidden');
+      });
+
+      authForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        authError.classList.add('hidden');
+        try {
+          var res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: authEmailInput.value.trim(), role: authRoleSelect.value })
+          });
+          var data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Could not sign in');
+          // Store full session including token
+          currentUser = { ...data.user, token: data.token, sub: data.user.id };
+          window.localStorage.setItem('ep_user', JSON.stringify(currentUser));
+          window.localStorage.setItem('event-portal-user', JSON.stringify(currentUser));
+          window.localStorage.setItem('event-portal-user-id', data.user.id);
+          updateAuthUI();
+          authModal.classList.add('hidden');
+          // Redirect to role dashboard
+          var roleMap = { administrator: '/admin/dashboard', organizer: '/organizer/dashboard', student: '/student/dashboard' };
+          var dest = roleMap[data.user.role];
+          if (dest) { location.href = dest; return; }
+          await loadMyRegistrations();
+          if (typeof renderEventsPage === 'function' && !document.getElementById('view-events').classList.contains('hidden')) {
+            renderEventsPage();
+          }
+          if (pendingRegisterCallback) {
+            var cb = pendingRegisterCallback;
+            pendingRegisterCallback = null;
+            cb();
+          }
+        } catch (err) {
+          authError.textContent = err.message;
+          authError.classList.remove('hidden');
+        }
+      });
+
+      async function registerForEvent(ev, btn) {
+        if (!currentUser || !currentUser.id) {
+          openAuthModal(function () { registerForEvent(ev, btn); });
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Registering...';
+        try {
+          var res = await fetch('/api/registrations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: currentUser.id, event_id: ev.id })
+          });
+          var data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Registration failed');
+          registeredEventIds[ev.id] = true;
+          btn.textContent = 'Registered';
+          await Promise.all([loadMyRegistrations(), loadLiveEvents()]);
+        } catch (err) {
+          window.alert(err.message);
+          btn.disabled = false;
+          btn.textContent = 'Register';
+        }
+      }
+
+      async function loadMyRegistrations() {
+        if (!currentUser || !currentUser.id) return;
+        var list = document.getElementById('registered-events-list');
+        if (!list) return;
+        try {
+          var res = await fetch('/api/me/registrations?user_id=' + encodeURIComponent(currentUser.id));
+          if (!res.ok) return;
+          var rows = await res.json();
+          if (!Array.isArray(rows)) return;
+          registeredEventIds = {};
+          if (!rows.length) {
+            list.innerHTML = '<p class="py-3 text-xs text-slate-500">No registrations yet for ' + currentUser.email + '. Click any event to register!</p>';
+            return;
+          }
+          list.replaceChildren();
+          rows.slice(0, 4).forEach(function (row) {
+            var ev = row.events || {};
+            if (row.event_id) registeredEventIds[row.event_id] = true;
+            var item = document.createElement('div');
+            item.className = 'py-2.5 flex items-center justify-between gap-2.5';
+            var left = document.createElement('div');
+            left.className = 'min-w-0';
+            var title = document.createElement('p');
+            title.className = 'text-xs font-bold text-slate-900 truncate';
+            title.textContent = ev.title || 'Registered Event';
+            var sub = document.createElement('p');
+            sub.className = 'text-[11px] text-slate-500 truncate';
+            sub.textContent = 'Capacity: ' + (ev.capacity || 'Open');
+            left.append(title, sub);
+            var badge = document.createElement('span');
+            badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold shrink-0';
+            badge.textContent = 'Registered';
+            item.append(left, badge);
+            list.appendChild(item);
+          });
+        } catch (e) {}
+      }
+
+      function normalizeStatus(ev) {
+        var s = String(ev.status || '').toLowerCase();
+        if (s === 'ongoing' || s === 'running' || s === 'active') return 'ongoing';
+        if (s === 'closed' || s === 'completed' || s === 'ended') return 'closed';
+        return 'upcoming';
+      }
+
+      function formatDate(ev) {
+        var d = ev.start_date || ev.date || ev.starts_at || '';
+        return d ? String(d).slice(0, 10) : 'TBD';
+      }
+
+      function populateFeaturedCards(events) {
+        var running = events.find(function (e) { return normalizeStatus(e) === 'ongoing'; });
+        var upcoming = events.find(function (e) { return normalizeStatus(e) === 'upcoming'; });
+        var closed = events.find(function (e) { return normalizeStatus(e) === 'closed'; });
+
+        if (running) {
+          document.getElementById('card-running-title').textContent = running.title || running.name || 'Running Event';
+          document.getElementById('card-running-date').textContent = formatDate(running);
+        }
+        if (upcoming) {
+          document.getElementById('card-upcoming-title').textContent = upcoming.title || upcoming.name || 'Upcoming Event';
+          document.getElementById('card-upcoming-date').textContent = formatDate(upcoming);
+        }
+        if (closed) {
+          document.getElementById('card-closed-title').textContent = closed.title || closed.name || 'Closed Event';
+          document.getElementById('card-closed-date').textContent = formatDate(closed);
+        }
+      }
+
+      // Modal Explorer
+      var modal = document.getElementById('events-modal');
+      var modalTitle = document.getElementById('modal-title');
+      var modalSubtitle = document.getElementById('modal-subtitle');
+      var modalGrid = document.getElementById('modal-events-grid');
+
+      function openExplorer(filterType, titleText) {
+        modalTitle.textContent = titleText || 'All Events';
+        var filtered = liveEvents.filter(function (ev) {
+          if (!filterType || filterType === 'all') return true;
+          if (filterType === 'ongoing' || filterType === 'upcoming' || filterType === 'closed') {
+            return normalizeStatus(ev) === filterType;
+          }
+          var cat = String(ev.category || ev.type || '').toLowerCase();
+          return cat === filterType.toLowerCase();
+        });
+        modalSubtitle.textContent = filtered.length
+          ? filtered.length + ' event(s) available'
+          : 'No matching events found in database.';
+
+        modalGrid.replaceChildren();
+        filtered.forEach(function (ev) {
+          var card = document.createElement('article');
+          card.className = 'border border-slate-200 rounded-xl p-4 flex flex-col gap-2 bg-slate-50/50';
+
+          var top = document.createElement('div');
+          top.className = 'flex items-center justify-between gap-2';
+          var cat = document.createElement('span');
+          cat.className = 'text-[11px] font-bold uppercase tracking-wider text-portal-primary';
+          cat.textContent = ev.category || ev.type || 'Event';
+          var st = normalizeStatus(ev);
+          var pill = document.createElement('span');
+          pill.className = 'px-2 py-0.5 rounded-full text-[11px] font-semibold ' +
+            (st === 'ongoing' ? 'bg-emerald-50 text-emerald-700' :
+             st === 'closed' ? 'bg-slate-100 text-slate-600' : 'bg-blue-50 text-blue-700');
+          pill.textContent = st.charAt(0).toUpperCase() + st.slice(1);
+          top.append(cat, pill);
+
+          var h3 = document.createElement('h3');
+          h3.className = 'text-sm font-bold text-slate-900';
+          h3.textContent = ev.title || ev.name || 'Untitled Event';
+
+          var dateEl = document.createElement('p');
+          dateEl.className = 'text-xs text-slate-500';
+          dateEl.textContent = 'Date: ' + formatDate(ev);
+
+          card.append(top, h3, dateEl);
+
+          if (ev.description) {
+            var desc = document.createElement('p');
+            desc.className = 'text-xs text-slate-600 line-clamp-2';
+            desc.textContent = ev.description;
+            card.appendChild(desc);
+          }
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mt-auto rounded-lg bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2 px-3 transition disabled:opacity-60';
+          var isReg = !!registeredEventIds[ev.id];
+          btn.textContent = st === 'closed' ? 'Closed' : (isReg ? 'Registered' : 'Register');
+          btn.disabled = st === 'closed' || isReg;
+          btn.addEventListener('click', function () {
+            registerForEvent(ev, btn);
+          });
+          card.appendChild(btn);
+          modalGrid.appendChild(card);
+        });
+
+        modal.classList.remove('hidden');
+      }
+
+      document.getElementById('close-modal-btn').addEventListener('click', function () {
+        modal.classList.add('hidden');
+      });
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+
+      document.querySelectorAll('[data-open-explorer]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var mode = el.getAttribute('data-open-explorer');
+          var labels = { ongoing: 'Running Events', upcoming: 'Upcoming Events', closed: 'Closed Events', all: 'All Events' };
+          openExplorer(mode, labels[mode] || 'Events');
+        });
+      });
+
+      function loadLiveEvents() {
+        return fetch('/api/events')
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (events) {
+            if (Array.isArray(events) && events.length) {
+              liveEvents = events.map(function (ev) {
+                ev.category = inferCategory(ev);
+                return ev;
+              });
+              populateFeaturedCards(liveEvents);
+              if (typeof renderEventsPage === 'function' && !document.getElementById('view-events').classList.contains('hidden')) {
+                renderEventsPage();
+              }
+            }
+          })
+          .catch(function () {});
+      }
+
+      updateAuthUI();
+      loadLiveEvents();
+      loadMyRegistrations();
+      window.setInterval(function () {
+        loadLiveEvents();
+        loadMyRegistrations();
+      }, 10000);
+
+      // Mobile sidebar toggle
+      var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      var sidebar = document.getElementById('portal-sidebar');
+      if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', function () {
+          var isHidden = sidebar.classList.contains('hidden');
+          sidebar.classList.toggle('hidden', !isHidden);
+          sidebar.classList.toggle('flex', isHidden);
+          sidebar.classList.toggle('flex-col', isHidden);
+          mobileMenuBtn.setAttribute('aria-expanded', String(isHidden));
+        });
+      }
+
+      // Role dropdown
+      var roleBtn = document.getElementById('role-menu-btn');
+      var roleDropdown = document.getElementById('role-menu-dropdown');
+      var roleLabel = document.getElementById('active-role-label');
+      if (roleBtn && roleDropdown) {
+        roleBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = !roleDropdown.classList.contains('hidden');
+          roleDropdown.classList.toggle('hidden', open);
+          roleBtn.setAttribute('aria-expanded', String(!open));
+        });
+        document.querySelectorAll('.role-option').forEach(function (opt) {
+          opt.addEventListener('click', async function () {
+            var rawRole = (opt.getAttribute('data-role') || '').toLowerCase();
+            roleDropdown.classList.add('hidden');
+            roleBtn.setAttribute('aria-expanded', 'false');
+
+            if (!currentUser || !currentUser.token) {
+              openAuthModal();
+              return;
+            }
+
+            if (rawRole === 'profile') {
+              var ownMap = {
+                administrator: '/admin/dashboard',
+                organizer: '/organizer/dashboard',
+                student: '/student/dashboard'
+              };
+              window.location.href = ownMap[currentUser.role] || '/student/dashboard';
+              return;
+            }
+
+            try {
+              opt.disabled = true;
+              var res = await fetch('/api/auth/switch-view', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + currentUser.token
+                },
+                body: JSON.stringify({ target_role: rawRole })
+              });
+              var data = await res.json().catch(function () { return {}; });
+              if (res.status === 401) {
+                currentUser = null;
+                window.localStorage.removeItem('ep_user');
+                window.localStorage.removeItem('event-portal-user');
+                window.localStorage.removeItem('event-portal-user-id');
+                window.sessionStorage.removeItem('ep_preview_role');
+                updateAuthUI();
+                openAuthModal();
+                return;
+              }
+              if (!res.ok) {
+                alert(data.error || 'Access denied for this role.');
+                return;
+              }
+              if (data.preview_mode) {
+                window.sessionStorage.setItem('ep_preview_role', data.active_view);
+              } else {
+                window.sessionStorage.removeItem('ep_preview_role');
+              }
+              if (roleLabel) roleLabel.textContent = opt.getAttribute('data-role') || 'Student';
+              window.location.href = data.redirect;
+            } catch (err) {
+              alert('Network error while switching role.');
+            } finally {
+              opt.disabled = false;
+            }
+          });
+        });
+        document.addEventListener('click', function () {
+          roleDropdown.classList.add('hidden');
+          roleBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      // Search & Sidebar Category Filter
+      var searchInput = document.getElementById('event-search-input');
+      if (searchInput) {
+        searchInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            var q = searchInput.value.trim().toLowerCase();
+            if (!q) return openExplorer('all', 'All Events');
+            var saved = liveEvents;
+            liveEvents = saved.filter(function (ev) {
+              return String(ev.title || ev.name || '').toLowerCase().indexOf(q) !== -1 ||
+                     String(ev.category || ev.type || '').toLowerCase().indexOf(q) !== -1;
+            });
+            openExplorer('all', 'Search: "' + searchInput.value.trim() + '"');
+            liveEvents = saved;
+          }
+        });
+      }
+
+      // Page / View Routing (Home, About, Contact, Help, Events Categories)
+      var activeEventsCategory = 'all';
+      var activeStatusFilter = 'all';
+      var SAMPLE_EVENTS = [
+        { id: 'sample-1', title: '24-Hour Hackathon 2027', category: 'Competitions', status: 'ongoing', start_date: '2026-12-10', description: 'Code, build, and innovate with your team in our flagship 24-hour campus hackathon.' },
+        { id: 'sample-2', title: 'CodeSprint Algorithm Cup', category: 'Competitions', status: 'upcoming', start_date: '2027-01-22', description: 'Competitive programming contest featuring data structures and algorithmic challenges.' },
+        { id: 'sample-3', title: 'Full-Stack Web Workshop', category: 'Workshops', status: 'upcoming', start_date: '2027-02-05', description: 'Hands-on session covering Flask APIs, Tailwind UI, and cloud deployment.' },
+        { id: 'sample-4', title: 'AI Summit 2027', category: 'Seminars', status: 'upcoming', start_date: '2027-01-15', description: 'Keynote talks and panel discussions on applied AI, LLMs, and research.' },
+        { id: 'sample-5', title: 'Cultural Fest 2026', category: 'Cultural Events', status: 'closed', start_date: '2026-11-20', description: 'Annual celebration of music, dance, drama, and student art showcases.' }
+      ];
+      var CATEGORY_META = {
+        all: { title: 'All Events', subtitle: 'Explore all running, upcoming, and closed campus events', icon: 'event_note' },
+        Competitions: { title: 'Competitions', subtitle: 'Hackathons, coding contests, and team challenges', icon: 'emoji_events' },
+        Workshops: { title: 'Workshops', subtitle: 'Hands-on technical labs and skill-building bootcamps', icon: 'star' },
+        Seminars: { title: 'Seminars', subtitle: 'Industry keynotes, tech talks, and career panels', icon: 'groups' },
+        'Cultural Events': { title: 'Cultural Events', subtitle: 'Music, arts, fests, and campus community nights', icon: 'sports_esports' }
+      };
+
+      function renderEventsPage() {
+        var grid = document.getElementById('events-page-grid');
+        var meta = CATEGORY_META[activeEventsCategory] || CATEGORY_META.all;
+        document.getElementById('events-page-title').textContent = meta.title;
+        document.getElementById('events-page-subtitle').textContent = meta.subtitle;
+        document.getElementById('events-page-icon').textContent = meta.icon;
+
+        var source = liveEvents.length ? liveEvents : SAMPLE_EVENTS;
+        var filtered = source.filter(function (ev) {
+          var cat = String(ev.category || ev.type || 'Events').toLowerCase();
+          var catMatch = activeEventsCategory === 'all' || cat === activeEventsCategory.toLowerCase();
+          var stMatch = activeStatusFilter === 'all' || normalizeStatus(ev) === activeStatusFilter;
+          return catMatch && stMatch;
+        });
+
+        if (!filtered.length && liveEvents.length) {
+          filtered = SAMPLE_EVENTS.filter(function (ev) {
+            var catMatch = activeEventsCategory === 'all' || ev.category.toLowerCase() === activeEventsCategory.toLowerCase();
+            var stMatch = activeStatusFilter === 'all' || normalizeStatus(ev) === activeStatusFilter;
+            return catMatch && stMatch;
+          });
+        }
+
+        grid.replaceChildren();
+        if (!filtered.length) {
+          var empty = document.createElement('div');
+          empty.className = 'col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center text-sm text-slate-500';
+          empty.textContent = 'No events match this filter yet.';
+          grid.appendChild(empty);
+          return;
+        }
+
+        filtered.forEach(function (ev) {
+          var st = normalizeStatus(ev);
+          var card = document.createElement('article');
+          card.className = 'bg-white border border-slate-200/90 rounded-2xl shadow-card p-5 flex flex-col gap-3';
+
+          var top = document.createElement('div');
+          top.className = 'flex items-center justify-between gap-2';
+          var catBadge = document.createElement('span');
+          catBadge.className = 'text-xs font-bold text-portal-primary';
+          catBadge.textContent = ev.category || ev.type || 'Event';
+          var pill = document.createElement('span');
+          pill.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-semibold ' +
+            (st === 'ongoing' ? 'bg-emerald-50 text-emerald-700' :
+             st === 'closed' ? 'bg-slate-100 text-slate-600' : 'bg-blue-50 text-blue-700');
+          pill.textContent = st.charAt(0).toUpperCase() + st.slice(1);
+          top.append(catBadge, pill);
+
+          var h3 = document.createElement('h2');
+          h3.className = 'text-base font-bold text-slate-900';
+          h3.textContent = ev.title || ev.name || 'Untitled Event';
+
+          var dateEl = document.createElement('p');
+          dateEl.className = 'text-xs text-slate-500 flex items-center gap-1.5';
+          dateEl.textContent = 'Date: ' + formatDate(ev);
+
+          var desc = document.createElement('p');
+          desc.className = 'text-xs text-slate-600 leading-relaxed';
+          desc.textContent = ev.description || 'Join fellow students and organizers for this campus event.';
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mt-auto rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 transition disabled:opacity-60';
+          var isReg = !!registeredEventIds[ev.id];
+          btn.textContent = st === 'closed' ? 'Registration Closed' : (isReg ? 'Registered' : 'Register Now');
+          btn.disabled = st === 'closed' || isReg;
+          btn.addEventListener('click', function () {
+            if (String(ev.id || '').indexOf('sample-') === 0) {
+              btn.textContent = 'Registered (Demo)';
+              btn.disabled = true;
+              return;
+            }
+            registerForEvent(ev, btn);
+          });
+
+          card.append(top, h3, dateEl, desc, btn);
+          grid.appendChild(card);
+        });
+      }
+
+      function setSidebarActive(targetKey) {
+        document.querySelectorAll('.sidebar-nav-link').forEach(function (el) {
+          var isMatch = el.getAttribute('href') === '#' + targetKey;
+          el.className = isMatch
+            ? 'sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-portal-softBlue text-portal-softBlueText font-semibold text-sm'
+            : 'sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition';
+        });
+        document.querySelectorAll('.sidebar-cat-btn').forEach(function (el) {
+          var isMatch = targetKey === 'events' && el.getAttribute('data-category') === activeEventsCategory;
+          el.className = isMatch
+            ? 'sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-semibold bg-portal-softBlue text-portal-softBlueText'
+            : 'sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition';
+        });
+      }
+
+      function showView(viewKey, category) {
+        document.querySelectorAll('.portal-view').forEach(function (el) {
+          el.classList.add('hidden');
+        });
+        var target = document.getElementById('view-' + viewKey) || document.getElementById('view-home');
+        target.classList.remove('hidden');
+        if (viewKey === 'events') {
+          activeEventsCategory = category || 'all';
+          renderEventsPage();
+        }
+        setSidebarActive(viewKey);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      document.querySelectorAll('.sidebar-nav-link, a[href="#home"]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var key = (link.getAttribute('href') || '#home').replace('#', '');
+          window.location.hash = key;
+          showView(key);
+        });
+      });
+
+      document.querySelectorAll('[data-go-home]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          window.location.hash = 'home';
+          showView('home');
+        });
+      });
+
+      document.querySelectorAll('.sidebar-cat-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var cat = btn.getAttribute('data-category') || 'all';
+          activeStatusFilter = 'all';
+          showView('events', cat);
+        });
+      });
+
+      document.querySelectorAll('.events-status-pill').forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          activeStatusFilter = pill.getAttribute('data-status-filter') || 'all';
+          document.querySelectorAll('.events-status-pill').forEach(function (p) {
+            var active = p === pill;
+            p.className = active
+              ? 'events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-portal-softBlue text-portal-softBlueText'
+              : 'events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200';
+          });
+          renderEventsPage();
+        });
+      });
+
+      var contactPageForm = document.getElementById('contact-page-form');
+      if (contactPageForm) {
+        contactPageForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          document.getElementById('contact-page-status').textContent = 'Message sent! Our team will reply soon.';
+          contactPageForm.reset();
+        });
+      }
+
+      var initialHash = (window.location.hash || '#home').replace('#', '');
+      if (['home', 'about', 'contact', 'help'].indexOf(initialHash) !== -1) {
+        showView(initialHash);
+      }
+
+      // Filter form
+      var filterForm = document.getElementById('filter-form');
+      var filterStatus = document.getElementById('filter-status');
+      if (filterForm) {
+        filterForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var checked = Array.from(filterForm.querySelectorAll('input[name="event-type"]:checked')).map(function (el) {
+            return el.value;
+          });
+          filterStatus.textContent = checked.length
+            ? 'Filtered: ' + checked.join(', ')
+            : 'Showing all event types';
+          if (checked.length === 1) {
+            openExplorer(checked[0], checked[0]);
+          } else {
+            openExplorer('all', checked.length ? checked.join(', ') : 'All Events');
+          }
+        });
+      }
+
+      // Feedback form
+      var feedbackForm = document.getElementById('feedback-form');
+      var feedbackInput = document.getElementById('feedback-input');
+      var feedbackStatus = document.getElementById('feedback-status');
+      if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!feedbackInput.value.trim()) {
+            feedbackStatus.className = 'text-[11px] text-rose-600 font-medium';
+            feedbackStatus.textContent = 'Please enter feedback first.';
+            return;
+          }
+          feedbackStatus.className = 'text-[11px] text-emerald-600 font-medium';
+          feedbackStatus.textContent = 'Thank you for your feedback!';
+          feedbackInput.value = '';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

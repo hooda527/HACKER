@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Organizer Dashboard — Event Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0&display=block" rel="stylesheet">
+  <style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#EEF4FD;}.material-symbols-rounded{font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;display:inline-flex;align-items:center;vertical-align:middle;user-select:none;}</style>
+</head>
+<body class="min-h-screen text-slate-900 antialiased">
+  <script>
+    (function(){
+      var user=null; try{user=JSON.parse(localStorage.getItem('ep_user')||'null');}catch(e){}
+      if(!user||!user.token){location.replace('/');}
+      else if(user.role==='student'){location.replace('/student/dashboard');}
+      else if(user.role!=='organizer'&&user.role!=='administrator'){location.replace('/');}
+      if(window.history&&window.history.replaceState){
+        window.history.replaceState(null,'',window.location.href);
+      }
+    })();
+  </script>
+  <div class="flex h-screen overflow-hidden">
+    <aside class="w-60 bg-white border-r border-slate-200 flex flex-col shrink-0">
+      <div class="px-5 py-4 border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500 text-white">
+            <span class="material-symbols-rounded text-[18px]">calendar_month</span>
+          </span>
+          <span class="text-sm font-bold">Organizer Panel</span>
+        </div>
+        <p id="org-email" class="text-[11px] text-slate-500 mt-1 truncate"></p>
+      </div>
+      <nav class="flex-1 p-3 flex flex-col gap-1">
+        <button onclick="showSec('my-events')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">event_note</span>My Events
+        </button>
+        <button onclick="showSec('attendees')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">how_to_reg</span>Attendees
+        </button>
+        <div class="mt-auto pt-3 border-t border-slate-200">
+          <a href="/" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-slate-600 hover:bg-slate-100">
+            <span class="material-symbols-rounded text-[18px] text-slate-400">home</span>Portal Home
+          </a>
+          <button id="org-del-btn" onclick="requestDataDeletion()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-amber-700 hover:bg-amber-50 w-full text-left mt-1">
+            <span class="material-symbols-rounded text-[18px]">delete_forever</span>Request Data Deletion
+          </button>
+          <button onclick="logout()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-rose-600 hover:bg-rose-50 w-full text-left mt-1">
+            <span class="material-symbols-rounded text-[18px]">logout</span>Sign Out
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-4 shrink-0">
+        <h1 id="sec-title" class="text-base font-bold text-slate-900">My Events</h1>
+        <div class="flex items-center gap-2">
+          <div id="admin-view-switcher" class="hidden inline-flex items-center rounded-xl bg-slate-100 p-1 text-xs font-semibold">
+            <button type="button" onclick="switchView('administrator')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Admin</button>
+            <button type="button" onclick="switchView('organizer')" class="px-2.5 py-1 rounded-lg bg-white text-amber-700 shadow-sm">Organizer Preview</button>
+            <button type="button" onclick="switchView('student')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Student Preview</button>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold">
+            <span class="material-symbols-rounded text-[14px]">calendar_month</span>ORGANIZER
+          </span>
+        </div>
+      </header>
+      <div id="preview-banner" class="hidden bg-amber-50 border-b border-amber-200 px-6 py-2 flex items-center justify-between text-xs text-amber-900 shrink-0">
+        <span><strong>Admin Preview Mode (Read-Only):</strong> Viewing Organizer interface without modifying your administrator role.</span>
+        <button type="button" onclick="switchView('administrator')" class="rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1 transition">Return to Admin Dashboard</button>
+      </div>
+
+      <main class="flex-1 overflow-y-auto p-6">
+        <!-- My Events -->
+        <section id="sec-my-events" class="sec-section">
+          <div class="flex items-center justify-between mb-4">
+            <div id="org-stats" class="flex gap-4"></div>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <table class="w-full text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+                <tr>
+                  <th class="px-4 py-2.5 text-left">Title</th>
+                  <th class="px-4 py-2.5 text-left">Status</th>
+                  <th class="px-4 py-2.5 text-left">Capacity</th>
+                  <th class="px-4 py-2.5 text-left">Date</th>
+                  <th class="px-4 py-2.5 text-left">Registrations</th>
+                </tr>
+              </thead>
+              <tbody id="org-events-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Attendees -->
+        <section id="sec-attendees" class="sec-section hidden">
+          <div class="mb-4">
+            <label class="text-xs font-semibold text-slate-700 mr-2">Select Event:</label>
+            <select id="attendee-event-select" onchange="loadAttendees()" class="text-xs rounded-xl border border-slate-200 px-3 py-2 focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
+              <option value="">— choose —</option>
+            </select>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <table class="w-full text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+                <tr>
+                  <th class="px-4 py-2.5 text-left">Email</th>
+                  <th class="px-4 py-2.5 text-left">Name</th>
+                  <th class="px-4 py-2.5 text-left">Status</th>
+                  <th class="px-4 py-2.5 text-left">Registered</th>
+                </tr>
+              </thead>
+              <tbody id="attendee-body" class="divide-y divide-slate-100">
+                <tr><td colspan="4" class="px-4 py-4 text-slate-400">Select an event above</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    var user=null; try{user=JSON.parse(localStorage.getItem('ep_user')||'null');}catch(e){}
+    if(!user){location.replace('/');throw new Error();}
+    document.getElementById('org-email').textContent=user.email;
+
+    function authHeader(){return{'Authorization':'Bearer '+user.token,'Content-Type':'application/json'};}
+
+    function clearSession(){
+      localStorage.removeItem('ep_user');
+      localStorage.removeItem('event-portal-user');
+      localStorage.removeItem('event-portal-user-id');
+      sessionStorage.removeItem('ep_preview_role');
+    }
+
+    async function logout(){
+      try{ await fetch('/api/auth/logout',{method:'POST',headers:authHeader()}); }catch(e){}
+      clearSession();
+      location.replace('/');
+    }
+
+    var isPreview = (user.role === 'administrator');
+    if (isPreview) {
+      document.getElementById('preview-banner').classList.remove('hidden');
+      document.getElementById('admin-view-switcher').classList.remove('hidden');
+      var delBtn = document.getElementById('org-del-btn');
+      if (delBtn) { delBtn.disabled = true; delBtn.classList.add('opacity-50','cursor-not-allowed'); }
+    }
+
+    fetch('/api/auth/whoami',{headers:authHeader()}).then(function(r){
+      if(r.status===401||r.status===403){logout();return null;}
+      return r.ok?r.json():null;
+    }).then(function(u){
+      if(u&&u.role!==user.role){
+        user.role=u.role;
+        localStorage.setItem('ep_user',JSON.stringify(user));
+        if(u.role==='student')location.replace('/student/dashboard');
+      }
+    }).catch(function(){});
+
+    async function switchView(targetRole){
+      var r=await fetch('/api/auth/switch-view',{method:'POST',headers:authHeader(),body:JSON.stringify({target_role:targetRole})});
+      var d=await r.json().catch(function(){return{};});
+      if(r.status===401){logout();return;}
+      if(!r.ok){alert(d.error||'Cannot switch view.');return;}
+      if(d.preview_mode)sessionStorage.setItem('ep_preview_role',d.active_view);
+      else sessionStorage.removeItem('ep_preview_role');
+      location.href=d.redirect;
+    }
+
+    var orgEvents=[];
+    function showSec(name){
+      document.querySelectorAll('.sec-section').forEach(function(s){s.classList.add('hidden');});
+      document.getElementById('sec-'+name).classList.remove('hidden');
+      document.getElementById('sec-title').textContent={'my-events':'My Events','attendees':'Attendees'}[name]||name;
+      if(name==='my-events')loadOrgEvents();
+      if(name==='attendees')loadOrgEvents();
+    }
+
+    async function loadOrgEvents(){
+      var r=await fetch('/api/organizer/events',{headers:authHeader()});
+      if(!r.ok)return;
+      orgEvents=await r.json();
+
+      // Stats bar
+      var upcoming=orgEvents.filter(function(e){return e.status==='upcoming'||e.status==='ongoing';}).length;
+      document.getElementById('org-stats').innerHTML=
+        '<div class="bg-white rounded-xl border border-slate-200 px-4 py-2 flex items-center gap-2"><span class="material-symbols-rounded text-[18px] text-amber-500">event_note</span><span class="text-sm font-bold">'+orgEvents.length+'</span><span class="text-xs text-slate-500 ml-1">Events</span></div>'
+        +'<div class="bg-white rounded-xl border border-slate-200 px-4 py-2 flex items-center gap-2"><span class="material-symbols-rounded text-[18px] text-blue-500">schedule</span><span class="text-sm font-bold">'+upcoming+'</span><span class="text-xs text-slate-500 ml-1">Active</span></div>';
+
+      var STATUS={ongoing:'bg-emerald-50 text-emerald-700',upcoming:'bg-blue-50 text-blue-700',closed:'bg-slate-100 text-slate-600'};
+      document.getElementById('org-events-body').innerHTML=orgEvents.map(function(ev){
+        return '<tr class="hover:bg-slate-50">'
+          +'<td class="px-4 py-2.5 font-medium">'+ev.title+'</td>'
+          +'<td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-semibold '+(STATUS[ev.status]||'bg-slate-100 text-slate-600')+'">'+ev.status+'</span></td>'
+          +'<td class="px-4 py-2.5">'+(ev.capacity||'Open')+'</td>'
+          +'<td class="px-4 py-2.5">'+(ev.start_date||'—')+'</td>'
+          +'<td class="px-4 py-2.5"><button onclick="viewAttendees(\''+ev.id+'\')" class="text-[11px] px-2 py-0.5 rounded border border-amber-200 text-amber-700 hover:bg-amber-50">View</button></td>'
+          +'</tr>';
+      }).join('');
+
+      // Populate attendee selector
+      var sel=document.getElementById('attendee-event-select');
+      sel.innerHTML='<option value="">— choose —</option>'+orgEvents.map(function(ev){
+        return '<option value="'+ev.id+'">'+ev.title+'</option>';
+      }).join('');
+    }
+
+    function viewAttendees(eventId){
+      showSec('attendees');
+      document.getElementById('attendee-event-select').value=eventId;
+      loadAttendees();
+    }
+
+    async function loadAttendees(){
+      var id=document.getElementById('attendee-event-select').value;
+      if(!id)return;
+      var r=await fetch('/api/events/'+id+'/registrations',{headers:authHeader()});
+      var body=document.getElementById('attendee-body');
+      if(!r.ok){var e=await r.json();body.innerHTML='<tr><td colspan="4" class="px-4 py-4 text-rose-600">'+e.error+'</td></tr>';return;}
+      var regs=await r.json();
+      var STATUS={confirmed:'bg-emerald-50 text-emerald-700',cancelled:'bg-slate-100 text-slate-600',pending:'bg-amber-50 text-amber-700'};
+      body.innerHTML=regs.length?regs.map(function(reg){
+        var u=reg.users||{};
+        return '<tr class="hover:bg-slate-50">'
+          +'<td class="px-4 py-2.5">'+(u.email||reg.user_id)+'</td>'
+          +'<td class="px-4 py-2.5">'+(u.full_name||'—')+'</td>'
+          +'<td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-semibold '+(STATUS[reg.status]||'bg-slate-100 text-slate-600')+'">'+reg.status+'</span></td>'
+          +'<td class="px-4 py-2.5">'+(reg.created_at?new Date(reg.created_at).toLocaleDateString():'—')+'</td>'
+          +'</tr>';
+      }).join(''):'<tr><td colspan="4" class="px-4 py-4 text-slate-400">No registrations yet.</td></tr>';
+    }
+
+    async function requestDataDeletion(){
+      if(isPreview){alert('Read-only preview mode: cannot submit data deletion.');return;}
+      if(!confirm('Submit a request to delete your account and personal data from our database?'))return;
+      var r=await fetch('/api/me/delete-request',{method:'POST',headers:authHeader(),body:JSON.stringify({reason:'Requested from Organizer Panel'})});
+      var data=await r.json().catch(function(){return{};});
+      alert(r.ok?(data.message||'Deletion request submitted.'):(data.error||'Failed to submit request.'));
+    }
+
+    showSec('my-events');
+  </script>
+</body>
+</html>

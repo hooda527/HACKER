@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Dashboard — Event Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0&display=block" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #EEF4FD; }
+    .material-symbols-rounded { font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24; display:inline-flex;align-items:center;vertical-align:middle;user-select:none; }
+  </style>
+</head>
+<body class="min-h-screen text-slate-900 antialiased">
+
+  <!-- REDIRECT GUARD: runs before anything renders -->
+  <script>
+    (function(){
+      var user = null;
+      try { user = JSON.parse(localStorage.getItem('ep_user')||'null'); } catch(e){}
+      if (!user || !user.token) { location.replace('/'); }
+      else if (user.role !== 'administrator') {
+        var map = { student: '/student/dashboard', organizer: '/organizer/dashboard' };
+        location.replace(map[user.role] || '/');
+      }
+      // Prevent browser Back from restoring this page after logout
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.href);
+      }
+    })();
+  </script>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-60 bg-white border-r border-slate-200 flex flex-col shrink-0">
+      <div class="px-5 py-4 border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-600 text-white">
+            <span class="material-symbols-rounded text-[18px]">admin_panel_settings</span>
+          </span>
+          <span class="text-sm font-bold text-slate-900">Admin Panel</span>
+        </div>
+        <p id="admin-email" class="text-[11px] text-slate-500 mt-1 truncate"></p>
+      </div>
+      <nav class="flex-1 p-3 flex flex-col gap-1 overflow-y-auto">
+        <button onclick="showSection('overview')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">dashboard</span>Overview
+        </button>
+        <button onclick="showSection('users')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">group</span>User Management
+        </button>
+        <button onclick="showSection('events')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">event_note</span>Event Management
+        </button>
+        <button onclick="showSection('registrations')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">how_to_reg</span>Registrations
+        </button>
+        <button onclick="showSection('audit')" class="nav-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-left w-full text-slate-700 hover:bg-slate-100">
+          <span class="material-symbols-rounded text-[18px] text-slate-500">history</span>Audit Logs
+        </button>
+        <div class="mt-auto pt-3 border-t border-slate-200">
+          <a href="/" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-slate-600 hover:bg-slate-100">
+            <span class="material-symbols-rounded text-[18px] text-slate-400">home</span>Portal Home
+          </a>
+          <button onclick="logout()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-rose-600 hover:bg-rose-50 w-full text-left mt-1">
+            <span class="material-symbols-rounded text-[18px]">logout</span>Sign Out
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top bar -->
+      <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-4 shrink-0">
+        <h1 id="section-title" class="text-base font-bold text-slate-900">Overview</h1>
+        <div class="flex items-center gap-2">
+          <div class="inline-flex items-center rounded-xl bg-slate-100 p-1 text-xs font-semibold">
+            <button type="button" onclick="switchView('administrator')" class="px-2.5 py-1 rounded-lg bg-white text-red-700 shadow-sm">Admin</button>
+            <button type="button" onclick="switchView('organizer')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Organizer Preview</button>
+            <button type="button" onclick="switchView('student')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Student Preview</button>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-xs font-bold">
+            <span class="material-symbols-rounded text-[14px]">shield</span>ADMINISTRATOR
+          </span>
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-y-auto p-6">
+
+        <!-- SECTION: Overview -->
+        <section id="sec-overview" class="section">
+          <div id="analytics-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h2 class="text-sm font-bold text-slate-900 mb-3">Recent Activity</h2>
+            <div id="recent-activity" class="text-xs text-slate-500">Loading…</div>
+          </div>
+        </section>
+
+        <!-- SECTION: User Management -->
+        <section id="sec-users" class="section hidden">
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="flex items-center justify-between p-4 border-b border-slate-200">
+              <h2 class="text-sm font-bold text-slate-900">All Users</h2>
+              <span id="users-count" class="text-xs text-slate-500"></span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+                  <tr>
+                    <th class="px-4 py-2.5 text-left">Email</th>
+                    <th class="px-4 py-2.5 text-left">Role</th>
+                    <th class="px-4 py-2.5 text-left">Status</th>
+                    <th class="px-4 py-2.5 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: Event Management -->
+        <section id="sec-events" class="section hidden">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-sm font-bold text-slate-900">All Events</h2>
+            <button onclick="showCreateEvent()" class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition">+ Create Event</button>
+          </div>
+          <div id="create-event-form" class="hidden bg-white border border-slate-200 rounded-2xl p-5 mb-4">
+            <h3 class="text-sm font-bold mb-3">New Event</h3>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <input id="ev-title" type="text" placeholder="Title" class="col-span-2 rounded-xl border border-slate-200 px-3 py-2.5 text-xs focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+              <input id="ev-category" type="text" placeholder="Category (e.g. Workshops)" class="rounded-xl border border-slate-200 px-3 py-2.5">
+              <input id="ev-capacity" type="number" placeholder="Capacity" class="rounded-xl border border-slate-200 px-3 py-2.5">
+              <input id="ev-date" type="date" class="rounded-xl border border-slate-200 px-3 py-2.5">
+              <select id="ev-status" class="rounded-xl border border-slate-200 px-3 py-2.5">
+                <option value="upcoming">Upcoming</option><option value="ongoing">Ongoing</option><option value="closed">Closed</option>
+              </select>
+              <textarea id="ev-desc" rows="2" placeholder="Description" class="col-span-2 rounded-xl border border-slate-200 px-3 py-2.5 resize-none"></textarea>
+            </div>
+            <div class="flex gap-2 mt-3">
+              <button onclick="submitCreateEvent()" class="text-xs font-semibold bg-blue-600 text-white px-4 py-2 rounded-lg">Create</button>
+              <button onclick="document.getElementById('create-event-form').classList.add('hidden')" class="text-xs text-slate-500 px-4 py-2 rounded-lg border border-slate-200">Cancel</button>
+            </div>
+            <p id="ev-create-status" class="text-xs text-emerald-600 mt-2"></p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <table class="w-full text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+                <tr>
+                  <th class="px-4 py-2.5 text-left">Title</th>
+                  <th class="px-4 py-2.5 text-left">Category</th>
+                  <th class="px-4 py-2.5 text-left">Status</th>
+                  <th class="px-4 py-2.5 text-left">Capacity</th>
+                  <th class="px-4 py-2.5 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="events-table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION: Registrations -->
+        <section id="sec-registrations" class="section hidden">
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+              <h2 class="text-sm font-bold text-slate-900">All Registrations</h2>
+              <span id="reg-count" class="text-xs text-slate-500"></span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+                  <tr>
+                    <th class="px-4 py-2.5 text-left">Student</th>
+                    <th class="px-4 py-2.5 text-left">Event</th>
+                    <th class="px-4 py-2.5 text-left">Status</th>
+                    <th class="px-4 py-2.5 text-left">Date</th>
+                  </tr>
+                </thead>
+                <tbody id="reg-table-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: Audit Logs -->
+        <section id="sec-audit" class="section hidden">
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="p-4 border-b border-slate-200">
+              <h2 class="text-sm font-bold text-slate-900">Audit Log (last 100 entries)</h2>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+                  <tr>
+                    <th class="px-4 py-2.5 text-left">Time</th>
+                    <th class="px-4 py-2.5 text-left">Actor</th>
+                    <th class="px-4 py-2.5 text-left">Action</th>
+                    <th class="px-4 py-2.5 text-left">Target</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-table-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    var user = null;
+    try { user = JSON.parse(localStorage.getItem('ep_user')||'null'); } catch(e){}
+    if (!user || user.role !== 'administrator') { location.replace('/'); throw new Error('guard'); }
+
+    document.getElementById('admin-email').textContent = user.email;
+
+    function authHeader() { return { 'Authorization': 'Bearer ' + user.token, 'Content-Type': 'application/json' }; }
+
+    function clearSession() {
+      localStorage.removeItem('ep_user');
+      localStorage.removeItem('event-portal-user');
+      localStorage.removeItem('event-portal-user-id');
+      sessionStorage.removeItem('ep_preview_role');
+    }
+
+    async function logout() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST', headers: authHeader() });
+      } catch(e) {}
+      clearSession();
+      location.replace('/');
+    }
+
+    sessionStorage.removeItem('ep_preview_role');
+    fetch('/api/auth/whoami', { headers: authHeader() }).then(function(r){
+      if (r.status === 401 || r.status === 403) { logout(); return null; }
+      return r.ok ? r.json() : null;
+    }).then(function(u){
+      if (u && u.role !== 'administrator') {
+        user.role = u.role;
+        localStorage.setItem('ep_user', JSON.stringify(user));
+        var map = { student: '/student/dashboard', organizer: '/organizer/dashboard' };
+        location.replace(map[u.role] || '/');
+      }
+    }).catch(function(){});
+
+    async function switchView(targetRole) {
+      var r = await fetch('/api/auth/switch-view', {
+        method: 'POST', headers: authHeader(), body: JSON.stringify({ target_role: targetRole })
+      });
+      var d = await r.json().catch(function(){ return {}; });
+      if (r.status === 401) { logout(); return; }
+      if (!r.ok) { alert(d.error || 'Cannot switch view.'); return; }
+      if (d.preview_mode) sessionStorage.setItem('ep_preview_role', d.active_view);
+      else sessionStorage.removeItem('ep_preview_role');
+      location.href = d.redirect;
+    }
+
+    var currentSection = 'overview';
+    function showSection(name) {
+      document.querySelectorAll('.section').forEach(function(s){ s.classList.add('hidden'); });
+      document.getElementById('sec-' + name).classList.remove('hidden');
+      document.getElementById('section-title').textContent = {
+        overview:'Overview', users:'User Management', events:'Event Management',
+        registrations:'Registrations', audit:'Audit Logs'
+      }[name] || name;
+      currentSection = name;
+      if (name === 'overview') loadAnalytics();
+      if (name === 'users') loadUsers();
+      if (name === 'events') loadEvents();
+      if (name === 'registrations') loadRegistrations();
+      if (name === 'audit') loadAudit();
+    }
+
+    // ---- Analytics ----
+    async function loadAnalytics() {
+      var r = await fetch('/api/admin/analytics', {headers: authHeader()});
+      if (!r.ok) return;
+      var d = await r.json();
+      var grid = document.getElementById('analytics-grid');
+      var cards = [
+        { label:'Total Users', val: d.total_users, color:'blue', icon:'group' },
+        { label:'Students', val: d.users_by_role.student||0, color:'emerald', icon:'school' },
+        { label:'Organizers', val: d.users_by_role.organizer||0, color:'amber', icon:'calendar_month' },
+        { label:'Total Events', val: d.total_events, color:'purple', icon:'event_note' },
+        { label:'Total Registrations', val: d.total_registrations, color:'teal', icon:'how_to_reg' },
+        { label:'Upcoming Events', val: d.events_by_status.upcoming||0, color:'blue', icon:'schedule' },
+        { label:'Ongoing Events', val: d.events_by_status.ongoing||0, color:'green', icon:'directions_run' },
+        { label:'Closed Events', val: d.events_by_status.closed||0, color:'slate', icon:'lock' },
+      ];
+      grid.innerHTML = cards.map(function(c){
+        return '<div class="bg-white rounded-2xl border border-slate-200 p-4 flex items-center gap-3">'
+          +'<span class="material-symbols-rounded text-[22px] text-'+c.color+'-500">'+c.icon+'</span>'
+          +'<div><p class="text-xl font-extrabold text-slate-900">'+c.val+'</p>'
+          +'<p class="text-xs text-slate-500">'+c.label+'</p></div></div>';
+      }).join('');
+      // Recent audit
+      var ar = await fetch('/api/admin/audit-logs?limit=5', {headers: authHeader()});
+      if (ar.ok) {
+        var logs = await ar.json();
+        document.getElementById('recent-activity').innerHTML = logs.length
+          ? logs.map(function(l){ return '<div class="py-1.5 border-b border-slate-100 last:border-0"><span class="text-slate-400">'+new Date(l.created_at).toLocaleString()+'</span> — <strong>'+l.action+'</strong> on '+l.target+'</div>'; }).join('')
+          : '<p>No recent activity.</p>';
+      }
+    }
+
+    // ---- Users ----
+    async function loadUsers() {
+      var r = await fetch('/api/admin/users', {headers: authHeader()});
+      if (!r.ok) { document.getElementById('users-table-body').innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-rose-600">Failed to load</td></tr>'; return; }
+      var users = await r.json();
+      document.getElementById('users-count').textContent = users.length + ' users';
+      var ROLE_COLORS = {administrator:'red', organizer:'amber', student:'blue'};
+      document.getElementById('users-table-body').innerHTML = users.map(function(u){
+        var rc = ROLE_COLORS[u.role]||'slate';
+        var isSelf = u.id === user.sub;
+        return '<tr class="hover:bg-slate-50">'
+          +'<td class="px-4 py-2.5 font-medium">'+(u.full_name?'<span class="text-slate-400 mr-1">'+u.full_name+'</span>':'')+u.email+'</td>'
+          +'<td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded-full bg-'+rc+'-50 text-'+rc+'-700 font-semibold">'+u.role+'</span></td>'
+          +'<td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded-full '+(u.status==='active'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate-500')+' font-semibold">'+u.status+'</span></td>'
+          +'<td class="px-4 py-2.5 flex gap-2">'
+          +(isSelf ? '<span class="text-slate-400 text-[11px]">(you)</span>' :
+            '<select onchange="updateUserField(\''+u.id+'\',\'role\',this.value)" class="text-[11px] border border-slate-200 rounded px-1 py-0.5"><option'+(u.role==='student'?' selected':'')+' value="student">student</option><option'+(u.role==='organizer'?' selected':'')+' value="organizer">organizer</option><option'+(u.role==='administrator'?' selected':'')+' value="administrator">administrator</option></select>'
+            +'<button onclick="updateUserField(\''+u.id+'\',\'status\',\''+(u.status==='active'?'suspended':'active')+'\')" class="text-[11px] px-2 py-0.5 rounded border border-slate-200 hover:bg-slate-100">'+(u.status==='active'?'Suspend':'Activate')+'</button>')
+          +'</td></tr>';
+      }).join('');
+    }
+
+    async function updateUserField(uid, field, val) {
+      var body = {}; body[field] = val;
+      var r = await fetch('/api/admin/users/' + uid, {method:'PATCH', headers: authHeader(), body: JSON.stringify(body)});
+      if (r.ok) loadUsers();
+      else { var e = await r.json(); alert(e.error); }
+    }
+
+    // ---- Events ----
+    async function loadEvents() {
+      var r = await fetch('/api/events', {headers: authHeader()});
+      if (!r.ok) return;
+      var events = await r.json();
+      var STATUS = {ongoing:'bg-emerald-50 text-emerald-700', upcoming:'bg-blue-50 text-blue-700', closed:'bg-slate-100 text-slate-600'};
+      document.getElementById('events-table-body').innerHTML = events.map(function(ev){
+        return '<tr class="hover:bg-slate-50">'
+          +'<td class="px-4 py-2.5 font-medium">'+ev.title+'</td>'
+          +'<td class="px-4 py-2.5">'+( ev.category||'—')+'</td>'
+          +'<td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-semibold '+(STATUS[ev.status]||'bg-slate-100 text-slate-600')+'">'+ev.status+'</span></td>'
+          +'<td class="px-4 py-2.5">'+(ev.capacity||'Open')+'</td>'
+          +'<td class="px-4 py-2.5 flex gap-2">'
+          +'<button onclick="deleteEvent(\''+ev.id+'\')" class="text-[11px] px-2 py-0.5 rounded border border-rose-200 text-rose-600 hover:bg-rose-50">Delete</button>'
+          +'</td></tr>';
+      }).join('');
+    }
+
+    function showCreateEvent() { document.getElementById('create-event-form').classList.toggle('hidden'); }
+    async function submitCreateEvent() {
+      var payload = {
+        title: document.getElementById('ev-title').value,
+        category: document.getElementById('ev-category').value||'General',
+        capacity: parseInt(document.getElementById('ev-capacity').value)||null,
+        start_date: document.getElementById('ev-date').value||null,
+        status: document.getElementById('ev-status').value,
+        description: document.getElementById('ev-desc').value,
+      };
+      var r = await fetch('/api/events', {method:'POST', headers: authHeader(), body: JSON.stringify(payload)});
+      var d = await r.json();
+      if (r.ok) {
+        document.getElementById('ev-create-status').textContent = 'Created: ' + d.title;
+        loadEvents();
+      } else {
+        document.getElementById('ev-create-status').textContent = '❌ ' + d.error;
+        document.getElementById('ev-create-status').className = 'text-xs text-rose-600 mt-2';
+      }
+    }
+
+    async function deleteEvent(id) {
+      if (!confirm('Delete this event? This cannot be undone.')) return;
+      var r = await fetch('/api/events/' + id, {method:'DELETE', headers: authHeader()});
+      if (r.ok) loadEvents();
+      else { var e = await r.json(); alert(e.error); }
+    }
+
+    // ---- Registrations ----
+    async function loadRegistrations() {
+      var r = await fetch('/api/admin/registrations', {headers: authHeader()});
+      if (!r.ok) { document.getElementById('reg-table-body').innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-rose-600">Failed — ensure migration 001_rbac.sql has been run</td></tr>'; return; }
+      var regs = await r.json();
+      document.getElementById('reg-count').textContent = regs.length + ' registrations';
+      var STATUS = {confirmed:'bg-emerald-50 text-emerald-700', cancelled:'bg-slate-100 text-slate-600', pending:'bg-amber-50 text-amber-700'};
+      document.getElementById('reg-table-body').innerHTML = regs.map(function(reg){
+        var u = reg.users||{}; var ev = reg.events||{};
+        return '<tr class="hover:bg-slate-50">'
+          +'<td class="px-4 py-2.5">'+(u.email||reg.user_id)+'</td>'
+          +'<td class="px-4 py-2.5">'+(ev.title||reg.event_id)+'</td>'
+          +'<td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-semibold '+(STATUS[reg.status]||'bg-slate-100 text-slate-600')+'">'+reg.status+'</span></td>'
+          +'<td class="px-4 py-2.5">'+(reg.created_at?new Date(reg.created_at).toLocaleDateString():'—')+'</td>'
+          +'</tr>';
+      }).join('');
+    }
+
+    // ---- Audit ----
+    async function loadAudit() {
+      var r = await fetch('/api/admin/audit-logs?limit=100', {headers: authHeader()});
+      if (!r.ok) { document.getElementById('audit-table-body').innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-rose-600">Failed to load — ensure migration has been run</td></tr>'; return; }
+      var logs = await r.json();
+      document.getElementById('audit-table-body').innerHTML = logs.map(function(l){
+        return '<tr class="hover:bg-slate-50">'
+          +'<td class="px-4 py-2.5 text-slate-400 whitespace-nowrap">'+new Date(l.created_at).toLocaleString()+'</td>'
+          +'<td class="px-4 py-2.5 font-medium">'+(l.actor_id||'—')+'</td>'
+          +'<td class="px-4 py-2.5 font-mono text-[11px]">'+l.action+'</td>'
+          +'<td class="px-4 py-2.5 text-slate-500">'+(l.target||'—')+'</td>'
+          +'</tr>';
+      }).join('');
+    }
+
+    // Boot
+    showSection('overview');
+  </script>
+</body>
+</html>

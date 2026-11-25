@@ -411,10 +411,30 @@ def create_registration():
         if event.get("status") == "closed":
             return api_error("Event is closed for registrations", 409)
 
-        existing = (db.table("registrations").select("id")
+        # Check for an existing registration row (any status)
+        existing = (db.table("registrations").select("id,status")
                     .eq("user_id", user_id).eq("event_id", event_id).limit(1).execute())
+
         if existing.data:
-            return api_error("You are already registered for this event", 409)
+            existing_row = existing.data[0]
+            if existing_row["status"] == "confirmed":
+                return api_error("You are already registered for this event", 409)
+            # Previously cancelled → re-activate instead of inserting a duplicate
+            # (the table has UNIQUE(user_id, event_id) so INSERT would fail anyway)
+            capacity = event.get("capacity")
+            if capacity is not None:
+                current = (db.table("registrations").select("id", count="exact")
+                           .eq("event_id", event_id).eq("status", "confirmed").execute())
+                if (current.count or 0) >= capacity:
+                    return api_error("Event is at capacity", 409)
+            reactivated = (db.table("registrations")
+                           .update({"status": "confirmed"})
+                           .eq("id", existing_row["id"]).execute())
+            reg = reactivated.data[0] if reactivated.data else {
+                "id": existing_row["id"], "user_id": user_id, "event_id": event_id, "status": "confirmed"
+            }
+            audit_log(db, user_id, "registrations.reactivate", event_id)
+            return jsonify(reg), 200
 
         capacity = event.get("capacity")
         if capacity is not None:

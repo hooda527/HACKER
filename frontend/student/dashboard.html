@@ -295,8 +295,19 @@
       if(!confirm('Cancel this registration?'))return;
       btn.disabled=true;
       var r=await fetch('/api/me/registrations/'+regId+'/cancel',{method:'PATCH',headers:authHeader()});
-      if(r.ok)loadMyRegs();
-      else{var e=await r.json();alert(e.error);btn.disabled=false;}
+      if(r.ok){
+        // Refresh in-memory map so Browse Events shows Register button again
+        var rr=await fetch('/api/me/registrations',{headers:authHeader()});
+        if(rr.ok){
+          var regs=await rr.json();
+          myRegEventIds={};
+          regs.forEach(function(reg){ if(reg.event_id)myRegEventIds[reg.event_id]=reg.status; });
+        }
+        loadMyRegs();
+        // If Browse Events is visible, refresh it immediately
+        var browseSection=document.getElementById('sec-browse');
+        if(browseSection&&!browseSection.classList.contains('hidden'))filterEvents();
+      } else{var e=await r.json();alert(e.error||'Cancel failed');btn.disabled=false;}
     }
 
     // ---- Profile ----

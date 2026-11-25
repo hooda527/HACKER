@@ -10,7 +10,7 @@ from supabase import Client, create_client
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="public", static_url_path="")
 
 
 def get_supabase() -> Client:
@@ -39,6 +39,11 @@ def database_error(error: APIError):
 
 @app.get("/")
 def index():
+    return app.send_static_file("index.html")
+
+
+@app.get("/api")
+def api_index():
     return jsonify({"service": "events-api", "endpoints": [
         "GET /api/events", "GET /api/events/<id>", "POST /api/registrations",
         "GET /api/me/registrations?user_id=<uuid>",

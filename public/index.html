@@ -833,6 +833,51 @@
         if (roleLabel && currentUser) {
           roleLabel.textContent = currentUser.role || 'Student';
         }
+        var userRole = (currentUser && currentUser.token && currentUser.role) ? String(currentUser.role).toLowerCase() : '';
+        document.querySelectorAll('.role-option').forEach(function (opt) {
+          var dr = (opt.getAttribute('data-role') || '').toLowerCase();
+          if (dr === 'profile') {
+            opt.classList.remove('hidden');
+            return;
+          }
+          var allowed = !userRole || userRole === 'administrator' || dr === userRole;
+          opt.classList.toggle('hidden', !allowed);
+          var isActive = userRole && dr === userRole;
+          opt.classList.toggle('bg-portal-softBlue/60', isActive);
+          opt.classList.toggle('text-portal-primary', isActive);
+          opt.classList.toggle('font-semibold', isActive);
+          var span = opt.querySelector('span:last-child');
+          if (span) {
+            if (userRole === 'administrator' && (dr === 'organizer' || dr === 'student')) {
+              span.textContent = opt.getAttribute('data-role') + ' (Preview)';
+            } else {
+              span.textContent = opt.getAttribute('data-role');
+            }
+          }
+        });
+      }
+
+      if (currentUser && currentUser.token) {
+        fetch('/api/auth/whoami', { headers: { 'Authorization': 'Bearer ' + currentUser.token } })
+          .then(function (r) {
+            if (r.status === 401 || r.status === 403) {
+              currentUser = null;
+              window.localStorage.removeItem('ep_user');
+              updateAuthUI();
+              return null;
+            }
+            return r.ok ? r.json() : null;
+          })
+          .then(function (u) {
+            if (u && u.role) {
+              currentUser.role = u.role;
+              currentUser.email = u.email || currentUser.email;
+              currentUser.status = u.status || currentUser.status;
+              window.localStorage.setItem('ep_user', JSON.stringify(currentUser));
+              updateAuthUI();
+            }
+          })
+          .catch(function () {});
       }
 
       var authModal = document.getElementById('auth-modal');
@@ -1122,10 +1167,60 @@
           roleBtn.setAttribute('aria-expanded', String(!open));
         });
         document.querySelectorAll('.role-option').forEach(function (opt) {
-          opt.addEventListener('click', function () {
-            if (roleLabel) roleLabel.textContent = opt.getAttribute('data-role') || 'Student';
+          opt.addEventListener('click', async function () {
+            var rawRole = (opt.getAttribute('data-role') || '').toLowerCase();
             roleDropdown.classList.add('hidden');
             roleBtn.setAttribute('aria-expanded', 'false');
+
+            if (!currentUser || !currentUser.token) {
+              openAuthModal();
+              return;
+            }
+
+            if (rawRole === 'profile') {
+              var ownMap = {
+                administrator: '/admin/dashboard',
+                organizer: '/organizer/dashboard',
+                student: '/student/dashboard'
+              };
+              window.location.href = ownMap[currentUser.role] || '/student/dashboard';
+              return;
+            }
+
+            try {
+              opt.disabled = true;
+              var res = await fetch('/api/auth/switch-view', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + currentUser.token
+                },
+                body: JSON.stringify({ target_role: rawRole })
+              });
+              var data = await res.json().catch(function () { return {}; });
+              if (res.status === 401) {
+                currentUser = null;
+                window.localStorage.removeItem('ep_user');
+                updateAuthUI();
+                openAuthModal();
+                return;
+              }
+              if (!res.ok) {
+                alert(data.error || 'Access denied for this role.');
+                return;
+              }
+              if (data.preview_mode) {
+                window.sessionStorage.setItem('ep_preview_role', data.active_view);
+              } else {
+                window.sessionStorage.removeItem('ep_preview_role');
+              }
+              if (roleLabel) roleLabel.textContent = opt.getAttribute('data-role') || 'Student';
+              window.location.href = data.redirect;
+            } catch (err) {
+              alert('Network error while switching role.');
+            } finally {
+              opt.disabled = false;
+            }
           });
         });
         document.addEventListener('click', function () {

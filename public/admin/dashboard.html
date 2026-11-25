@@ -69,11 +69,18 @@
     <!-- Main -->
     <div class="flex-1 flex flex-col overflow-hidden">
       <!-- Top bar -->
-      <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shrink-0">
+      <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-4 shrink-0">
         <h1 id="section-title" class="text-base font-bold text-slate-900">Overview</h1>
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-xs font-bold">
-          <span class="material-symbols-rounded text-[14px]">shield</span>ADMINISTRATOR
-        </span>
+        <div class="flex items-center gap-2">
+          <div class="inline-flex items-center rounded-xl bg-slate-100 p-1 text-xs font-semibold">
+            <button type="button" onclick="switchView('administrator')" class="px-2.5 py-1 rounded-lg bg-white text-red-700 shadow-sm">Admin</button>
+            <button type="button" onclick="switchView('organizer')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Organizer Preview</button>
+            <button type="button" onclick="switchView('student')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Student Preview</button>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-xs font-bold">
+            <span class="material-symbols-rounded text-[14px]">shield</span>ADMINISTRATOR
+          </span>
+        </div>
       </header>
 
       <main class="flex-1 overflow-y-auto p-6">
@@ -210,7 +217,33 @@
 
     function logout() {
       localStorage.removeItem('ep_user');
+      sessionStorage.removeItem('ep_preview_role');
       location.replace('/');
+    }
+
+    sessionStorage.removeItem('ep_preview_role');
+    fetch('/api/auth/whoami', { headers: authHeader() }).then(function(r){
+      if (r.status === 401 || r.status === 403) { logout(); return null; }
+      return r.ok ? r.json() : null;
+    }).then(function(u){
+      if (u && u.role !== 'administrator') {
+        user.role = u.role;
+        localStorage.setItem('ep_user', JSON.stringify(user));
+        var map = { student: '/student/dashboard', organizer: '/organizer/dashboard' };
+        location.replace(map[u.role] || '/');
+      }
+    }).catch(function(){});
+
+    async function switchView(targetRole) {
+      var r = await fetch('/api/auth/switch-view', {
+        method: 'POST', headers: authHeader(), body: JSON.stringify({ target_role: targetRole })
+      });
+      var d = await r.json().catch(function(){ return {}; });
+      if (r.status === 401) { logout(); return; }
+      if (!r.ok) { alert(d.error || 'Cannot switch view.'); return; }
+      if (d.preview_mode) sessionStorage.setItem('ep_preview_role', d.active_view);
+      else sessionStorage.removeItem('ep_preview_role');
+      location.href = d.redirect;
     }
 
     var currentSection = 'overview';

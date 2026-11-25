@@ -234,6 +234,73 @@ class TestStudentEndpoints:
         assert resp.status_code == 401
 
 
+class TestSwitchView:
+    def test_admin_can_switch_to_organizer_preview(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("administrator"),
+                           json={"target_role": "organizer"})
+        assert resp.status_code == 200
+        d = resp.get_json()
+        assert d["preview_mode"] is True
+        assert d["actual_role"] == "administrator"
+        assert d["active_view"] == "organizer"
+        assert "/organizer/dashboard" in d["redirect"]
+
+    def test_admin_can_switch_to_student_preview(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("administrator"),
+                           json={"target_role": "student"})
+        assert resp.status_code == 200
+        d = resp.get_json()
+        assert d["preview_mode"] is True
+        assert d["active_view"] == "student"
+
+    def test_admin_switch_to_own_role_no_preview(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("administrator"),
+                           json={"target_role": "administrator"})
+        assert resp.status_code == 200
+        d = resp.get_json()
+        assert d["preview_mode"] is False
+        assert d["redirect"] == "/admin/dashboard"
+
+    def test_organizer_cannot_switch_to_admin(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("organizer"),
+                           json={"target_role": "administrator"})
+        assert resp.status_code == 403
+
+    def test_student_cannot_switch_to_organizer(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("student"),
+                           json={"target_role": "organizer"})
+        assert resp.status_code == 403
+
+    def test_student_cannot_switch_to_admin(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("student"),
+                           json={"target_role": "administrator"})
+        assert resp.status_code == 403
+
+    def test_organizer_can_switch_to_own_role(self, client):
+        resp = client.post("/api/auth/switch-view",
+                           headers=auth("organizer"),
+                           json={"target_role": "organizer"})
+        assert resp.status_code == 200
+        d = resp.get_json()
+        assert d["preview_mode"] is False
+
+    def test_unauthenticated_cannot_switch_view(self, client):
+        resp = client.post("/api/auth/switch-view", json={"target_role": "administrator"})
+        assert resp.status_code == 401
+
+    def test_cannot_inject_role_via_profile_update(self, client):
+        resp = client.patch("/api/me/profile",
+                            headers=auth("student"),
+                            json={"full_name": "Hacker", "role": "administrator"})
+        assert resp.status_code == 403
+
+
 class TestRoleEscalation:
     def test_new_user_cannot_self_assign_admin(self, client):
         """Login with role=administrator for a NEW user → system forces student role."""

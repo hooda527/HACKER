@@ -180,6 +180,51 @@ def whoami():
         return api_error(str(error), 500)
 
 
+@app.post("/api/auth/switch-view")
+@login_required
+def switch_view():
+    """
+    Validate whether the authenticated user may view a target role dashboard.
+    Never modifies the permanent database role:
+      - administrator -> administrator (/admin/dashboard), or organizer/student in read-only preview mode
+      - organizer     -> organizer (/organizer/dashboard) only (403 for anything else)
+      - student       -> student (/student/dashboard) only (403 for anything else)
+    """
+    user = get_current_user()
+    body: Any = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return api_error("Request body must be a JSON object", 400)
+
+    raw_target = str(body.get("target_role", "")).strip().lower()
+    target_role = "administrator" if raw_target == "admin" else raw_target
+    if target_role not in ("administrator", "organizer", "student"):
+        return api_error("Invalid target_role; must be administrator, organizer, or student", 400)
+
+    actual_role = user.get("role", "student")
+    if actual_role != "administrator" and target_role != actual_role:
+        return api_error(f"Forbidden: {actual_role} accounts cannot switch to {target_role}", 403)
+
+    preview_mode = (actual_role == "administrator" and target_role != "administrator")
+    routes = {
+        "administrator": "/admin/dashboard",
+        "organizer": "/organizer/dashboard?preview=1" if preview_mode else "/organizer/dashboard",
+        "student": "/student/dashboard?preview=1" if preview_mode else "/student/dashboard",
+    }
+
+    try:
+        db = get_supabase()
+        audit_log(db, user["sub"], "auth.switch_view", target_role, {"preview_mode": preview_mode})
+    except RuntimeError:
+        pass
+
+    return jsonify({
+        "actual_role": actual_role,
+        "active_view": target_role,
+        "preview_mode": preview_mode,
+        "redirect": routes[target_role],
+    })
+
+
 # Keep old resolve endpoint for backward compat (redirects to login)
 @app.post("/api/users/resolve")
 def resolve_user():
@@ -405,6 +450,9 @@ def update_own_profile():
     body: Any = request.get_json(silent=True)
     if not isinstance(body, dict):
         return api_error("Request body must be a JSON object", 400)
+
+    if "role" in body or "status" in body:
+        return api_error("Forbidden: cannot modify your own role or account status", 403)
 
     full_name = str(body.get("full_name", "")).strip()
     if not full_name:

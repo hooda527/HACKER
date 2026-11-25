@@ -52,10 +52,21 @@
     <div class="flex-1 flex flex-col overflow-hidden">
       <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shrink-0">
         <h1 id="sec-title" class="text-base font-bold text-slate-900">Browse Events</h1>
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-          <span class="material-symbols-rounded text-[14px]">school</span>STUDENT
-        </span>
+        <div class="flex items-center gap-2">
+          <div id="admin-view-switcher" class="hidden inline-flex items-center rounded-xl bg-slate-100 p-1 text-xs font-semibold">
+            <button type="button" onclick="switchView('administrator')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Admin</button>
+            <button type="button" onclick="switchView('organizer')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">Organizer Preview</button>
+            <button type="button" onclick="switchView('student')" class="px-2.5 py-1 rounded-lg bg-white text-blue-700 shadow-sm">Student Preview</button>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
+            <span class="material-symbols-rounded text-[14px]">school</span>STUDENT
+          </span>
+        </div>
       </header>
+      <div id="preview-banner" class="hidden bg-blue-50 border-b border-blue-200 px-6 py-2 flex items-center justify-between text-xs text-blue-900 shrink-0">
+        <span><strong>Admin Preview Mode (Read-Only):</strong> Viewing Student interface without modifying your administrator role.</span>
+        <button type="button" onclick="switchView('administrator')" class="rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 transition">Return to Admin Dashboard</button>
+      </div>
 
       <main class="flex-1 overflow-y-auto p-6">
 
@@ -141,7 +152,35 @@
     document.getElementById('profile-role').value=user.role||'student';
 
     function authHeader(){return{'Authorization':'Bearer '+user.token,'Content-Type':'application/json'};}
-    function logout(){localStorage.removeItem('ep_user');location.replace('/');}
+    function logout(){localStorage.removeItem('ep_user');sessionStorage.removeItem('ep_preview_role');location.replace('/');}
+
+    var isPreview = (user.role === 'administrator');
+    if (isPreview) {
+      document.getElementById('preview-banner').classList.remove('hidden');
+      document.getElementById('admin-view-switcher').classList.remove('hidden');
+    }
+
+    fetch('/api/auth/whoami',{headers:authHeader()}).then(function(r){
+      if(r.status===401||r.status===403){logout();return null;}
+      return r.ok?r.json():null;
+    }).then(function(u){
+      if(u&&u.role&&u.role!==user.role&&!isPreview){
+        user.role=u.role;
+        localStorage.setItem('ep_user',JSON.stringify(user));
+        if(u.role==='administrator')location.replace('/admin/dashboard');
+        if(u.role==='organizer')location.replace('/organizer/dashboard');
+      }
+    }).catch(function(){});
+
+    async function switchView(targetRole){
+      var r=await fetch('/api/auth/switch-view',{method:'POST',headers:authHeader(),body:JSON.stringify({target_role:targetRole})});
+      var d=await r.json().catch(function(){return{};});
+      if(r.status===401){logout();return;}
+      if(!r.ok){alert(d.error||'Cannot switch view.');return;}
+      if(d.preview_mode)sessionStorage.setItem('ep_preview_role',d.active_view);
+      else sessionStorage.removeItem('ep_preview_role');
+      location.href=d.redirect;
+    }
 
     var allEvents=[];
     var myRegEventIds={};

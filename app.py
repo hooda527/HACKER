@@ -87,7 +87,7 @@ def resolve_user():
     role = str(body.get("role") or "student").strip().lower()
     if not email or "@" not in email:
         return api_error("A valid email address is required", 400)
-    if role not in ("student", "organizer"):
+    if role not in ("student", "organizer", "administrator"):
         role = "student"
 
     try:

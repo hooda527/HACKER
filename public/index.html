@@ -110,11 +110,16 @@
             </button>
 
             <div id="role-menu-dropdown" role="menu"
-              class="hidden absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-float py-1.5 z-40">
+              class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-float py-1.5 z-40">
               <button type="button" role="menuitem" data-role="Profile"
                 class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
                 <span class="material-symbols-rounded text-[18px] text-slate-500">person</span>
                 <span>Profile</span>
+              </button>
+              <button type="button" role="menuitem" data-role="Administrator"
+                class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[18px] text-slate-500">admin_panel_settings</span>
+                <span>Administrator</span>
               </button>
               <button type="button" role="menuitem" data-role="Organizer"
                 class="role-option w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50">
@@ -770,6 +775,7 @@
           <select id="auth-role-select" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
             <option value="student">Student</option>
             <option value="organizer">Organizer</option>
+            <option value="administrator">Administrator</option>
           </select>
         </div>
         <p id="auth-error" class="text-xs text-rose-600 hidden"></p>

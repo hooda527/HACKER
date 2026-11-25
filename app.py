@@ -422,6 +422,38 @@ def update_own_profile():
         return api_error(str(error), 500)
 
 
+@app.post("/api/me/delete-request")
+@login_required
+def request_data_deletion():
+    """Allow any authenticated user to request deletion of their data."""
+    user = get_current_user()
+    body: Any = request.get_json(silent=True) or {}
+    reason = str(body.get("reason", "")).strip()[:500] if isinstance(body, dict) else ""
+
+    try:
+        db = get_supabase()
+        db.table("audit_logs").insert({
+            "actor_id": user["sub"],
+            "action": "user.deletion_request",
+            "target": user["sub"],
+            "meta": {
+                "email": user.get("email"),
+                "role": user.get("role"),
+                "reason": reason or "User requested data deletion",
+                "status": "pending",
+            },
+        }).execute()
+        return jsonify({
+            "message": "Your data deletion request has been submitted for administrator review.",
+            "user_id": user["sub"],
+            "status": "pending",
+        }), 201
+    except APIError as error:
+        return database_error(error)
+    except RuntimeError as error:
+        return api_error(str(error), 500)
+
+
 @app.get("/api/events/<event_id>/registrations")
 @login_required
 @role_required("organizer", "administrator")

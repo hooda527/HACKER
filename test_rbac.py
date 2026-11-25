@@ -222,6 +222,17 @@ class TestStudentEndpoints:
         resp = client.post("/api/registrations", json={"event_id": "x"})
         assert resp.status_code == 401
 
+    def test_student_can_request_data_deletion(self, client):
+        resp = client.post("/api/me/delete-request",
+                           headers=auth("student"),
+                           json={"reason": "No longer needed"})
+        assert resp.status_code == 201
+        assert resp.get_json()["status"] == "pending"
+
+    def test_unauthenticated_cannot_request_data_deletion(self, client):
+        resp = client.post("/api/me/delete-request", json={"reason": "test"})
+        assert resp.status_code == 401
+
 
 class TestRoleEscalation:
     def test_new_user_cannot_self_assign_admin(self, client):

@@ -39,6 +39,9 @@
           <a href="/" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-slate-600 hover:bg-slate-100">
             <span class="material-symbols-rounded text-[18px] text-slate-400">home</span>Portal Home
           </a>
+          <button onclick="requestDataDeletion()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-amber-700 hover:bg-amber-50 w-full text-left mt-1">
+            <span class="material-symbols-rounded text-[18px]">delete_forever</span>Request Data Deletion
+          </button>
           <button onclick="logout()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-rose-600 hover:bg-rose-50 w-full text-left mt-1">
             <span class="material-symbols-rounded text-[18px]">logout</span>Sign Out
           </button>
@@ -173,6 +176,13 @@
           +'<td class="px-4 py-2.5">'+(reg.created_at?new Date(reg.created_at).toLocaleDateString():'—')+'</td>'
           +'</tr>';
       }).join(''):'<tr><td colspan="4" class="px-4 py-4 text-slate-400">No registrations yet.</td></tr>';
+    }
+
+    async function requestDataDeletion(){
+      if(!confirm('Submit a request to delete your account and personal data from our database?'))return;
+      var r=await fetch('/api/me/delete-request',{method:'POST',headers:authHeader(),body:JSON.stringify({reason:'Requested from Organizer Panel'})});
+      var data=await r.json().catch(function(){return{};});
+      alert(r.ok?(data.message||'Deletion request submitted.'):(data.error||'Failed to submit request.'));
     }
 
     showSec('my-events');

@@ -92,6 +92,7 @@ $$;
 -- ---------------------------------------------------------------------------
 
 -- Drop existing policies first (idempotent re-run)
+DROP POLICY IF EXISTS "Allow public read access" ON public.users;
 DROP POLICY IF EXISTS users_read_self      ON public.users;
 DROP POLICY IF EXISTS users_insert_self    ON public.users;
 DROP POLICY IF EXISTS users_update_self    ON public.users;
@@ -118,6 +119,7 @@ CREATE POLICY users_update_self ON public.users
 DROP POLICY IF EXISTS events_read_published     ON public.events;
 DROP POLICY IF EXISTS events_insert_organizer   ON public.events;
 DROP POLICY IF EXISTS events_update_organizer   ON public.events;
+DROP POLICY IF EXISTS events_delete_admin       ON public.events;
 
 -- Everyone can read events (students browse, organizers see own)
 CREATE POLICY events_read_published ON public.events
@@ -134,6 +136,11 @@ CREATE POLICY events_update_organizer ON public.events
   FOR UPDATE TO anon
   USING (true)
   WITH CHECK (true);
+
+-- Admins can delete events (enforced in Flask via @permission_required("events:delete"))
+CREATE POLICY events_delete_admin ON public.events
+  FOR DELETE TO anon
+  USING (true);
 
 -- ---------------------------------------------------------------------------
 -- 8. RLS Policies — registrations table
@@ -174,10 +181,10 @@ CREATE POLICY audit_read ON public.audit_logs
 -- ---------------------------------------------------------------------------
 -- 10. Grant minimum required privileges to anon role
 -- ---------------------------------------------------------------------------
-GRANT SELECT, INSERT, UPDATE ON public.users          TO anon;
-GRANT SELECT, INSERT, UPDATE ON public.events         TO anon;
-GRANT SELECT, INSERT, UPDATE ON public.registrations  TO anon;
-GRANT SELECT, INSERT         ON public.audit_logs     TO anon;
+GRANT SELECT, INSERT, UPDATE         ON public.users          TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.events         TO anon;
+GRANT SELECT, INSERT, UPDATE         ON public.registrations  TO anon;
+GRANT SELECT, INSERT                 ON public.audit_logs     TO anon;
 GRANT USAGE ON SCHEMA public TO anon;
 
 -- =============================================================================

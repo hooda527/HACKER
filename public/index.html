@@ -190,7 +190,10 @@
       </aside>
 
       <!-- Main Dashboard Content -->
-      <main id="home" class="flex-1 min-w-0 flex flex-col gap-5">
+      <main id="main-content" class="flex-1 min-w-0 flex flex-col gap-5">
+
+        <!-- VIEW: Home (Dashboard) -->
+        <div id="view-home" class="portal-view flex flex-col gap-5">
 
         <!-- Row 1: Running Events, Upcoming Events, Closed Events -->
         <section aria-label="Featured event categories" class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -577,6 +580,162 @@
           </div>
         </section>
 
+        </div><!-- /#view-home -->
+
+        <!-- VIEW: About -->
+        <section id="view-about" class="portal-view hidden flex flex-col gap-5">
+          <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-softBlue text-portal-primary">
+                  <span class="material-symbols-rounded icon-filled text-[20px]">info</span>
+                </span>
+                <div>
+                  <h1 class="text-xl font-bold text-slate-900">About Event Portal</h1>
+                  <p class="text-xs text-slate-500">Connecting students, clubs, and organizers across campus</p>
+                </div>
+              </div>
+              <button type="button" data-go-home class="text-xs font-semibold text-portal-primary hover:underline">← Back to Home</button>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Event Portal is your central campus hub to discover hackathons, technical workshops, expert seminars, and cultural festivals. Track live registrations, stay updated on schedule changes, and climb the campus leaderboard.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4">
+                <p class="text-2xl font-extrabold text-portal-primary">25+</p>
+                <p class="text-xs font-semibold text-slate-700 mt-1">Annual Campus Events</p>
+              </div>
+              <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4">
+                <p class="text-2xl font-extrabold text-emerald-600">1,500+</p>
+                <p class="text-xs font-semibold text-slate-700 mt-1">Active Student Participants</p>
+              </div>
+              <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4">
+                <p class="text-2xl font-extrabold text-amber-600">12+</p>
+                <p class="text-xs font-semibold text-slate-700 mt-1">Partner Clubs &amp; Societies</p>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <span class="material-symbols-rounded text-portal-primary text-[24px]">travel_explore</span>
+              <h2 class="text-sm font-bold text-slate-900 mt-2">1. Discover Events</h2>
+              <p class="text-xs text-slate-500 mt-1">Browse ongoing, upcoming, and archived events filtered by category or month.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <span class="material-symbols-rounded text-emerald-600 text-[24px]">how_to_reg</span>
+              <h2 class="text-sm font-bold text-slate-900 mt-2">2. Instant Registration</h2>
+              <p class="text-xs text-slate-500 mt-1">Reserve your seat in one click with live capacity tracking backed by Supabase.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <span class="material-symbols-rounded text-amber-500 text-[24px]">military_tech</span>
+              <h2 class="text-sm font-bold text-slate-900 mt-2">3. Earn Points &amp; Prizes</h2>
+              <p class="text-xs text-slate-500 mt-1">Participate in competitions and workshops to earn points on the leaderboard.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: Contact -->
+        <section id="view-contact" class="portal-view hidden grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div class="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl shadow-card p-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-softBlue text-portal-primary">
+                  <span class="material-symbols-rounded icon-filled text-[20px]">mail</span>
+                </span>
+                <h1 class="text-xl font-bold text-slate-900">Contact Us</h1>
+              </div>
+              <button type="button" data-go-home class="text-xs font-semibold text-portal-primary hover:underline">← Back</button>
+            </div>
+            <p class="text-xs text-slate-500">Have questions about hosting an event, sponsorship, or your registration? Reach out to the Student Activities Office.</p>
+            <div class="flex flex-col gap-3 text-xs text-slate-700 pt-1">
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-rounded text-portal-primary text-[18px]">alternate_email</span>
+                <span>events-support@campusconnect.edu</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-rounded text-portal-primary text-[18px]">call</span>
+                <span>+91 98765 43210 (Mon–Fri, 9:00 AM – 5:30 PM)</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-rounded text-portal-primary text-[18px]">location_on</span>
+                <span>Innovation Block, Room 204, Main Campus</span>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl shadow-card p-6">
+            <h2 class="text-base font-bold text-slate-900 mb-3">Send a Message</h2>
+            <form id="contact-page-form" class="flex flex-col gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input type="text" required placeholder="Your Name" class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+                <input type="email" required placeholder="Your Email" class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+              </div>
+              <input type="text" required placeholder="Subject (e.g., Hackathon Team Query)" class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20">
+              <textarea rows="4" required placeholder="Write your message..." class="rounded-xl border border-slate-200 bg-slate-50/70 text-xs px-3 py-2.5 resize-none focus:bg-white focus:border-portal-primary focus:ring-2 focus:ring-portal-primary/20"></textarea>
+              <div class="flex items-center justify-between">
+                <span id="contact-page-status" class="text-xs font-medium text-emerald-600"></span>
+                <button type="submit" class="rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold px-5 py-2.5 transition">Send Message</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- VIEW: Help -->
+        <section id="view-help" class="portal-view hidden flex flex-col gap-5">
+          <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-6 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-portal-softBlue text-portal-primary">
+                <span class="material-symbols-rounded icon-filled text-[20px]">help</span>
+              </span>
+              <div>
+                <h1 class="text-xl font-bold text-slate-900">Help &amp; Frequently Asked Questions</h1>
+                <p class="text-xs text-slate-500">Quick answers for participants and event organizers</p>
+              </div>
+            </div>
+            <button type="button" data-go-home class="text-xs font-semibold text-portal-primary hover:underline">← Back to Home</button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">How do I register for an event?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Open any event category or click <strong>View All</strong>, then press <strong>Register</strong> on an open event and enter your User UUID.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">Why does it say an event is at capacity?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Each event has a maximum seat limit enforced by the API. Once full, new registrations return a capacity notice.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">How are leaderboard points calculated?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Students earn points for attending workshops, completing hackathons, and placing in top 3 competition ranks.</p>
+            </div>
+            <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5">
+              <h2 class="text-sm font-bold text-slate-900">How can organizers view attendees?</h2>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Organizers can query <code>/api/events/&lt;id&gt;/registrations?organizer_id=&lt;uuid&gt;</code> or switch to Organizer view from the top-right menu.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: Events Category Page (All Events, Competitions, Workshops, Seminars, Cultural Events) -->
+        <section id="view-events" class="portal-view hidden flex flex-col gap-5">
+          <div class="bg-white border border-slate-200/90 rounded-2xl shadow-card p-5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-portal-softBlue text-portal-primary">
+                <span id="events-page-icon" class="material-symbols-rounded icon-filled text-[22px]">event_note</span>
+              </span>
+              <div>
+                <h1 id="events-page-title" class="text-xl font-bold text-slate-900">All Events</h1>
+                <p id="events-page-subtitle" class="text-xs text-slate-500">Browse and register for campus events</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" data-status-filter="all" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-portal-softBlue text-portal-softBlueText">All</button>
+              <button type="button" data-status-filter="ongoing" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Ongoing</button>
+              <button type="button" data-status-filter="upcoming" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Upcoming</button>
+              <button type="button" data-status-filter="closed" class="events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Closed</button>
+              <button type="button" data-go-home class="ml-2 text-xs font-semibold text-portal-primary hover:underline">← Home</button>
+            </div>
+          </div>
+          <div id="events-page-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+        </section>
+
         <!-- Footer -->
         <footer class="pt-1 pb-3 text-center">
           <p class="text-xs font-medium text-portal-primary">All rights reserved • Copyright</p>
@@ -805,12 +964,199 @@
         });
       }
 
-      document.querySelectorAll('.sidebar-cat-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var cat = btn.getAttribute('data-category');
-          openExplorer(cat, cat === 'all' ? 'All Events' : cat);
+      // Page / View Routing (Home, About, Contact, Help, Events Categories)
+      var activeEventsCategory = 'all';
+      var activeStatusFilter = 'all';
+      var SAMPLE_EVENTS = [
+        { id: 'sample-1', title: '24-Hour Hackathon 2027', category: 'Competitions', status: 'ongoing', start_date: '2026-12-10', description: 'Code, build, and innovate with your team in our flagship 24-hour campus hackathon.' },
+        { id: 'sample-2', title: 'CodeSprint Algorithm Cup', category: 'Competitions', status: 'upcoming', start_date: '2027-01-22', description: 'Competitive programming contest featuring data structures and algorithmic challenges.' },
+        { id: 'sample-3', title: 'Full-Stack Web Workshop', category: 'Workshops', status: 'upcoming', start_date: '2027-02-05', description: 'Hands-on session covering Flask APIs, Tailwind UI, and cloud deployment.' },
+        { id: 'sample-4', title: 'AI Summit 2027', category: 'Seminars', status: 'upcoming', start_date: '2027-01-15', description: 'Keynote talks and panel discussions on applied AI, LLMs, and research.' },
+        { id: 'sample-5', title: 'Cultural Fest 2026', category: 'Cultural Events', status: 'closed', start_date: '2026-11-20', description: 'Annual celebration of music, dance, drama, and student art showcases.' }
+      ];
+      var CATEGORY_META = {
+        all: { title: 'All Events', subtitle: 'Explore all running, upcoming, and closed campus events', icon: 'event_note' },
+        Competitions: { title: 'Competitions', subtitle: 'Hackathons, coding contests, and team challenges', icon: 'emoji_events' },
+        Workshops: { title: 'Workshops', subtitle: 'Hands-on technical labs and skill-building bootcamps', icon: 'star' },
+        Seminars: { title: 'Seminars', subtitle: 'Industry keynotes, tech talks, and career panels', icon: 'groups' },
+        'Cultural Events': { title: 'Cultural Events', subtitle: 'Music, arts, fests, and campus community nights', icon: 'sports_esports' }
+      };
+
+      function renderEventsPage() {
+        var grid = document.getElementById('events-page-grid');
+        var meta = CATEGORY_META[activeEventsCategory] || CATEGORY_META.all;
+        document.getElementById('events-page-title').textContent = meta.title;
+        document.getElementById('events-page-subtitle').textContent = meta.subtitle;
+        document.getElementById('events-page-icon').textContent = meta.icon;
+
+        var source = liveEvents.length ? liveEvents : SAMPLE_EVENTS;
+        var filtered = source.filter(function (ev) {
+          var cat = String(ev.category || ev.type || 'Events').toLowerCase();
+          var catMatch = activeEventsCategory === 'all' || cat === activeEventsCategory.toLowerCase();
+          var stMatch = activeStatusFilter === 'all' || normalizeStatus(ev) === activeStatusFilter;
+          return catMatch && stMatch;
+        });
+
+        if (!filtered.length && liveEvents.length) {
+          filtered = SAMPLE_EVENTS.filter(function (ev) {
+            var catMatch = activeEventsCategory === 'all' || ev.category.toLowerCase() === activeEventsCategory.toLowerCase();
+            var stMatch = activeStatusFilter === 'all' || normalizeStatus(ev) === activeStatusFilter;
+            return catMatch && stMatch;
+          });
+        }
+
+        grid.replaceChildren();
+        if (!filtered.length) {
+          var empty = document.createElement('div');
+          empty.className = 'col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center text-sm text-slate-500';
+          empty.textContent = 'No events match this filter yet.';
+          grid.appendChild(empty);
+          return;
+        }
+
+        filtered.forEach(function (ev) {
+          var st = normalizeStatus(ev);
+          var card = document.createElement('article');
+          card.className = 'bg-white border border-slate-200/90 rounded-2xl shadow-card p-5 flex flex-col gap-3';
+
+          var top = document.createElement('div');
+          top.className = 'flex items-center justify-between gap-2';
+          var catBadge = document.createElement('span');
+          catBadge.className = 'text-xs font-bold text-portal-primary';
+          catBadge.textContent = ev.category || ev.type || 'Event';
+          var pill = document.createElement('span');
+          pill.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-semibold ' +
+            (st === 'ongoing' ? 'bg-emerald-50 text-emerald-700' :
+             st === 'closed' ? 'bg-slate-100 text-slate-600' : 'bg-blue-50 text-blue-700');
+          pill.textContent = st.charAt(0).toUpperCase() + st.slice(1);
+          top.append(catBadge, pill);
+
+          var h3 = document.createElement('h2');
+          h3.className = 'text-base font-bold text-slate-900';
+          h3.textContent = ev.title || ev.name || 'Untitled Event';
+
+          var dateEl = document.createElement('p');
+          dateEl.className = 'text-xs text-slate-500 flex items-center gap-1.5';
+          dateEl.textContent = 'Date: ' + formatDate(ev);
+
+          var desc = document.createElement('p');
+          desc.className = 'text-xs text-slate-600 leading-relaxed';
+          desc.textContent = ev.description || 'Join fellow students and organizers for this campus event.';
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mt-auto rounded-xl bg-portal-primary hover:bg-portal-primaryHover text-white text-xs font-semibold py-2.5 px-4 transition disabled:opacity-60';
+          btn.textContent = st === 'closed' ? 'Registration Closed' : 'Register Now';
+          btn.disabled = st === 'closed';
+          btn.addEventListener('click', async function () {
+            if (String(ev.id || '').indexOf('sample-') === 0) {
+              btn.textContent = 'Registered (Demo)';
+              btn.disabled = true;
+              return;
+            }
+            var userId = window.localStorage.getItem('event-portal-user-id') || window.prompt('Enter your User UUID to register:');
+            if (!userId) return;
+            window.localStorage.setItem('event-portal-user-id', userId.trim());
+            btn.disabled = true;
+            try {
+              var res = await fetch('/api/registrations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId.trim(), event_id: ev.id })
+              });
+              var data = await res.json();
+              if (!res.ok) throw new Error(data.error || 'Registration failed');
+              btn.textContent = 'Registered';
+            } catch (err) {
+              window.alert(err.message);
+              btn.disabled = false;
+            }
+          });
+
+          card.append(top, h3, dateEl, desc, btn);
+          grid.appendChild(card);
+        });
+      }
+
+      function setSidebarActive(targetKey) {
+        document.querySelectorAll('.sidebar-nav-link').forEach(function (el) {
+          var isMatch = el.getAttribute('href') === '#' + targetKey;
+          el.className = isMatch
+            ? 'sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-portal-softBlue text-portal-softBlueText font-semibold text-sm'
+            : 'sidebar-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100/80 font-medium text-sm transition';
+        });
+        document.querySelectorAll('.sidebar-cat-btn').forEach(function (el) {
+          var isMatch = targetKey === 'events' && el.getAttribute('data-category') === activeEventsCategory;
+          el.className = isMatch
+            ? 'sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-semibold bg-portal-softBlue text-portal-softBlueText'
+            : 'sidebar-cat-btn flex items-center gap-3 px-3.5 py-2 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-slate-100/80 transition';
+        });
+      }
+
+      function showView(viewKey, category) {
+        document.querySelectorAll('.portal-view').forEach(function (el) {
+          el.classList.add('hidden');
+        });
+        var target = document.getElementById('view-' + viewKey) || document.getElementById('view-home');
+        target.classList.remove('hidden');
+        if (viewKey === 'events') {
+          activeEventsCategory = category || 'all';
+          renderEventsPage();
+        }
+        setSidebarActive(viewKey);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      document.querySelectorAll('.sidebar-nav-link, a[href="#home"]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var key = (link.getAttribute('href') || '#home').replace('#', '');
+          window.location.hash = key;
+          showView(key);
         });
       });
+
+      document.querySelectorAll('[data-go-home]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          window.location.hash = 'home';
+          showView('home');
+        });
+      });
+
+      document.querySelectorAll('.sidebar-cat-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var cat = btn.getAttribute('data-category') || 'all';
+          activeStatusFilter = 'all';
+          showView('events', cat);
+        });
+      });
+
+      document.querySelectorAll('.events-status-pill').forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          activeStatusFilter = pill.getAttribute('data-status-filter') || 'all';
+          document.querySelectorAll('.events-status-pill').forEach(function (p) {
+            var active = p === pill;
+            p.className = active
+              ? 'events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-portal-softBlue text-portal-softBlueText'
+              : 'events-status-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200';
+          });
+          renderEventsPage();
+        });
+      });
+
+      var contactPageForm = document.getElementById('contact-page-form');
+      if (contactPageForm) {
+        contactPageForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          document.getElementById('contact-page-status').textContent = 'Message sent! Our team will reply soon.';
+          contactPageForm.reset();
+        });
+      }
+
+      var initialHash = (window.location.hash || '#home').replace('#', '');
+      if (['home', 'about', 'contact', 'help'].indexOf(initialHash) !== -1) {
+        showView(initialHash);
+      }
 
       // Filter form
       var filterForm = document.getElementById('filter-form');

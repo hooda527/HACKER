@@ -858,18 +858,24 @@
         e.preventDefault();
         authError.classList.add('hidden');
         try {
-          var res = await fetch('/api/users/resolve', {
+          var res = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: authEmailInput.value.trim(), role: authRoleSelect.value })
           });
           var data = await res.json();
           if (!res.ok) throw new Error(data.error || 'Could not sign in');
-          currentUser = data;
-          window.localStorage.setItem('event-portal-user', JSON.stringify(data));
-          window.localStorage.setItem('event-portal-user-id', data.id);
+          // Store full session including token
+          currentUser = { ...data.user, token: data.token, sub: data.user.id };
+          window.localStorage.setItem('ep_user', JSON.stringify(currentUser));
+          window.localStorage.setItem('event-portal-user', JSON.stringify(currentUser));
+          window.localStorage.setItem('event-portal-user-id', data.user.id);
           updateAuthUI();
           authModal.classList.add('hidden');
+          // Redirect to role dashboard
+          var roleMap = { administrator: '/admin/dashboard', organizer: '/organizer/dashboard', student: '/student/dashboard' };
+          var dest = roleMap[data.user.role];
+          if (dest) { location.href = dest; return; }
           await loadMyRegistrations();
           if (typeof renderEventsPage === 'function' && !document.getElementById('view-events').classList.contains('hidden')) {
             renderEventsPage();

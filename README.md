@@ -14,6 +14,25 @@ SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 `SUPABASE_ANON_KEY` is also accepted as a legacy alternative. Run with
 `python app.py` (or `flask --app app run`).
 
+## Deploy to Vercel
+
+This repository contains both the Flask API and the static dashboard. The
+dashboard calls the API on the same origin at `/api/events` and
+`/api/registrations`.
+
+1. Import this repository into Vercel and set the project root to this
+   `backend` directory if the Git repository also contains the sibling
+   `frontend` directory.
+2. Add `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` under Project Settings →
+   Environment Variables for the environments you deploy.
+3. Deploy. `vercel.json` routes `/api/*` to the Flask application and serves
+   `public/index.html` as the dashboard.
+
+For local development, install `requirements.txt`, set the same variables in
+`.env`, and run `python app.py`. The dashboard expects the API at the same
+origin, so use `vercel dev` from this directory to run the complete app
+locally.
+
 ## Deploy to Render
 
 Create a Render web service from this repository and use the included

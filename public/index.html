@@ -94,11 +94,38 @@
 
         <!-- Header Right: Notifications & Profile/Role Dropdown -->
         <div class="flex items-center gap-3 shrink-0">
-          <button id="notif-btn" type="button" aria-label="3 unread notifications"
-            class="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100 transition">
-            <span class="material-symbols-rounded text-[22px]">notifications</span>
-            <span class="absolute top-1.5 right-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white text-[11px] font-bold leading-none">3</span>
-          </button>
+          <div class="relative">
+            <button id="notif-btn" type="button" aria-label="Notifications" aria-expanded="false"
+              class="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100 transition">
+              <span class="material-symbols-rounded text-[22px]">notifications</span>
+              <span id="notif-badge"
+                class="hidden absolute top-1.5 right-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white text-[11px] font-bold leading-none">0</span>
+            </button>
+            <!-- Notification Popover Panel -->
+            <div id="notif-panel"
+              class="hidden absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-2xl shadow-float z-50 flex flex-col"
+              style="max-height:520px;">
+              <!-- Panel Header -->
+              <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 shrink-0">
+                <h3 class="text-[14px] font-bold text-slate-900">Notifications</h3>
+                <button id="notif-mark-all" type="button"
+                  class="text-[12px] font-semibold text-portal-primary hover:underline">Mark all read</button>
+              </div>
+              <!-- Notification List -->
+              <div id="notif-list" class="overflow-y-auto flex-1 divide-y divide-slate-100">
+                <!-- Loading state -->
+                <div id="notif-loading" class="flex items-center justify-center py-8 text-slate-400 text-sm gap-2">
+                  <span class="material-symbols-rounded text-[20px] animate-spin" style="animation:spin 1s linear infinite">progress_activity</span>
+                  Loading…
+                </div>
+                <!-- Empty state (hidden by default) -->
+                <div id="notif-empty" class="hidden flex-col items-center justify-center py-10 text-slate-400 text-sm text-center px-6">
+                  <span class="material-symbols-rounded text-[40px] mb-2">notifications_off</span>
+                  <p>No notifications yet</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div class="relative">
             <button id="role-menu-btn" type="button" aria-haspopup="menu" aria-expanded="false"
@@ -377,57 +404,11 @@
               </button>
             </div>
 
-            <div class="divide-y divide-slate-100 flex-1 flex flex-col justify-between">
-              <div class="py-3 flex items-start justify-between gap-3">
-                <div class="flex items-start gap-3">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white shrink-0 mt-0.5">
-                    <span class="material-symbols-rounded icon-filled text-[17px]">info</span>
-                  </span>
-                  <div>
-                    <p class="text-[13px] font-semibold text-slate-900">New event "AI Summit 2027" is now live!</p>
-                    <p class="text-xs text-slate-500 mt-0.5">Explore and register for the upcoming AI Summit.</p>
-                  </div>
-                </div>
-                <span class="text-xs text-slate-400 shrink-0">2h ago</span>
-              </div>
-
-              <div class="py-3 flex items-start justify-between gap-3">
-                <div class="flex items-start gap-3">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white shrink-0 mt-0.5">
-                    <span class="material-symbols-rounded icon-filled text-[17px]">check</span>
-                  </span>
-                  <div>
-                    <p class="text-[13px] font-semibold text-slate-900">Your registration for Hackathon 2027 is confirmed.</p>
-                    <p class="text-xs text-slate-500 mt-0.5">Check your email for details.</p>
-                  </div>
-                </div>
-                <span class="text-xs text-slate-400 shrink-0">4h ago</span>
-              </div>
-
-              <div class="py-3 flex items-start justify-between gap-3">
-                <div class="flex items-start gap-3">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-50 text-amber-500 border border-amber-200 shrink-0 mt-0.5">
-                    <span class="material-symbols-rounded icon-filled text-[17px]">campaign</span>
-                  </span>
-                  <div>
-                    <p class="text-[13px] font-semibold text-slate-900">Event schedule for Cultural Fest 2026 has been updated.</p>
-                    <p class="text-xs text-slate-500 mt-0.5">See the latest timings and venue.</p>
-                  </div>
-                </div>
-                <span class="text-xs text-slate-400 shrink-0">1d ago</span>
-              </div>
-
-              <div class="py-3 flex items-start justify-between gap-3">
-                <div class="flex items-start gap-3">
-                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-50 text-purple-600 border border-purple-200 shrink-0 mt-0.5">
-                    <span class="material-symbols-rounded icon-filled text-[17px]">redeem</span>
-                  </span>
-                  <div>
-                    <p class="text-[13px] font-semibold text-slate-900">Win exciting prizes at the upcoming events!</p>
-                    <p class="text-xs text-slate-500 mt-0.5">Participate and stand a chance to win.</p>
-                  </div>
-                </div>
-                <span class="text-xs text-slate-400 shrink-0">2d ago</span>
+            <div id="home-notif-list" class="divide-y divide-slate-100 flex-1 flex flex-col justify-between">
+              <!-- Dynamic notifications rendered by JS. Static fallback below shown until JS loads. -->
+              <div id="home-notif-loading" class="py-5 flex items-center gap-2 text-slate-400 text-sm">
+                <span class="material-symbols-rounded text-[18px]" style="animation:spin 1s linear infinite">progress_activity</span>
+                Loading notifications…
               </div>
             </div>
           </div>
@@ -1235,6 +1216,203 @@
         });
       }
 
+      // ── Notification Bell ────────────────────────────────────────────────
+      (function () {
+        var notifBtn     = document.getElementById('notif-btn');
+        var notifPanel   = document.getElementById('notif-panel');
+        var notifBadge   = document.getElementById('notif-badge');
+        var notifList    = document.getElementById('notif-list');
+        var notifLoading = document.getElementById('notif-loading');
+        var notifEmpty   = document.getElementById('notif-empty');
+        var notifMarkAll = document.getElementById('notif-mark-all');
+        var backdrop     = document.getElementById('notif-backdrop');
+        var homeList     = document.getElementById('home-notif-list');
+        var homeLoading  = document.getElementById('home-notif-loading');
+
+        var allNotifications = [];
+
+        // ── Helpers ──────────────────────────────────────────────────────────
+        function relativeTime(iso) {
+          if (!iso) return '';
+          var diff = Date.now() - new Date(iso).getTime();
+          var sec = Math.floor(diff / 1000);
+          if (sec < 60)   return 'just now';
+          if (sec < 3600) return Math.floor(sec / 60) + 'm ago';
+          if (sec < 86400)return Math.floor(sec / 3600) + 'h ago';
+          return Math.floor(sec / 86400) + 'd ago';
+        }
+
+        var iconMap = {
+          registration: { icon: 'how_to_reg',  bg: 'bg-emerald-100 text-emerald-600' },
+          event:        { icon: 'event',         bg: 'bg-blue-100 text-blue-600' },
+          cancellation: { icon: 'cancel',        bg: 'bg-rose-100 text-rose-500' },
+          admin:        { icon: 'admin_panel_settings', bg: 'bg-purple-100 text-purple-600' },
+          organizer:    { icon: 'manage_accounts',bg: 'bg-amber-100 text-amber-600' },
+          default:      { icon: 'notifications', bg: 'bg-slate-100 text-slate-500' }
+        };
+
+        function iconFor(type) {
+          return iconMap[type] || iconMap.default;
+        }
+
+        // ── Render notification items ─────────────────────────────────────────
+        function renderNotifItems(container, items, limit) {
+          container.querySelectorAll('.notif-item').forEach(function (el) { el.remove(); });
+          var slice = limit ? items.slice(0, limit) : items;
+          if (!slice.length) return false; // signal empty
+
+          slice.forEach(function (n) {
+            var ic = iconFor(n.type);
+            var div = document.createElement('div');
+            div.className = 'notif-item py-3 px-4 flex items-start gap-3 cursor-pointer transition ' +
+              (n.read ? 'bg-white hover:bg-slate-50' : 'bg-blue-50/40 hover:bg-blue-50');
+            div.dataset.id = n.id;
+            div.innerHTML =
+              '<span class="inline-flex items-center justify-center w-8 h-8 rounded-full shrink-0 mt-0.5 ' + ic.bg + '">' +
+                '<span class="material-symbols-rounded icon-filled text-[17px]">' + ic.icon + '</span>' +
+              '</span>' +
+              '<div class="flex-1 min-w-0">' +
+                '<p class="text-[13px] font-semibold text-slate-900 leading-tight">' + (n.title || '') + '</p>' +
+                '<p class="text-xs text-slate-500 mt-0.5 truncate">' + (n.body || '') + '</p>' +
+              '</div>' +
+              '<div class="flex flex-col items-end gap-1 shrink-0">' +
+                '<span class="text-[11px] text-slate-400">' + relativeTime(n.time) + '</span>' +
+                (!n.read ? '<span class="inline-block w-2 h-2 rounded-full bg-portal-primary"></span>' : '') +
+              '</div>';
+
+            div.addEventListener('click', function () {
+              if (!n.read) markRead([n.id]);
+              n.read = true;
+              div.classList.remove('bg-blue-50/40', 'hover:bg-blue-50');
+              div.classList.add('bg-white', 'hover:bg-slate-50');
+              div.querySelector('.w-2') && div.querySelector('.w-2').remove();
+              refreshBadge();
+            });
+            container.appendChild(div);
+          });
+          return true;
+        }
+
+        // ── Badge ─────────────────────────────────────────────────────────────
+        function refreshBadge() {
+          var unread = allNotifications.filter(function (n) { return !n.read; }).length;
+          if (unread > 0) {
+            notifBadge.textContent = unread > 99 ? '99+' : unread;
+            notifBadge.classList.remove('hidden');
+          } else {
+            notifBadge.classList.add('hidden');
+          }
+          notifBtn && notifBtn.setAttribute('aria-label', unread + ' unread notifications');
+        }
+
+        // ── Fetch from backend ────────────────────────────────────────────────
+        function fetchNotifications() {
+          var user = currentUser;
+          if (!user || !user.token) {
+            // Not logged in — hide loading spinners, show sign-in hint
+            if (notifLoading) notifLoading.classList.add('hidden');
+            if (notifEmpty) { notifEmpty.classList.remove('hidden'); notifEmpty.classList.add('flex'); }
+            if (homeLoading) homeLoading.innerHTML =
+              '<p class="text-[13px] text-slate-500 py-4">Sign in to see your notifications.</p>';
+            return;
+          }
+
+          fetch('/api/me/notifications', {
+            headers: { 'Authorization': 'Bearer ' + user.token }
+          })
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+          .then(function (data) {
+            allNotifications = data.notifications || [];
+            refreshBadge();
+
+            // Popover list
+            if (notifLoading) notifLoading.classList.add('hidden');
+            var hadItems = renderNotifItems(notifList, allNotifications);
+            if (!hadItems) {
+              notifEmpty && notifEmpty.classList.remove('hidden');
+              notifEmpty && notifEmpty.classList.add('flex');
+            }
+
+            // Home card (first 4)
+            if (homeList) {
+              if (homeLoading) homeLoading.remove();
+              var hadHome = renderNotifItems(homeList, allNotifications, 4);
+              if (!hadHome) {
+                homeList.innerHTML = '<p class="text-sm text-slate-400 py-4 text-center">No notifications yet.</p>';
+              }
+            }
+          })
+          .catch(function () {
+            if (notifLoading) { notifLoading.textContent = 'Could not load notifications.'; }
+            if (homeLoading)  { homeLoading.textContent = 'Could not load notifications.'; }
+          });
+        }
+
+        // ── Mark read ─────────────────────────────────────────────────────────
+        function markRead(ids) {
+          var user = currentUser;
+          if (!user || !user.token) return;
+          fetch('/api/me/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify({ ids: ids })
+          }).catch(function () {});
+        }
+
+        // ── Open / Close panel ────────────────────────────────────────────────
+        function openPanel() {
+          notifPanel.classList.remove('hidden');
+          notifPanel.classList.add('flex');
+          backdrop.classList.remove('hidden');
+          notifBtn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closePanel() {
+          notifPanel.classList.add('hidden');
+          notifPanel.classList.remove('flex');
+          backdrop.classList.add('hidden');
+          notifBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        // ── Event listeners ───────────────────────────────────────────────────
+        if (notifBtn) {
+          notifBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = notifPanel && !notifPanel.classList.contains('hidden');
+            if (open) { closePanel(); } else { openPanel(); }
+          });
+        }
+
+        if (backdrop) {
+          backdrop.addEventListener('click', closePanel);
+        }
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closePanel();
+        });
+
+        // "Mark all read" button
+        if (notifMarkAll) {
+          notifMarkAll.addEventListener('click', function (e) {
+            e.stopPropagation();
+            allNotifications.forEach(function (n) { n.read = true; });
+            markRead([]); // empty = mark all
+            refreshBadge();
+            // Re-render popover to remove unread dots
+            if (notifLoading) notifLoading.classList.add('hidden');
+            renderNotifItems(notifList, allNotifications);
+            renderNotifItems(homeList, allNotifications, 4);
+          });
+        }
+
+        // Initial fetch once DOM ready
+        fetchNotifications();
+      })();
+      // ── End Notification Bell ─────────────────────────────────────────────
+
       // Search & Sidebar Category Filter
       var searchInput = document.getElementById('event-search-input');
       if (searchInput) {
@@ -1472,5 +1650,7 @@
       }
     })();
   </script>
+  <!-- Notification backdrop blur overlay (behind popover, above page) -->
+  <div id="notif-backdrop" class="hidden fixed inset-0 z-40" style="backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);background:rgba(0,0,0,0.05);"></div>
 </body>
 </html>

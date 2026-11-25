@@ -262,6 +262,178 @@ def resolve_user():
 
 
 # ===========================================================================
+# NOTIFICATIONS  (derived from real data — no separate notifications table)
+# ===========================================================================
+
+@app.get("/api/me/notifications")
+@login_required
+def get_notifications():
+    """
+    Return role-relevant notifications derived from real data:
+      - student:       own confirmed/cancelled registrations + upcoming events
+      - organizer:     registrations on their events + upcoming events assigned
+      - administrator: recent user sign-ups, new registrations, audit events
+    Stored read-state is tracked per user in a JSON blob in the users table
+    under the column 'notification_read_ids' (created lazily).
+    """
+    user = get_current_user()
+    role = user.get("role", "student")
+    uid = user["sub"]
+
+    try:
+        db = get_supabase()
+        notifications: list = []
+
+        if role == "student":
+            # 1. User's own registrations
+            regs = db.table("registrations").select("id,event_id,status,created_at,events(title,status)") \
+                     .eq("user_id", uid).order("created_at", desc=True).limit(10).execute()
+            for r in (regs.data or []):
+                ev = r.get("events") or {}
+                st = r.get("status", "")
+                icon = "check_circle" if st == "confirmed" else "cancel" if st == "cancelled" else "pending"
+                color = "emerald" if st == "confirmed" else "rose" if st == "cancelled" else "amber"
+                notifications.append({
+                    "id": f"reg-{r['id']}",
+                    "type": "registration",
+                    "icon": icon, "color": color,
+                    "title": f"Registration {st}: {ev.get('title','Event')}",
+                    "body": "Your registration is confirmed." if st == "confirmed" else
+                            "You cancelled this registration. You can re-register." if st == "cancelled" else
+                            "Your registration is pending approval.",
+                    "time": r.get("created_at"),
+                })
+            # 2. Upcoming events (new events posted recently)
+            evs = db.table("events").select("id,title,status,created_at") \
+                    .neq("status", "closed").order("created_at", desc=True).limit(5).execute()
+            for e in (evs.data or []):
+                notifications.append({
+                    "id": f"ev-{e['id']}",
+                    "type": "event",
+                    "icon": "event_note", "color": "blue",
+                    "title": f"Event available: {e.get('title','')}",
+                    "body": f"Status: {e.get('status','upcoming').capitalize()}. Register now!",
+                    "time": e.get("created_at"),
+                })
+
+        elif role == "organizer":
+            # Registrations on their events
+            evs = db.table("events").select("id,title").eq("organizer_id", uid).execute()
+            ev_ids = [e["id"] for e in (evs.data or [])]
+            if ev_ids:
+                regs = db.table("registrations") \
+                         .select("id,user_id,status,created_at,events(title),users(email)") \
+                         .in_("event_id", ev_ids).order("created_at", desc=True).limit(15).execute()
+                for r in (regs.data or []):
+                    ev = r.get("events") or {}
+                    u_email = (r.get("users") or {}).get("email", "Someone")
+                    notifications.append({
+                        "id": f"reg-{r['id']}",
+                        "type": "registration",
+                        "icon": "how_to_reg", "color": "amber",
+                        "title": f"New registration: {ev.get('title','')}",
+                        "body": f"{u_email} registered — status: {r.get('status','')}",
+                        "time": r.get("created_at"),
+                    })
+            # Their assigned events
+            for e in (evs.data or [])[:5]:
+                notifications.append({
+                    "id": f"ev-{e['id']}",
+                    "type": "event",
+                    "icon": "event_note", "color": "blue",
+                    "title": f"Your event: {e.get('title','')}",
+                    "body": "Manage registrations and attendees from your dashboard.",
+                    "time": None,
+                })
+
+        else:  # administrator
+            # Recent audit log entries
+            logs = db.table("audit_logs").select("id,action,target,created_at,actor_id") \
+                     .order("created_at", desc=True).limit(10).execute()
+            ACTION_META = {
+                "auth.login": ("login", "blue", "User signed in"),
+                "auth.logout": ("logout", "slate", "User signed out"),
+                "auth.register": ("person_add", "emerald", "New user registered"),
+                "registrations.create": ("how_to_reg", "blue", "New event registration"),
+                "registrations.reactivate": ("replay", "amber", "Re-registration after cancellation"),
+                "user.deletion_request": ("delete_forever", "rose", "Data deletion requested"),
+                "auth.switch_view": ("swap_horiz", "purple", "Role view switched"),
+            }
+            for lg in (logs.data or []):
+                meta = ACTION_META.get(lg.get("action", ""), ("info", "slate", lg.get("action", "")))
+                notifications.append({
+                    "id": f"log-{lg['id']}",
+                    "type": "audit",
+                    "icon": meta[0], "color": meta[1],
+                    "title": meta[2],
+                    "body": f"Target: {lg.get('target','') or '—'}",
+                    "time": lg.get("created_at"),
+                })
+            # Also show pending deletion requests
+            del_reqs = db.table("audit_logs").select("id,actor_id,created_at") \
+                         .eq("action", "user.deletion_request").order("created_at", desc=True).limit(5).execute()
+            for d in (del_reqs.data or []):
+                notifications.append({
+                    "id": f"delreq-{d['id']}",
+                    "type": "alert",
+                    "icon": "warning", "color": "rose",
+                    "title": "⚠ Pending data deletion request",
+                    "body": f"User {d.get('actor_id','')} requested account deletion.",
+                    "time": d.get("created_at"),
+                })
+
+        # Sort by time descending, put None-time items last
+        notifications.sort(key=lambda n: n.get("time") or "", reverse=True)
+        notifications = notifications[:20]  # cap at 20
+
+        # Read state: stored as comma-sep IDs in users.notification_read_ids
+        try:
+            u_row = db.table("users").select("notification_read_ids").eq("id", uid).limit(1).execute()
+            raw = (u_row.data[0].get("notification_read_ids") or "") if u_row.data else ""
+            read_ids = set(raw.split(",")) if raw else set()
+        except Exception:
+            read_ids = set()
+
+        for n in notifications:
+            n["read"] = n["id"] in read_ids
+
+        unread = sum(1 for n in notifications if not n["read"])
+        return jsonify({"notifications": notifications, "unread": unread})
+
+    except (APIError, RuntimeError) as error:
+        return api_error(str(error), 500)
+
+
+@app.post("/api/me/notifications/mark-read")
+@login_required
+def mark_notifications_read():
+    """Mark specific notification IDs (or all) as read for the current user."""
+    user = get_current_user()
+    body: Any = request.get_json(silent=True) or {}
+    ids_to_mark = body.get("ids", [])  # [] means mark all
+    uid = user["sub"]
+    try:
+        db = get_supabase()
+        if ids_to_mark:
+            # Merge with existing read IDs
+            u_row = db.table("users").select("notification_read_ids").eq("id", uid).limit(1).execute()
+            raw = (u_row.data[0].get("notification_read_ids") or "") if u_row.data else ""
+            existing = set(raw.split(",")) if raw else set()
+            merged = existing | set(ids_to_mark)
+            new_val = ",".join(merged)
+        else:
+            # Mark all — fetch current notification IDs and persist them
+            resp = get_notifications()
+            data = resp.get_json()
+            all_ids = [n["id"] for n in data.get("notifications", [])]
+            new_val = ",".join(all_ids)
+        db.table("users").update({"notification_read_ids": new_val}).eq("id", uid).execute()
+        return jsonify({"marked": len(ids_to_mark) or "all"})
+    except (APIError, RuntimeError) as error:
+        return api_error(str(error), 500)
+
+
+# ===========================================================================
 # EVENTS (public read + protected write)
 # ===========================================================================
 
